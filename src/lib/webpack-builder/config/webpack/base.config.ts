@@ -1,37 +1,36 @@
-import { Configuration } from "webpack";
+import { WebpackConfigProperties } from "@webpack-builder/api";
 import { Config } from "rh-utils";
-import { NAMESPACE_WEBPACK_CONFIGURATION } from "../../../../api";
-import { ConfigurationPropertys } from "../../api/config";
+import { Configuration } from "webpack";
 
 const configService = Config.getInstance();
 
 export const baseConfiguration: Configuration = {
 
     optimization: {
-        minimize: false
+        minimize: false,
     },
 
-    context: configService.get(NAMESPACE_WEBPACK_CONFIGURATION.SOURCE_ROOT),
+    context: configService.get(WebpackConfigProperties.context),
 
     entry: () => {
         try {
-            return `./${configService.get(ConfigurationPropertys.entry)}`;
+            return `./${configService.get(WebpackConfigProperties.entry)}`;
         } catch ( error ) {
-            return "./index.ts"
+            return "./index.ts";
         }
     },
 
     module: {
         rules: [
             {
+                loader: "ts-loader",
                 test: /.*\.tsx?$/,
-                loader: "ts-loader"
-            }
-        ]
+            },
+        ],
     },
 
     resolve: {
-        extensions: ['.ts', '.js']
+        extensions: [".ts", ".js"],
     },
 
     resolveLoader: {
@@ -40,12 +39,12 @@ export const baseConfiguration: Configuration = {
          * otherwise it will search in the current working directory
          * which is that directory which has consumed base_loader module
          */
-        modules: [configService.get(NAMESPACE_WEBPACK_CONFIGURATION.LOADER_RESOLVER)],
-        mainFields: ['loader', 'main']
+        mainFields: ["loader", "main"],
+        modules: [configService.get(WebpackConfigProperties.loaderContext)],
     },
 
     output: {
-        path: configService.get(ConfigurationPropertys.outDir),
-        filename: configService.get(ConfigurationPropertys.outFile)
-    }
+        filename: configService.get(WebpackConfigProperties.outFile),
+        path: configService.get(WebpackConfigProperties.outDir),
+    },
 };

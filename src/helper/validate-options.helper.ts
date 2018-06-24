@@ -1,13 +1,13 @@
-import { OptionProperties } from '../api'
+import { IDataNode, OptionProperties } from "~/api";
 
 /**
  * @todo refactoring
  */
-export function validateOptions(options): String[] {
+export function validateOptions(options: IDataNode): string[] {
 
-    let errors: String[] = [];
+    let errors: string[] = [];
 
-    for(const property in OptionProperties) {
+    for (const property in OptionProperties) {
 
         if ( ! OptionProperties.hasOwnProperty(property) ) {
             continue;
@@ -25,12 +25,13 @@ export function validateOptions(options): String[] {
         if ( optionSet ) {
 
             if (option.hasOwnProperty("validator") ) {
-                const isInvalid = ! value.match(option.validator.test)
+                const isInvalid = ! value.match(option.validator.test);
                 errors = errors.concat( isInvalid ? [option.validator.errorMsg] : []);
             } else {
                 const isInvalid = option.values.indexOf(value) === -1;
-                errors = errors.concat( isInvalid 
-                    ? `invalid property value submitted: "${value}" for option --${property}\nrequires on of these values: "${option.values.join(", ")}"\n\n`
+                errors = errors.concat( isInvalid
+                    ? `invalid property value submitted: "${value}" for option --${property}\n
+                       requires on of these values: "${option.values.join(", ")}"\n\n`
                     : []);
             }
         }

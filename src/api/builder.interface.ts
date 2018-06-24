@@ -1,10 +1,8 @@
-export enum Builders 
-{ 
-    WEBPACK = "webpack" 
-};
+export enum Builders {
+    WEBPACK = "webpack",
+}
 
-export interface IBuilder
-{
+export interface IBuilder {
     configure(config: any): void;
 
     run(): void;

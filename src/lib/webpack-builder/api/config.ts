@@ -1,5 +1,7 @@
-export enum ConfigurationPropertys { 
-    "entry"   = "q2gBuilder.webpack.entry",
-    "outDir"  = "q2gBuilder.webpack.outDir",
-    "outFile" = "q2gBuilder.webpack.outFile"
- };
+export enum WebpackConfigProperties {
+    "context"       = "q2gBuilder.webpack.context",
+    "entry"         = "q2gBuilder.webpack.entry",
+    "loaderContext" = "q2gBuilder.webpack.paths.loaderResolver",
+    "outDir"        = "q2gBuilder.webpack.outDir",
+    "outFile"       = "q2gBuilder.webpack.outFile",
+ }

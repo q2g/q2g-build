@@ -1,13 +1,17 @@
-import * as Webpack from "webpack";
 import { Config, Log } from "rh-utils";
-import { NAMESPACE_BASE_CONFIGURATION } from "../../../api";
+import * as Webpack from "webpack";
+import { AppConfigProperties } from "~/api";
 
 export class WebpackService {
     public static instance: WebpackService = new WebpackService();
 
-    private DEVELOPMENT_CONFIGURATION = '../config/webpack/development.config';
+    public static getInstance() {
+        return this.instance;
+    }
 
-    private PRODUCTION_CONFIGURATION = '../config/webpack/production.config';
+    private DEVELOPMENT_CONFIGURATION = "../config/webpack/development.config";
+
+    private PRODUCTION_CONFIGURATION = "../config/webpack/production.config";
 
     private logService: Log;
 
@@ -24,33 +28,32 @@ export class WebpackService {
         WebpackService.instance = this;
     }
 
-    public static getInstance() {
-        return this.instance;
-    }
-
     public getWebpack(): Webpack.Compiler {
         let configruation: Webpack.Configuration;
 
-        const environment: string = this.configService.get(NAMESPACE_BASE_CONFIGURATION.ENVIRONMENT);
+        const environment: string = this.configService.get(AppConfigProperties.environment);
 
         switch (environment) {
-            case 'development':
+            case "development":
                 configruation = this.loadDevelopmentConfiguration();
                 break;
-            case 'production':
+            case "production":
                 configruation = this.loadProductionConfiguration();
                 break;
             default:
                 throw new Error(`${__filename}: invalid evironment is set:
-                    ${environment}.`)
+                    ${environment}.`);
         }
 
         this.logService.log(
             `Used Webpack Configuration:\n${JSON.stringify(configruation, null, 4)}`,
-            Log.LOG_DEBUG
-        );
+            Log.LOG_DEBUG);
 
         return Webpack(configruation);
+    }
+
+    public loadProductionConfiguration(): Webpack.Configuration {
+        return this.loadConfigurationFile(this.PRODUCTION_CONFIGURATION);
     }
 
     /**
@@ -58,10 +61,6 @@ export class WebpackService {
      */
     private loadDevelopmentConfiguration(): Webpack.Configuration {
         return this.loadConfigurationFile(this.DEVELOPMENT_CONFIGURATION);
-    }
-
-    public loadProductionConfiguration(): Webpack.Configuration {
-        return this.loadConfigurationFile(this.PRODUCTION_CONFIGURATION);
     }
 
     private loadConfigurationFile(file: string): Webpack.Configuration {

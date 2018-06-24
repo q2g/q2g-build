@@ -8,24 +8,24 @@ interface IOptionProperty {
             test: RegExp;
             errorMsg: string;
         },
-        values?: String[];
-    }
+        values?: string[];
+    };
 }
 
 /**
- * only for validation to loop and get option 
+ * only for validation to loop and get option
  * properties to check with given options
  */
 export const OptionProperties: IOptionProperty  = {
     builder: {
         required: true,
-        values: ["webpack"]
+        values: ["webpack"],
     },
     config: {
         required: false,
         validator: {
+            errorMsg: `Invalid argument for "config", use --config [filename].json\n\n`,
             test: /\.json$/,
-            errorMsg: `Invalid argument for "config", use --config [filename].json\n\n`
-        }
-    }
-}
+        },
+    },
+};
