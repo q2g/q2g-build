@@ -1,12 +1,10 @@
 import { resolve } from "path";
 import { Config } from "rh-utils";
 import { Compiler } from "webpack";
-
-import { IDataNode } from "~/api";
-import { Builder } from "~/lib/builder";
-
-import { WebpackConfigProperties } from "@webpack-builder/api/config";
-import { WebpackService } from "@webpack-builder/service/webpack.service";
+import { AppConfigProperties, IDataNode } from "../../api";
+import { Builder } from "../../lib/builder";
+import { WebpackConfigProperties } from "./api/config";
+import { WebpackService } from "./service/webpack.service";
 
 export class WebpackBuilder extends Builder {
     private webpackService: WebpackService;
@@ -16,9 +14,12 @@ export class WebpackBuilder extends Builder {
     private sourceRoot: string;
 
     public constructor() {
+
         super();
+
         this.webpackService = WebpackService.getInstance();
-        this.configService = Config.getInstance();
+        this.configService  = Config.getInstance();
+        this.sourceRoot     = this.configService.get(AppConfigProperties.sourceRoot);
     }
 
     /**

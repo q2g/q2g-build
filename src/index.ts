@@ -1,9 +1,9 @@
 import { existsSync, readFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { Config, Log } from "rh-utils";
-import { AppConfigProperties, Builders, IBuilder, IOptions } from "~/api";
-import { validateOptions } from "~/helper";
-import { BuilderFactory } from "~/service/builder.factory";
+import { AppConfigProperties, Builders, IBuilder, IOptions } from "./api";
+import { validateOptions } from "./helper";
+import { BuilderFactory } from "./service/builder.factory";
 
 const logService = Log.getInstance();
 const configService = Config.getInstance();
@@ -78,8 +78,11 @@ function loadConfigurationFromFile(configFile: string) {
  * @param args option command line arguments
  */
 function main(scriptPath: string, ...args: string[]) {
+
     const options: IOptions = convertArgumentsToOptions(args);
     const errors = validateOptions(options);
+
+    let builder: any;
 
     if ( errors.length ) {
         process.stderr.write(errors.join("\n"));
@@ -92,7 +95,7 @@ function main(scriptPath: string, ...args: string[]) {
         configService.set(AppConfigProperties.sourceRoot , process.cwd());
         configService.set(AppConfigProperties.environment , "development");
 
-        const builder = getBuilder(options.builder);
+        builder = getBuilder(options.builder);
 
         if ( options.hasOwnProperty("config") && options.config ) {
             const configFile = resolve(process.cwd(), options.config);

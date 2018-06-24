@@ -1,4 +1,4 @@
-import { IDataNode, OptionProperties } from "~/api";
+import { IDataNode, OptionProperties } from "../api";
 
 /**
  * @todo refactoring

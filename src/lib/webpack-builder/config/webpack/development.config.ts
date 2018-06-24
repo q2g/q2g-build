@@ -1,8 +1,14 @@
-import { Configuration } from "webpack";
+import { Configuration, LoaderOptionsPlugin } from "webpack";
 import { baseConfiguration } from "./base.config";
 
 const developmentConfiguration: Configuration = {
-    mode: "development" as "development",
+    mode: "production" as "production",
+
+    plugins: [
+        new LoaderOptionsPlugin({
+            debug: true,
+        }),
+    ],
 };
 
 export default {

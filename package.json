@@ -1,6 +1,6 @@
 {
   "name": "q2g-build",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "general build process",
   "main": "bin/index.js",
   "scripts": {

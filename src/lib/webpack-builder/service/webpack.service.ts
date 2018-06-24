@@ -1,6 +1,6 @@
 import { Config, Log } from "rh-utils";
 import * as Webpack from "webpack";
-import { AppConfigProperties } from "~/api";
+import { AppConfigProperties } from "../../../api";
 
 export class WebpackService {
     public static instance: WebpackService = new WebpackService();

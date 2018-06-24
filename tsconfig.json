@@ -1,38 +1,22 @@
 {
     "compilerOptions": {
-        "baseUrl": "src",
-        "rootDir": "src",
+        "rootDir": "./src",
         "outDir": "./bin",
         "module": "commonjs",
         "target": "es6",
         "moduleResolution": "node",
         "sourceMap": false,
         "allowJs": false,
-        "noUnusedLocals": true,                /* Report errors on unused locals. */
-        "noUnusedParameters": true,            /* Report errors on unused parameters. */
-        "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
-        "noImplicitAny": true,                 /* Raise error on expressions and declarations with an implied 'any' type. */
         "removeComments": true,
         "lib": [
             "es6"
-        ],
-        "paths": {
-            "~/*": ["*"],
-            "@webpack-builder": [
-                "./lib/webpack-builder"
-            ],
-            "@webpack-builder/*": [
-                "./lib/webpack-builder/*"
-            ]
-
-        }
+        ]
     },
-    "exclude": [
-        "./node_modules",
-        "./test",
-        "./bin"
-    ],
     "include": [
         "**/*.ts"
-    ]
+    ],
+    "exclude": [
+        "./node_modules/*",
+        "./node_modules/**/*.d.ts",
+    ],
 }

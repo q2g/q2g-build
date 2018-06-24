@@ -1,4 +1,4 @@
-import { IBuilder, IDataNode } from "~/api";
+import { IBuilder, IDataNode } from "../api";
 
 export abstract class Builder implements IBuilder {
 

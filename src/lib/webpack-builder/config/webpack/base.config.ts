@@ -1,6 +1,6 @@
-import { WebpackConfigProperties } from "@webpack-builder/api";
 import { Config } from "rh-utils";
 import { Configuration } from "webpack";
+import { WebpackConfigProperties } from "../../api";
 
 const configService = Config.getInstance();
 
@@ -12,18 +12,15 @@ export const baseConfiguration: Configuration = {
 
     context: configService.get(WebpackConfigProperties.context),
 
-    entry: () => {
-        try {
-            return `./${configService.get(WebpackConfigProperties.entry)}`;
-        } catch ( error ) {
-            return "./index.ts";
-        }
-    },
+    entry: configService.get(WebpackConfigProperties.entry),
 
     module: {
         rules: [
             {
                 loader: "ts-loader",
+                options: {
+                    configFile: configService.get(WebpackConfigProperties.tsconfig),
+                },
                 test: /.*\.tsx?$/,
             },
         ],
@@ -45,6 +42,7 @@ export const baseConfiguration: Configuration = {
 
     output: {
         filename: configService.get(WebpackConfigProperties.outFile),
+        libraryTarget: "umd",
         path: configService.get(WebpackConfigProperties.outDir),
     },
 };
