@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "baseUrl": "src",
+        "rootDir": "src",
+        "outDir": "./bin",
+        "module": "commonjs",
+        "target": "es6",
+        "moduleResolution": "node",
+        "sourceMap": false,
+        "allowJs": false,
+        "noUnusedLocals": true,
+        "lib": [
+            "es6"
+        ]
+    },
+    "include": [
+        "**/*.ts"
+    ],
+    "exclude": [
+        "./node_modules",
+        "./test",
+        "./bin"
+    ]
+}
