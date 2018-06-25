@@ -5,4 +5,5 @@ export enum WebpackConfigProperties {
     "outDir"        = "q2gBuilder.webpack.outDir",
     "outFile"       = "q2gBuilder.webpack.outFile",
     "tsconfig"      = "q2gBuilder.webpack.tsconfigFile",
+    "q2gLoaderContext" = "q2gBuilder.webpack.q2gLoaderContext",
  }
