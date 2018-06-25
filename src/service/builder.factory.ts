@@ -11,8 +11,12 @@ export abstract class BuilderFactory {
         const builder          = new WebpackBuilder();
         const config           = Config.getInstance();
         const sourceRoot       = config.get(AppConfigProperties.sourceRoot);
-        const q2gBuilderSource = `${sourceRoot}/node_modules/q2g-build/node_modules`;
-        const q2gLoaderContext = resolve(q2gBuilderSource, "../bin/lib/webpack-builder/loader");
+
+        /** @var {string} q2gBuilderSource q2g-build path in source package node_modules folder */
+        const q2gBuilderSource = `${sourceRoot}/node_modules/q2g-build`;
+
+        /** @var {string} q2gLoaderContext own loader paths */
+        const q2gLoaderContext = resolve(q2gBuilderSource, "./bin/lib/webpack-builder/loader");
 
         config.set( WebpackConfigProperties.outDir, `${sourceRoot}/dist`, false);
         config.set( WebpackConfigProperties.entry, "./index.ts");
@@ -20,10 +24,10 @@ export abstract class BuilderFactory {
         config.set( WebpackConfigProperties.context, sourceRoot);
 
         /** set loader context paths where to search loaders */
-        config.set( WebpackConfigProperties.loaderContext, [q2gBuilderSource, q2gLoaderContext]);
-
-        console.log(config.get(WebpackConfigProperties.loaderContext));
-
+        config.set( WebpackConfigProperties.loaderContext, [
+            resolve(q2gBuilderSource, "./node_modules"), // where to find vendor loaders (less, css or ts-loader)
+            q2gLoaderContext, // where to find own q2g-builder/webpack-loaders
+        ]);
         return builder;
     }
 }

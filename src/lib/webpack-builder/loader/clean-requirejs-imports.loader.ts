@@ -9,10 +9,14 @@ export default function cleanRequireJsCssLoader(source) {
     // pattern to replace text! or css! requirejs plugins with ./content.filetype
     // const pattern = /("|')(?:text|css)\!(?:\.\/)?(.*?)(\1)/;
 
-    // pattern to replace css! requirejs plugins with ./content.css
+    // pattern to replace css!content.css | css!./content.css with ./content.css
     const pattern = /("|')css\!(?:\.\/)?(.*?)(\1)/;
-    const ret = source.replace(pattern, () => {
-        return `${RegExp.$1}./${RegExp.$2}${RegExp.$1}`;
+
+    /**
+     * loop through all matches and replace them
+     */
+    const ret = source.replace(pattern, (quoteChar, file) => {
+        return `${quoteChar}./${file}${quoteChar}`;
     });
     return ret;
 }
