@@ -28,6 +28,7 @@ export abstract class BuilderFactory {
             resolve(q2gBuilderSource, "./node_modules"), // where to find vendor loaders (less, css or ts-loader)
             q2gLoaderContext, // where to find own q2g-builder/webpack-loaders
         ]);
+
         return builder;
     }
 }

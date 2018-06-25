@@ -6,6 +6,7 @@
  * @author Ralf Hannuschka
  */
 export default function cleanRequireJsCssLoader(source) {
+
     // pattern to replace text! or css! requirejs plugins with ./content.filetype
     // const pattern = /("|')(?:text|css)\!(?:\.\/)?(.*?)(\1)/;
 
@@ -15,7 +16,7 @@ export default function cleanRequireJsCssLoader(source) {
     /**
      * loop through all matches and replace them
      */
-    const ret = source.replace(pattern, (quoteChar, file) => {
+    const ret = source.replace(pattern, (fullMatch, quoteChar, file) => {
         return `${quoteChar}./${file}${quoteChar}`;
     });
     return ret;
