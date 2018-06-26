@@ -83,4 +83,6 @@ export const baseConfiguration: Configuration = {
         libraryTarget: "umd",
         path: configService.get(WebpackConfigProperties.outDir),
     },
+
+    plugins: []
 };
