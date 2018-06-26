@@ -17,7 +17,6 @@ export const WebpackOption: IOption  = {
        required: false,
        validator: {
            errorMsg: "option outDir could not be empty",
-           // match as many as possible but no whitespace and at least 1 character
            test: NO_WS_EMPTY,
        },
    },

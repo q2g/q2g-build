@@ -25,11 +25,15 @@ Log.configure({
  * @param {string} root
  */
 function initAppConfiguration(root: string) {
+
     /** create base configuration values */
     configService.set(AppConfigProperties.appRoot, `${root}/bin`);
     configService.set(AppConfigProperties.environment , "development");
     configService.set(AppConfigProperties.root, root);
     configService.set(AppConfigProperties.sourceRoot , process.cwd());
+
+    const pkgJsonData = OptionHelper.loadFromFile(`${process.cwd()}/package.json`);
+    configService.set(AppConfigProperties.packageName, pkgJsonData.name );
 }
 
 /**

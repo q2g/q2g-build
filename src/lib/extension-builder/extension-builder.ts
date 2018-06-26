@@ -14,8 +14,19 @@ import { CopyWebpackPlugin, ZipWebpackPlugin } from "./plugins";
 export class ExtensionBuilder extends WebpackBuilder {
 
     /**
-     * load webpack plugins into webpack configuration model
-     *
+     * @inheritDoc
+     * @protected
+     * @returns {WebpackConfigModel}
+     * @memberof ExtensionBuilder
+     */
+    protected configureWebpack(): WebpackConfigModel {
+        const config = super.configureWebpack();
+        config.setEntryFile(`./${config.getPackageName()}.ts`);
+        return config;
+    }
+
+    /**
+     * @inheritDoc
      * @protected
      * @returns {Plugin[]}
      * @memberof WebpackBuilder
@@ -24,14 +35,15 @@ export class ExtensionBuilder extends WebpackBuilder {
 
         const config: WebpackConfigModel  = WebpackService.getInstance().getConfiguration();
         const plugins = super.loadWebpackPlugins();
+        const packageName = config.getPackageName();
 
         return plugins.concat([
             new CopyWebpackPlugin([
-                { from: "extension.qext", to: "extension.qext" },
+                { from: `${packageName}.qext`, to: `${packageName}.qext` },
                 { from: "wbfolder.wbl" , to: "wbfolder.wbl" },
             ]),
             new ZipWebpackPlugin({
-                filename: "extension.zip",
+                filename: `${packageName}.zip`,
                 path: config.getOutputDirectory(),
             }),
         ]);

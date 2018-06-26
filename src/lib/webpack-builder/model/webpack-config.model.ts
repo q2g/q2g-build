@@ -56,13 +56,13 @@ export class WebpackConfigModel {
     private outFileName: string;
 
     /**
-     * tsconfig file path from source
+     * source package name
      *
      * @private
      * @type {string}
      * @memberof WebpackConfigModel
      */
-    private tsConfigFile: string;
+    private packageName: string;
 
     /**
      * webpack plugins
@@ -72,6 +72,15 @@ export class WebpackConfigModel {
      * @memberof WebpackConfigModel
      */
     private plugins: Plugin[];
+
+    /**
+     * tsconfig file path from source
+     *
+     * @private
+     * @type {string}
+     * @memberof WebpackConfigModel
+     */
+    private tsConfigFile: string;
 
     /**
      * get source directory which where the project is located
@@ -124,6 +133,16 @@ export class WebpackConfigModel {
     }
 
     /**
+     * get output file name
+     *
+     * @returns {string}
+     * @memberof WebpackConfigModel
+     */
+    public getPackageName(): string {
+        return this.packageName;
+    }
+
+    /**
      * get webpack plugins
      *
      * @returns {Plugin[]}
@@ -161,6 +180,16 @@ export class WebpackConfigModel {
      */
     public setEntryFile(filename: string) {
         this.entryFile = filename;
+    }
+
+    /**
+     * set packageName, used for out file by default
+     *
+     * @param {string} packageName
+     * @memberof WebpackConfigModel
+     */
+    public setPackageName(packageName: string) {
+        this.packageName = packageName;
     }
 
     /**

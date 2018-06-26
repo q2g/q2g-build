@@ -3,4 +3,5 @@ export enum AppConfigProperties {
     "environment" = "q2gBuilder.env",
     "root"        = "q2gBuilder.paths.root",
     "sourceRoot"  = "q2gBuilder.paths.sourceRoot",
+    "packageName" = "q2gBuilder.source.packageName",
 }

@@ -17,12 +17,38 @@ import { WebpackService } from "./service/webpack.service";
  */
 export class WebpackBuilder implements IBuilder {
 
+    /**
+     * global configuration service which hold global
+     * configuration values.
+     *
+     * @protected
+     * @type {Config}
+     * @memberof WebpackBuilder
+     */
     protected configService: Config;
 
+    /**
+     * webpack service to add new plugins or set/get configuration
+     *
+     * @private
+     * @type {WebpackService}
+     * @memberof WebpackBuilder
+     */
     private webpackService: WebpackService;
 
+    /**
+     * source root path
+     *
+     * @private
+     * @type {string}
+     * @memberof WebpackBuilder
+     */
     private sourceRoot: string;
 
+    /**
+     * Creates an instance of WebpackBuilder.
+     * @memberof WebpackBuilder
+     */
     public constructor() {
 
         this.webpackService = WebpackService.getInstance();
@@ -61,7 +87,8 @@ export class WebpackBuilder implements IBuilder {
      */
     public async run() {
 
-        // add additional webpack plugins before we start
+        /**
+         */
         this.webpackService.addPlugins( this.loadWebpackPlugins());
 
         const compiler: Compiler = await this.webpackService.getWebpack();
@@ -89,11 +116,15 @@ export class WebpackBuilder implements IBuilder {
         /** @var {string} q2gLoaderContext own loader paths */
         const q2gLoaderContext = resolve(q2gBuilderSource, "./lib/webpack-builder/loader");
 
+        /** @var {string} packageName name for bundle */
+        const packageName = this.configService.get(AppConfigProperties.packageName);
+
         const config = this.webpackService.getConfiguration();
+        config.setPackageName(packageName);
         config.setContextPath(sourceRoot);
-        config.setEntryFile("./app/index.ts");
+        config.setEntryFile("./index.ts");
         config.setOutputDirectory(`${sourceRoot}/dist`);
-        config.setOutFileName(`bundle.js`);
+        config.setOutFileName(`${packageName}.js`);
         config.setTsConfigFile(`${sourceRoot}/tsconfig.json`);
         config.setLoaderContextPaths([
             // vendor loader path (aka ts-loader, css-loader, ...)
@@ -105,7 +136,9 @@ export class WebpackBuilder implements IBuilder {
     }
 
     /**
-     * load webpack plugins into webpack configuration model
+     * add webpack plugins before we start since configuration
+     * values can be changed by other builders which extends from
+     * webpack-builder or loaded by configuration file
      *
      * @protected
      * @returns {Plugin[]}
