@@ -1,11 +1,9 @@
 import { Configuration } from "webpack";
-import { WebpackConfigProperties } from "../api";
-import { WebpackConfigModel } from "../model";
 import { WebpackService } from "../service/webpack.service";
 
-const config: WebpackConfigModel = WebpackService.getInstance().getConfiguration();
+const config = WebpackService.getInstance().getConfiguration();
 
-export const baseConfiguration: Configuration = {
+const webpackConfig: Configuration = {
 
     optimization: {
         minimize: false,
@@ -84,5 +82,7 @@ export const baseConfiguration: Configuration = {
         path: config.getOutputDirectory(),
     },
 
-    plugins: [],
+    plugins: config.getPlugins(),
 };
+
+export default webpackConfig;

@@ -1,5 +1,8 @@
+import { Plugin } from "webpack";
 import { WebpackBuilder } from "../webpack-builder";
-import { WebpackConfigModel } from "../webpack-builder/model";
+import { WebpackConfigModel } from "../webpack-builder/model/webpack-config.model";
+import { WebpackService } from "../webpack-builder/service/webpack.service";
+import { CopyWebpackPlugin, ZipWebpackPlugin } from "./plugins";
 
 /**
  * Builder for Qlick 2 Go Extensions
@@ -10,18 +13,27 @@ import { WebpackConfigModel } from "../webpack-builder/model";
  */
 export class ExtensionBuilder extends WebpackBuilder {
 
-    public constructor() {
-        super();
-    }
-
     /**
-     * create default configuration for Extension Builder
+     * load webpack plugins into webpack configuration model
      *
      * @protected
-     * @memberof ExtensionBuilder
+     * @returns {Plugin[]}
+     * @memberof WebpackBuilder
      */
-    protected createDefaultConfiguration(): WebpackConfigModel {
-        const configModel = super.createDefaultConfiguration();
-        return configModel;
+    protected loadWebpackPlugins(): Plugin[] {
+
+        const config: WebpackConfigModel  = WebpackService.getInstance().getConfiguration();
+        const plugins = super.loadWebpackPlugins();
+
+        return plugins.concat([
+            new CopyWebpackPlugin([
+                { from: "extension.qext", to: "extension.qext" },
+                { from: "wbfolder.wbl" , to: "wbfolder.wbl" },
+            ]),
+            new ZipWebpackPlugin({
+                filename: "extension.zip",
+                path: config.getOutputDirectory(),
+            }),
+        ]);
     }
 }

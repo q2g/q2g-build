@@ -1,3 +1,5 @@
+import { Plugin } from "webpack";
+
 /**
  * Webpack configuration model
  *
@@ -5,25 +7,6 @@
  * @class WebpackConfigModel
  */
 export class WebpackConfigModel {
-
-    /**
-     * webpack configuration filename, line development.config
-     * or production config
-     *
-     * @private
-     * @type {string}
-     * @memberof WebpackConfigModel
-     */
-    private configFile: string;
-
-    /**
-     *
-     *
-     * @private
-     * @type {string}
-     * @memberof WebpackConfigModel
-     */
-    private configRoot: string;
 
     /**
      * set context path for webpack to set directory
@@ -73,7 +56,7 @@ export class WebpackConfigModel {
     private outFileName: string;
 
     /**
-     *
+     * tsconfig file path from source
      *
      * @private
      * @type {string}
@@ -82,117 +65,16 @@ export class WebpackConfigModel {
     private tsConfigFile: string;
 
     /**
-     * get directory where to find webpack configuration files
+     * webpack plugins
      *
-     * @param {string} path
+     * @private
+     * @type {Plugin[]}
      * @memberof WebpackConfigModel
      */
-    public setConfigRoot(path: string) {
-        this.configRoot = path;
-    }
+    private plugins: Plugin[];
 
     /**
-     * get directory where to find webpack configuration files
-     *
-     * @returns {string}
-     * @memberof WebpackConfigModel
-     */
-    public getConfigRoot(): string {
-        return this.configRoot;
-    }
-
-    /**
-     * set webpack configuration file name
-     *
-     * @param {string} fileName
-     * @memberof WebpackConfigModel
-     */
-    public setConfigFile(fileName: string) {
-        this.configFile = fileName;
-    }
-
-    /**
-     * get webpack configuration file name
-     *
-     * @param {string} fileName
-     * @memberof WebpackConfigModel
-     */
-    public getConfigFile(): string {
-        return this.configFile;
-    }
-
-    /**
-     * set output directory for webpack
-     *
-     * @param {string} dir
-     * @memberof WebpackConfigModel
-     */
-    public setOutputDirectory(dir: string) {
-        this.outputDirectory = dir;
-    }
-
-    /**
-     * get output directory for webpack
-     *
-     * @returns {string}
-     * @memberof WebpackConfigModel
-     */
-    public getOutputDirectory(): string {
-        return this.outputDirectory;
-    }
-
-    /**
-     * set entry file for webpack
-     *
-     * @param {string} filename
-     * @memberof WebpackConfigModel
-     */
-    public setEntryFile(filename: string) {
-        this.entryFile = filename;
-    }
-
-    /**
-     * return entry file for webpack
-     *
-     * @returns {string}
-     * @memberof WebpackConfigModel
-     */
-    public getEntryFile(): string {
-        return this.entryFile;
-    }
-
-    /**
-     * set tsconfig file
-     *
-     * @param {string} filepath
-     * @memberof WebpackConfigModel
-     */
-    public setTsConfigFile(filepath: string) {
-        this.tsConfigFile = filepath;
-    }
-
-    /**
-     * get tsconfig file, default to tsconfig.json
-     *
-     * @returns {string}
-     * @memberof WebpackConfigModel
-     */
-    public getTsConfigFile(): string {
-        return this.tsConfigFile;
-    }
-
-    /**
-     * set directory on which webpack should working
-     *
-     * @param {string} contextPath
-     * @memberof WebpackConfigModel
-     */
-    public setContextPath(contextPath: string) {
-        this.contextPath = contextPath;
-    }
-
-    /**
-     * get directory on which webpack should working
+     * get source directory which where the project is located
      *
      * @returns {string}
      * @memberof WebpackConfigModel
@@ -202,17 +84,17 @@ export class WebpackConfigModel {
     }
 
     /**
-     * set loader context paths
+     * get entry file
      *
-     * @param {string[]} paths
+     * @returns {string}
      * @memberof WebpackConfigModel
      */
-    public setLoaderContextPaths(paths: string[]) {
-        this.loaderContextPaths = paths;
+    public getEntryFile(): string {
+        return this.entryFile;
     }
 
     /**
-     * return loader source paths
+     * get context paths for loaders
      *
      * @returns {string[]}
      * @memberof WebpackConfigModel
@@ -222,7 +104,17 @@ export class WebpackConfigModel {
     }
 
     /**
-     * returns webpack output filename
+     * get output directory
+     *
+     * @returns {string}
+     * @memberof WebpackConfigModel
+     */
+    public getOutputDirectory(): string {
+        return this.outputDirectory;
+    }
+
+    /**
+     * get output file name
      *
      * @returns {string}
      * @memberof WebpackConfigModel
@@ -232,12 +124,92 @@ export class WebpackConfigModel {
     }
 
     /**
-     * set output filename for webpack bundle
+     * get webpack plugins
+     *
+     * @returns {Plugin[]}
+     * @memberof WebpackConfigModel
+     */
+    public getPlugins(): Plugin[] {
+        return this.plugins;
+    }
+
+    /**
+     * get tsconfig.json for ts-loader
+     *
+     * @returns {string}
+     * @memberof WebpackConfigModel
+     */
+    public getTsConfigFile(): string {
+        return this.tsConfigFile;
+    }
+
+    /**
+     * set output for bundle
+     *
+     * @param {string} dir
+     * @memberof WebpackConfigModel
+     */
+    public setOutputDirectory(dir: string) {
+        this.outputDirectory = dir;
+    }
+
+    /**
+     * set entry file
+     *
+     * @param {string} filename
+     * @memberof WebpackConfigModel
+     */
+    public setEntryFile(filename: string) {
+        this.entryFile = filename;
+    }
+
+    /**
+     * set tsconfig file for ts-loader
+     *
+     * @param {string} filepath
+     * @memberof WebpackConfigModel
+     */
+    public setTsConfigFile(filepath: string) {
+        this.tsConfigFile = filepath;
+    }
+
+    /**
+     * set context path for webpack
+     *
+     * @param {string} contextPath
+     * @memberof WebpackConfigModel
+     */
+    public setContextPath(contextPath: string) {
+        this.contextPath = contextPath;
+    }
+
+    /**
+     * set loader context paths where webpack can find our loaders
+     *
+     * @param {string[]} paths
+     * @memberof WebpackConfigModel
+     */
+    public setLoaderContextPaths(paths: string[]) {
+        this.loaderContextPaths = paths;
+    }
+
+    /**
+     * set output filename
      *
      * @param {string} filename
      * @memberof WebpackConfigModel
      */
     public setOutFileName(filename: string) {
         this.outFileName = filename;
+    }
+
+    /**
+     * set plugins used by webpack
+     *
+     * @param {Plugin[]} plugins
+     * @memberof WebpackConfigModel
+     */
+    public setPlugins(plugins: Plugin[]) {
+        this.plugins = plugins;
     }
 }

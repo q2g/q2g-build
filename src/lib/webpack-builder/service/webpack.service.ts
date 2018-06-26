@@ -1,7 +1,6 @@
-import { resolve } from "path";
 import { Config } from "rh-utils";
 import * as Webpack from "webpack";
-import { WebpackConfigModel } from "../model";
+import { WebpackConfigModel } from "../model/webpack-config.model";
 
 export class WebpackService {
 
@@ -26,20 +25,77 @@ export class WebpackService {
         WebpackService.instance = this;
     }
 
+    /**
+     * get webpack configuration
+     *
+     * @returns {WebpackConfigModel}
+     * @memberof WebpackService
+     */
     public getConfiguration(): WebpackConfigModel {
         return this.configModel;
     }
 
+    /**
+     * create new webpack instance and returns compiler
+     *
+     * @returns {Promise<Webpack.Compiler>}
+     * @memberof WebpackService
+     */
     public async getWebpack(): Promise<Webpack.Compiler> {
         return Webpack(await this.loadConfigurationFile());
     }
 
+    /**
+     * add new plugin to webpack
+     *
+     * @param plugin
+     */
+    public addPlugin(plugin: Webpack.Plugin) {
+        const plugins =  this.configModel.getPlugins();
+
+        if ( !plugins || ! plugins.length ) {
+            this.configModel.setPlugins([plugin]);
+            return;
+        }
+
+        plugins.push(plugin);
+    }
+
+    /**
+     * add multiple webpack plugins
+     *
+     * @param {Webpack.Plugin[]} plugins
+     * @memberof WebpackService
+     */
+    public addPlugins(plugins: Webpack.Plugin[]) {
+        plugins.forEach( (plugin) => {
+            this.addPlugin(plugin);
+        });
+    }
+
+    /**
+     * set webpack option
+     *
+     * @param {string} option
+     * @param {string} value
+     * @memberof WebpackService
+     */
+    public setOption(option: string, value: string) {
+        const setterMethod = `set${option}`;
+        if ( this.configModel.hasOwnProperty(setterMethod)) {
+            this.configModel[setterMethod](value);
+        }
+    }
+
+    /**
+     * load configuration file for webpack
+     *
+     * @private
+     * @returns {Promise<Webpack.Configuration>}
+     * @memberof WebpackService
+     */
     private async loadConfigurationFile(): Promise<Webpack.Configuration> {
-
-        const configFilePath: string = resolve(
-            this.configModel.getConfigRoot(), this.configModel.getConfigFile());
-
-        const webpackConfig = await import(configFilePath);
+        const webpackConfig = await import("../model/webpack.config");
         return webpackConfig.default;
     }
 }

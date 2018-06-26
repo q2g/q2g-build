@@ -1,9 +1,11 @@
 import { resolve } from "path";
 import { Config, IDataNode } from "rh-utils";
-import { Compiler } from "webpack";
-import { AppConfigProperties, IBuilder } from "../../api";
-import { WebpackConfigProperties } from "./api/config";
-import { WebpackConfigModel } from "./model";
+import { Compiler, Plugin } from "webpack";
+import { IBuilder } from "../../api";
+import { AppConfigProperties, WebpackOption } from "../../model";
+import { OptionHelper } from "../../services";
+import { WebpackConfigModel } from "./model/webpack-config.model";
+import { CleanWebpackPlugin, LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
 
 /**
@@ -27,7 +29,7 @@ export class WebpackBuilder implements IBuilder {
         this.configService  = Config.getInstance();
         this.sourceRoot     = this.configService.get(AppConfigProperties.sourceRoot);
 
-        this.createDefaultConfiguration();
+        this.configureWebpack();
     }
 
     /**
@@ -39,14 +41,16 @@ export class WebpackBuilder implements IBuilder {
      */
     public configure(config: IDataNode): void {
 
-        for (const property in WebpackConfigProperties) {
-            if (config.hasOwnProperty(property) && config[property]) {
-                let value = config[property];
-                if ( property === "outDir" ) {
-                    value = resolve(this.sourceRoot, config[property]);
+        const options: IDataNode = OptionHelper.cleanOptions(config, WebpackOption);
+        const errors: string[]   = OptionHelper.validateOptions(config, WebpackOption);
+
+        if ( ! errors.length ) {
+            for (const name in options) {
+                if ( options.hasOwnProperty(name) ) {
+                    this.webpackService.setOption(name, options[name]);
                 }
-                this.configService.set(WebpackConfigProperties[property], value, true);
             }
+            // value = resolve(this.sourceRoot, config[property]);
         }
     }
 
@@ -56,6 +60,10 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     public async run() {
+
+        // add additional webpack plugins before we start
+        this.webpackService.addPlugins( this.loadWebpackPlugins());
+
         const compiler: Compiler = await this.webpackService.getWebpack();
         compiler.run((err) => {
             if ( err ) {
@@ -71,7 +79,7 @@ export class WebpackBuilder implements IBuilder {
      * @protected
      * @memberof WebpackBuilder
      */
-    protected createDefaultConfiguration(): WebpackConfigModel {
+    protected configureWebpack(): WebpackConfigModel {
 
         const sourceRoot = this.sourceRoot;
 
@@ -82,20 +90,33 @@ export class WebpackBuilder implements IBuilder {
         const q2gLoaderContext = resolve(q2gBuilderSource, "./lib/webpack-builder/loader");
 
         const config = this.webpackService.getConfiguration();
-        config.setConfigFile("development.config");
-        config.setConfigRoot(resolve(q2gBuilderSource, "./lib/webpack-builder/config"));
         config.setContextPath(sourceRoot);
         config.setEntryFile("./app/index.ts");
         config.setOutputDirectory(`${sourceRoot}/dist`);
         config.setOutFileName(`bundle.js`);
         config.setTsConfigFile(`${sourceRoot}/tsconfig.json`);
         config.setLoaderContextPaths([
-            // vendor loader path ( aka ts-loader, css-loader )
+            // vendor loader path (aka ts-loader, css-loader, ...)
             resolve(q2gBuilderSource, "../node_modules"),
             // q2g-build loader path
             q2gLoaderContext,
         ]);
-
         return config;
+    }
+
+    /**
+     * load webpack plugins into webpack configuration model
+     *
+     * @protected
+     * @returns {Plugin[]}
+     * @memberof WebpackBuilder
+     */
+    protected loadWebpackPlugins(): Plugin[] {
+        const config = this.webpackService.getConfiguration();
+        const plugins: Plugin[] = [
+            new LogPlugin(),
+            new CleanWebpackPlugin(config.getOutputDirectory(), {allowExternal: true}),
+        ];
+        return plugins;
     }
 }

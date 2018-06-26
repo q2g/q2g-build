@@ -1,5 +1,6 @@
 export enum Builders {
     WEBPACK = "webpack",
+    EXTENSION = "extension",
 }
 
 export interface IBuilder {
