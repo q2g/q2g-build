@@ -1,9 +1,9 @@
-import { resolve } from "path";
-import { Config } from "rh-utils";
-import { Configuration, ProvidePlugin } from "webpack";
-import { WebpackConfigProperties } from "../../api";
+import { Configuration } from "webpack";
+import { WebpackConfigProperties } from "../api";
+import { WebpackConfigModel } from "../model";
+import { WebpackService } from "../service/webpack.service";
 
-const configService = Config.getInstance();
+const config: WebpackConfigModel = WebpackService.getInstance().getConfiguration();
 
 export const baseConfiguration: Configuration = {
 
@@ -11,9 +11,9 @@ export const baseConfiguration: Configuration = {
         minimize: false,
     },
 
-    context: configService.get(WebpackConfigProperties.context),
+    context: config.getContextPath(),
 
-    entry: configService.get(WebpackConfigProperties.entry),
+    entry: config.getEntryFile(),
 
     module: {
         rules: [
@@ -28,7 +28,7 @@ export const baseConfiguration: Configuration = {
                 }, {
                     loader: "ts-loader",
                     options: {
-                        configFile: configService.get(WebpackConfigProperties.tsconfig),
+                        configFile: config.getTsConfigFile(),
                     },
                 }],
             },
@@ -75,14 +75,14 @@ export const baseConfiguration: Configuration = {
             text: "raw-loader",
         },
         mainFields: ["loader", "main"],
-        modules: configService.get(WebpackConfigProperties.loaderContext),
+        modules: config.getLoaderContextPaths(),
     },
 
     output: {
-        filename: configService.get(WebpackConfigProperties.outFile),
+        filename: config.getOutFileName(),
         libraryTarget: "umd",
-        path: configService.get(WebpackConfigProperties.outDir),
+        path: config.getOutputDirectory(),
     },
 
-    plugins: []
+    plugins: [],
 };

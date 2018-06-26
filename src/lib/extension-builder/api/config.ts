@@ -5,5 +5,5 @@ export enum WebpackConfigProperties {
     "outDir"        = "q2gBuilder.webpack.outDir",
     "outFile"       = "q2gBuilder.webpack.outFile",
     "tsconfig"      = "q2gBuilder.webpack.tsconfigFile",
-    "configRoot"    = "q2gBuilder.webpack.paths.configRoot",
+    "configRoot"    = "q2gBuilder.webpack.paths.configuration",
  }

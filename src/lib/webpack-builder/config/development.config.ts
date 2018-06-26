@@ -1,5 +1,5 @@
 import { Configuration, Plugin } from "webpack";
-import { LogPlugin } from "../../plugins/log.plugin";
+import { LogPlugin } from "../plugins/log.plugin";
 import { baseConfiguration } from "./base.config";
 
 /** @var {Plugin[]} basePlugins default plugins to merge with development plugins */

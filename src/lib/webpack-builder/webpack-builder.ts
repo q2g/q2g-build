@@ -1,18 +1,28 @@
 import { resolve } from "path";
-import { Config } from "rh-utils";
+import { Config, IDataNode } from "rh-utils";
 import { Compiler } from "webpack";
-import { AppConfigProperties, IBuilder, IDataNode } from "../../api";
+import { AppConfigProperties, IBuilder } from "../../api";
 import { WebpackConfigProperties } from "./api/config";
+import { WebpackConfigModel } from "./model";
 import { WebpackService } from "./service/webpack.service";
 
+/**
+ * builder for webpack to bundle all files
+ *
+ * @export
+ * @class WebpackBuilder
+ * @implements {IBuilder}
+ */
 export class WebpackBuilder implements IBuilder {
-    private webpackService: WebpackService;
 
-    private configService: Config;
+    protected configService: Config;
+
+    private webpackService: WebpackService;
 
     private sourceRoot: string;
 
     public constructor() {
+
         this.webpackService = WebpackService.getInstance();
         this.configService  = Config.getInstance();
         this.sourceRoot     = this.configService.get(AppConfigProperties.sourceRoot);
@@ -21,9 +31,11 @@ export class WebpackBuilder implements IBuilder {
     }
 
     /**
-     * write configuration for webpack in config service
+     * configure webpack this will cause override if propertie
+     * is allready set
      *
-     * @param config
+     * @param {IDataNode} config
+     * @memberof WebpackBuilder
      */
     public configure(config: IDataNode): void {
 
@@ -38,8 +50,13 @@ export class WebpackBuilder implements IBuilder {
         }
     }
 
-    public run() {
-        const compiler: Compiler = this.webpackService.getWebpack();
+    /**
+     * run webpack compiler
+     *
+     * @memberof WebpackBuilder
+     */
+    public async run() {
+        const compiler: Compiler = await this.webpackService.getWebpack();
         compiler.run((err) => {
             if ( err ) {
                 process.stderr.write(err.toString());
@@ -48,11 +65,14 @@ export class WebpackBuilder implements IBuilder {
     }
 
     /**
-     * create default configuration for webpack builder
+     * create default configuration, override this to add / change configuration
+     * properties
      *
      * @protected
+     * @memberof WebpackBuilder
      */
-    protected createDefaultConfiguration(): void {
+    protected createDefaultConfiguration(): WebpackConfigModel {
+
         const sourceRoot = this.sourceRoot;
 
         /** @var {string} q2gBuilderSource q2g-build path in source package node_modules folder */
@@ -61,15 +81,21 @@ export class WebpackBuilder implements IBuilder {
         /** @var {string} q2gLoaderContext own loader paths */
         const q2gLoaderContext = resolve(q2gBuilderSource, "./lib/webpack-builder/loader");
 
-        this.configService.set( WebpackConfigProperties.outDir, `${sourceRoot}/dist`, false);
-        this.configService.set( WebpackConfigProperties.entry, "./index.ts");
-        this.configService.set( WebpackConfigProperties.tsconfig, `${sourceRoot}/tsconfig.json`);
-        this.configService.set( WebpackConfigProperties.context, sourceRoot);
-
-        /** set loader context paths where to search loaders */
-        this.configService.set( WebpackConfigProperties.loaderContext, [
-            resolve(q2gBuilderSource, "../node_modules"), // where to find vendor loaders (less, css or ts-loader)
-            q2gLoaderContext, // where to find own q2g-builder/webpack-loaders
+        const config = this.webpackService.getConfiguration();
+        config.setConfigFile("development.config");
+        config.setConfigRoot(resolve(q2gBuilderSource, "./lib/webpack-builder/config"));
+        config.setContextPath(sourceRoot);
+        config.setEntryFile("./app/index.ts");
+        config.setOutputDirectory(`${sourceRoot}/dist`);
+        config.setOutFileName(`bundle.js`);
+        config.setTsConfigFile(`${sourceRoot}/tsconfig.json`);
+        config.setLoaderContextPaths([
+            // vendor loader path ( aka ts-loader, css-loader )
+            resolve(q2gBuilderSource, "../node_modules"),
+            // q2g-build loader path
+            q2gLoaderContext,
         ]);
+
+        return config;
     }
 }

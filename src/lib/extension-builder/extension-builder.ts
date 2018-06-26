@@ -1,4 +1,5 @@
 import { WebpackBuilder } from "../webpack-builder";
+import { WebpackConfigModel } from "../webpack-builder/model";
 
 /**
  * Builder for Qlick 2 Go Extensions
@@ -9,13 +10,18 @@ import { WebpackBuilder } from "../webpack-builder";
  */
 export class ExtensionBuilder extends WebpackBuilder {
 
+    public constructor() {
+        super();
+    }
+
     /**
      * create default configuration for Extension Builder
      *
      * @protected
      * @memberof ExtensionBuilder
      */
-    protected createDefaultConfiguration() {
-        super.createDefaultConfiguration();
+    protected createDefaultConfiguration(): WebpackConfigModel {
+        const configModel = super.createDefaultConfiguration();
+        return configModel;
     }
 }
