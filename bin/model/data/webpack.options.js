@@ -1,11 +1,7 @@
-import { IOption } from "../../api/option.interface";
-
-/**
- * no whitespace or empty
- */
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const NO_WS_EMPTY = /^(?!.*\s)|\w+$/;
-
-export const WebpackOption: IOption  = {
+exports.WebpackOption = {
     entryFile: {
         required: false,
         validator: {

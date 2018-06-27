@@ -10,8 +10,22 @@ export class WebpackService {
         return this.instance;
     }
 
+    /**
+     * webpack config model
+     *
+     * @private
+     * @type {WebpackConfigModel}
+     * @memberof WebpackService
+     */
     private configModel: WebpackConfigModel;
 
+    /**
+     * global config values service
+     *
+     * @private
+     * @type {Config}
+     * @memberof WebpackService
+     */
     private configService: Config;
 
     public constructor() {
@@ -82,6 +96,7 @@ export class WebpackService {
      */
     public setOption(option: string, value: string) {
         const setterMethod = `set${option}`;
+        /** @todo implement parse config values */
         if ( this.configModel.hasOwnProperty(setterMethod)) {
             this.configModel[setterMethod](value);
         }

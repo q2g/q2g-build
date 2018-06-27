@@ -18,14 +18,17 @@ const webpackConfig: Configuration = {
                 loader: "raw-loader",
             }],
         }, {
-            test: /.*\.tsx?$/,
+            test: /\.(tsx?|js)$/,
             use: [{
                 /**
                  * remove all require js import css loader plugins
                  * otherwise bundle will fail
                  */
                 loader: "clean-requirejs-imports.loader",
-            }, {
+            }],
+        }, {
+            test: /.*\.tsx?$/,
+            use: [{
                 loader: "ts-loader",
                 options: {
                     configFile: config.getTsConfigFile(),
