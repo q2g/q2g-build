@@ -1,3 +1,4 @@
+import { IDataNode } from "rh-utils";
 import { Plugin } from "webpack";
 
 /**
@@ -19,14 +20,13 @@ export class WebpackConfigModel {
     private contextPath: string;
 
     /**
-     * context paths to tell webpack where to find specific loaders
-     * like ts-loader, css-loader
+     * external modules for webpack
      *
      * @private
      * @type {string[]}
      * @memberof WebpackConfigModel
      */
-    private loaderContextPaths: string[];
+    private externalModules: IDataNode[];
 
     /**
      * webpack entry filename default index.ts
@@ -36,6 +36,16 @@ export class WebpackConfigModel {
      * @memberof WebpackConfigModel
      */
     private entryFile: string;
+
+    /**
+     * context paths to tell webpack where to find specific loaders
+     * like ts-loader, css-loader
+     *
+     * @private
+     * @type {string[]}
+     * @memberof WebpackConfigModel
+     */
+    private loaderContextPaths: string[];
 
     /**
      * webpack out directory
@@ -100,6 +110,16 @@ export class WebpackConfigModel {
      */
     public getEntryFile(): string {
         return this.entryFile;
+    }
+
+    /**
+     * get entry file
+     *
+     * @returns {string}
+     * @memberof WebpackConfigModel
+     */
+    public getExternalModules(): IDataNode[] {
+        return this.externalModules;
     }
 
     /**
@@ -180,6 +200,16 @@ export class WebpackConfigModel {
      */
     public setEntryFile(filename: string) {
         this.entryFile = filename;
+    }
+
+    /**
+     * set external modules
+     *
+     * @param {string[]} modules
+     * @memberof WebpackConfigModel
+     */
+    public setExternalModules(modules: IDataNode[]) {
+        this.externalModules = modules;
     }
 
     /**

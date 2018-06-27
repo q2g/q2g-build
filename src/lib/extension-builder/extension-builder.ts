@@ -2,7 +2,7 @@ import { Plugin } from "webpack";
 import { WebpackBuilder } from "../webpack-builder";
 import { WebpackConfigModel } from "../webpack-builder/model/webpack-config.model";
 import { WebpackService } from "../webpack-builder/service/webpack.service";
-import { CopyWebpackPlugin, ZipWebpackPlugin } from "./plugins";
+import { CopyWebpackPlugin, PathOverridePlugin, ZipWebpackPlugin } from "./plugins";
 
 /**
  * Builder for Qlick 2 Go Extensions
@@ -22,6 +22,11 @@ export class ExtensionBuilder extends WebpackBuilder {
     protected configureWebpack(): WebpackConfigModel {
         const config = super.configureWebpack();
         config.setEntryFile(`./${config.getPackageName()}.ts`);
+        config.setExternalModules([{
+            angular   : "angular",
+            qlik      : "qlik",
+            qvangular : "qvangular",
+        }]);
         return config;
     }
 
@@ -38,6 +43,7 @@ export class ExtensionBuilder extends WebpackBuilder {
         const packageName = config.getPackageName();
 
         return plugins.concat([
+            new PathOverridePlugin(/\/umd\//, "esm"),
             new CopyWebpackPlugin([
                 { from: `${packageName}.qext`, to: `${packageName}.qext` },
                 { from: "wbfolder.wbl" , to: "wbfolder.wbl" },

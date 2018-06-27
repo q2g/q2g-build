@@ -1,5 +1,7 @@
-import * as CopyPlugin from "copy-webpack-plugin";
-import * as ZipPlugin from "zip-webpack-plugin";
+import * as WebpackCopyPlugin from "copy-webpack-plugin";
+import * as WebpackPathOverridePlugin from "path-override-webpack-plugin";
+import * as WebpackZipPlugin from "zip-webpack-plugin";
 
-export const ZipWebpackPlugin   = ZipPlugin;
-export const CopyWebpackPlugin  = CopyPlugin;
+export const CopyWebpackPlugin  = WebpackCopyPlugin;
+export const PathOverridePlugin = WebpackPathOverridePlugin;
+export const ZipWebpackPlugin   = WebpackZipPlugin;
