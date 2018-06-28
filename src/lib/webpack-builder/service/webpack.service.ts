@@ -96,8 +96,10 @@ export class WebpackService {
      */
     public setOption(option: string, value: string) {
         const setterMethod = `set${option}`;
-        /** @todo implement parse config values */
-        if ( this.configModel.hasOwnProperty(setterMethod)) {
+        const methodExists = Object.prototype.toString.call(
+            this.configModel[setterMethod]).slice(8, -1) === "Function";
+
+        if ( methodExists ) {
             this.configModel[setterMethod](value);
         }
     }
