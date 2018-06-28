@@ -6,17 +6,17 @@
   "scripts": {
     "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "tsc"
+    "postinstall": "tsc -p ./tsconfig.json"
   },
   "author": "Ralf Hannuschka",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^10.3.4",
-    "@types/webpack": "^4.4.2"
+    "@types/webpack": "^4.4.2",
+    "ajv": "^6.5.1"
   },
   "types": "./typings/index.d.ts",
   "dependencies": {
-    "ajv": "^6.5.1",
     "rh-utils": "git+https://github.com/r-hannuschka/rh-utils",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.2",

@@ -10,13 +10,13 @@
         "removeComments": true,
         "lib": [
             "es6"
-        ]
+        ],
+        "types": [ "node", "webpack" ]
     },
-    "include": [
-        "**/*.ts"
-    ],
     "exclude": [
-        "./node_modules/*",
-        "./node_modules/**/*.d.ts",
+        "node_modules"
     ],
+    "files": [
+        "./src/index.ts"
+    ]
 }
