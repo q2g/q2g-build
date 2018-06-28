@@ -1,4 +1,4 @@
-import { IOption } from "../../api/option.interface";
+import { IOption } from "../../../../api/option.interface";
 
 /**
  * no whitespace or empty
@@ -32,6 +32,6 @@ export const WebpackOption: IOption  = {
         validator: {
             errorMsg: "no valid configuration file passed",
             test: /\.json$/,
-        }
-    }
+        },
+    },
 };

@@ -95,7 +95,7 @@ export class WebpackService {
      * @memberof WebpackService
      */
     public setOption(option: string, value: string) {
-        const setterMethod = `set${option}`;
+        const setterMethod = `set${option.charAt(0).toUpperCase()}${option.slice(1)}`;
         const methodExists = Object.prototype.toString.call(
             this.configModel[setterMethod]).slice(8, -1) === "Function";
 
@@ -112,7 +112,7 @@ export class WebpackService {
      * @memberof WebpackService
      */
     private async loadConfigurationFile(): Promise<Webpack.Configuration> {
-        const webpackConfig = await import("../model/webpack.config");
+        const webpackConfig = await import("../templates/webpack.config");
         return webpackConfig.default;
     }
 }

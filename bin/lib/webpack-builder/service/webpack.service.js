@@ -45,14 +45,15 @@ class WebpackService {
         });
     }
     setOption(option, value) {
-        const setterMethod = `set${option}`;
-        if (this.configModel.hasOwnProperty(setterMethod)) {
+        const setterMethod = `set${option.charAt(0).toUpperCase()}${option.slice(1)}`;
+        const methodExists = Object.prototype.toString.call(this.configModel[setterMethod]).slice(8, -1) === "Function";
+        if (methodExists) {
             this.configModel[setterMethod](value);
         }
     }
     loadConfigurationFile() {
         return __awaiter(this, void 0, void 0, function* () {
-            const webpackConfig = yield Promise.resolve().then(() => require("../model/webpack.config"));
+            const webpackConfig = yield Promise.resolve().then(() => require("../templates/webpack.config"));
             return webpackConfig.default;
         });
     }

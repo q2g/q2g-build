@@ -12,6 +12,7 @@ const path_1 = require("path");
 const rh_utils_1 = require("rh-utils");
 const model_1 = require("../../model");
 const services_1 = require("../../services");
+const model_2 = require("./model");
 const plugins_1 = require("./plugins");
 const webpack_service_1 = require("./service/webpack.service");
 class WebpackBuilder {
@@ -22,8 +23,8 @@ class WebpackBuilder {
         this.configureWebpack();
     }
     configure(config) {
-        const options = services_1.OptionHelper.cleanOptions(config, model_1.WebpackOption);
-        const errors = services_1.OptionHelper.validateOptions(config, model_1.WebpackOption);
+        const options = services_1.OptionHelper.cleanOptions(config, model_2.WebpackOption);
+        const errors = services_1.OptionHelper.validateOptions(config, model_2.WebpackOption);
         if (!errors.length) {
             for (const name in options) {
                 if (options.hasOwnProperty(name)) {

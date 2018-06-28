@@ -2,9 +2,9 @@ import { resolve } from "path";
 import { Config, IDataNode } from "rh-utils";
 import { Compiler, Plugin } from "webpack";
 import { IBuilder } from "../../api";
-import { AppConfigProperties, WebpackOption } from "../../model";
+import { AppConfigProperties } from "../../model";
 import { OptionHelper } from "../../services";
-import { WebpackConfigModel } from "./model/webpack-config.model";
+import { WebpackConfigModel, WebpackOption } from "./model";
 import { CleanWebpackPlugin, LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
 
@@ -76,7 +76,6 @@ export class WebpackBuilder implements IBuilder {
                     this.webpackService.setOption(name, options[name]);
                 }
             }
-            // value = resolve(this.sourceRoot, config[property]);
         }
     }
 
@@ -86,11 +85,7 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     public async run() {
-
-        /**
-         */
         this.webpackService.addPlugins( this.loadWebpackPlugins());
-
         const compiler: Compiler = await this.webpackService.getWebpack();
         compiler.run((err) => {
             if ( err ) {

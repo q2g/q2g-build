@@ -43,7 +43,7 @@ export class ExtensionBuilder extends WebpackBuilder {
         const packageName = config.getPackageName();
 
         return plugins.concat([
-            new PathOverridePlugin(/\/umd\//, "esm"),
+            new PathOverridePlugin(/\/umd\//, "/esm/"),
             new CopyWebpackPlugin([
                 { from: `${packageName}.qext`, to: `${packageName}.qext` },
                 { from: "wbfolder.wbl" , to: "wbfolder.wbl" },

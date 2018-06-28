@@ -5,4 +5,3 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./data/app.config"));
 __export(require("./data/commandline.options"));
-__export(require("./data/webpack.options"));
