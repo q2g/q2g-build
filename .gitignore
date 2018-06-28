@@ -1,3 +1,4 @@
+bin/*
 node_modules/*
 log/debug.log
 log/error.log
