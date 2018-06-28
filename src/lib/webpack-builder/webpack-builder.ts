@@ -85,9 +85,14 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     public async run() {
-        const compiler: Compiler = await this.webpackService.getWebpack();
+        /** finish some configuration values before webpack would created and runs */
         this.beforeRun();
+
+        /** add required webpack plugins */
         this.webpackService.addPlugins( this.loadWebpackPlugins());
+
+        const compiler: Compiler = await this.webpackService.getWebpack();
+
         compiler.run((err) => {
             if ( err ) {
                 process.stderr.write(err.toString());
@@ -103,11 +108,17 @@ export class WebpackBuilder implements IBuilder {
      */
     protected beforeRun(): void {
         const config = this.webpackService.getConfiguration();
+        /*
         if ( config.getEnvironment() !== "production" ) {
             config.setOptimization({
                 minimize: false,
             });
         }
+        */
+        /** @todo remove we want minimize on production mode */
+        config.setOptimization({
+            minimize: false,
+        });
     }
 
     /**
