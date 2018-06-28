@@ -7,17 +7,14 @@
  */
 export default function cleanRequireJsCssLoader(source) {
 
-    // pattern to replace text! or css! requirejs plugins with ./content.filetype
-    // const pattern = /("|')(?:text|css)\!(?:\.\/)?(.*?)(\1)/;
-
     // pattern to replace css!content.css | css!./content.css with ./content.css
-    const pattern = /("|')css\!(?:\.\/)?(.*?)(\1)/;
+    const pattern = /("|')css\!(?:\.\/)?(.*?)\.css(\1)/;
 
     /**
      * loop through all matches and replace them
      */
     const ret = source.replace(pattern, (fullMatch, quoteChar, file) => {
-        return `${quoteChar}./${file}${quoteChar}`;
+        return `${quoteChar}./${file}.less${quoteChar}`;
     });
     return ret;
 }
