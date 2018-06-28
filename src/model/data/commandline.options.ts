@@ -12,4 +12,8 @@ export const CommandlineOptions: IOption  = {
            test: /\.json$/,
        },
    },
+   env: {
+       required: false,
+       values: ["development", "production"],
+   },
 };

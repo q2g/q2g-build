@@ -13,6 +13,10 @@ export const WebpackOption: IOption  = {
             test: NO_WS_EMPTY,
         },
     },
+    environment: {
+        required: false,
+        values: ["development", "production"],
+    },
     outFileName: {
         required: false,
         validator: {

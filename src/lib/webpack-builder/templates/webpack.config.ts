@@ -1,4 +1,4 @@
-import { Configuration } from "webpack";
+import { Configuration, Options } from "webpack";
 import { WebpackService } from "../service/webpack.service";
 
 const config = WebpackService.getInstance().getConfiguration();
@@ -10,6 +10,10 @@ const webpackConfig: Configuration = {
     entry: config.getEntryFile(),
 
     externals: config.getExternalModules(),
+
+    mode: config.getEnvironment(),
+
+    optimization:  config.getOptimization(),
 
     module: {
         rules: [{

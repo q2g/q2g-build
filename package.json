@@ -5,7 +5,6 @@
   "main": "bin/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "tsc -p ./tsconfig.json"
   },
   "author": "Ralf Hannuschka",
@@ -17,7 +16,6 @@
   },
   "types": "./typings/index.d.ts",
   "dependencies": {
-    "rh-utils": "git+https://github.com/r-hannuschka/rh-utils",
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
@@ -25,6 +23,7 @@
     "less-loader": "^4.1.0",
     "path-override-webpack-plugin": "^0.1.2",
     "raw-loader": "0.5.1",
+    "rh-utils": "git+https://github.com/r-hannuschka/rh-utils.git",
     "style-loader": "^0.21.0",
     "ts-loader": "^4.4.1",
     "tslint": "^5.10.0",

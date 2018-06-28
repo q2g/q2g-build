@@ -28,7 +28,6 @@ function initAppConfiguration(root: string) {
 
     /** create base configuration values */
     configService.set(AppConfigProperties.appRoot, `${root}/bin`);
-    configService.set(AppConfigProperties.environment , "development");
     configService.set(AppConfigProperties.root, root);
     configService.set(AppConfigProperties.sourceRoot , process.cwd());
 
@@ -56,13 +55,18 @@ function main(scriptPath: string, ...args: string[]) {
         initAppConfiguration(scriptPath);
 
         const builder: IBuilder = builderService.getBuilder(options.builder);
+        let config = {};
 
         if ( options.hasOwnProperty("config") && options.config ) {
             const configFile = resolve(process.cwd(), options.config);
-            builder.configure(
-                OptionHelper.loadFromFile(configFile));
+            config = OptionHelper.loadFromFile(configFile);
         }
 
+        const builderConfig = Object.assign({
+            environment: options.env || "development",
+        }, config);
+
+        builder.configure( builderConfig );
         builder.run();
     } catch ( err ) {
         logService.log(`${err}`, Log.LOG_ERROR);

@@ -85,13 +85,29 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     public async run() {
-        this.webpackService.addPlugins( this.loadWebpackPlugins());
         const compiler: Compiler = await this.webpackService.getWebpack();
+        this.beforeRun();
+        this.webpackService.addPlugins( this.loadWebpackPlugins());
         compiler.run((err) => {
             if ( err ) {
                 process.stderr.write(err.toString());
             }
         });
+    }
+
+    /**
+     * before compiler startes, good place to finalize configuration values
+     *
+     * @protected
+     * @memberof WebpackBuilder
+     */
+    protected beforeRun(): void {
+        const config = this.webpackService.getConfiguration();
+        if ( config.getEnvironment() !== "production" ) {
+            config.setOptimization({
+                minimize: false,
+            });
+        }
     }
 
     /**

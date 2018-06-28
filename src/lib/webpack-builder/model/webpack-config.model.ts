@@ -1,5 +1,5 @@
 import { IDataNode } from "rh-utils";
-import { Plugin } from "webpack";
+import { Options, Plugin } from "webpack";
 
 /**
  * Webpack configuration model
@@ -38,6 +38,15 @@ export class WebpackConfigModel {
     private entryFile: string;
 
     /**
+     * environment development or production
+     *
+     * @private
+     * @type {string}
+     * @memberof WebpackConfigModel
+     */
+    private environment: "development" | "production" | "none";
+
+    /**
      * context paths to tell webpack where to find specific loaders
      * like ts-loader, css-loader
      *
@@ -46,6 +55,15 @@ export class WebpackConfigModel {
      * @memberof WebpackConfigModel
      */
     private loaderContextPaths: string[];
+
+    /**
+     * webpack optimizations
+     *
+     * @private
+     * @type {Options.Optimization}
+     * @memberof WebpackConfigModel
+     */
+    private optimization: Options.Optimization;
 
     /**
      * webpack out directory
@@ -123,6 +141,16 @@ export class WebpackConfigModel {
     }
 
     /**
+     * get environment value
+     *
+     * @returns {string}
+     * @memberof WebpackConfigModel
+     */
+    public getEnvironment(): "development" | "production" | "none" {
+        return this.environment;
+    }
+
+    /**
      * get context paths for loaders
      *
      * @returns {string[]}
@@ -130,6 +158,16 @@ export class WebpackConfigModel {
      */
     public getLoaderContextPaths(): string[] {
         return this.loaderContextPaths;
+    }
+
+    /**
+     * get webpack optimization configuration values
+     *
+     * @returns {Options.Optimization}
+     * @memberof WebpackConfigModel
+     */
+    public getOptimization(): Options.Optimization {
+        return this.optimization;
     }
 
     /**
@@ -183,6 +221,16 @@ export class WebpackConfigModel {
     }
 
     /**
+     * set optimizations for webpack
+     *
+     * @param {Options.Optimization} optimization
+     * @memberof WebpackConfigModel
+     */
+    public setOptimization(optimization: Options.Optimization) {
+        this.optimization = optimization;
+    }
+
+    /**
      * set output for bundle
      *
      * @param {string} dir
@@ -200,6 +248,16 @@ export class WebpackConfigModel {
      */
     public setEntryFile(filename: string) {
         this.entryFile = filename;
+    }
+
+    /**
+     * set environment
+     *
+     * @param {string} env
+     * @memberof WebpackConfigModel
+     */
+    public setEnvironment(env: "development" | "production" | "none") {
+        this.environment = env;
     }
 
     /**

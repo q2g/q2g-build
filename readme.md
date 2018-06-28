@@ -3,6 +3,7 @@
 ## configuration properties
 * --builder [webpack|extension]
 * [--config config.file.json]
+* [--env development|production] default development
 
 ## Webpack JSON file configuration values
 * [{string} entryFile] entry file for webpack default index.ts
