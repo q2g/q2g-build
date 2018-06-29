@@ -2,7 +2,6 @@ import { Configuration, Options } from "webpack";
 import { WebpackService } from "../service/webpack.service";
 
 const config = WebpackService.getInstance().getConfiguration();
-console.log( config.getTsConfigFile() );
 
 const webpackConfig: Configuration = {
 

@@ -96,14 +96,12 @@ export class WebpackService {
      */
     public setOption(option: string, value: string) {
 
-        console.log(option, value);
         const setterMethod = `set${option.charAt(0).toUpperCase()}${option.slice(1)}`;
         const methodExists = Object.prototype.toString.call(
             this.configModel[setterMethod]).slice(8, -1) === "Function";
 
         if ( methodExists ) {
 
-            console.log(setterMethod);
             switch (option) {
                 case "outputDirectory":
                     value = `${this.configModel.getContextPath()}/${value}`;
