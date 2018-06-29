@@ -3,7 +3,7 @@ import { IOption } from "../../api/option.interface";
 export const CommandlineOptions: IOption  = {
    builder: {
        required: true,
-       values: ["webpack", "extension"],
+       values: ["webpack", "extension", "typescript"],
    },
    config: {
        required: false,

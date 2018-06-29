@@ -41,7 +41,7 @@ function initAppConfiguration(root: string) {
  * @param {string} scriptPath
  * @param {...string[]} args additional command line arguments
  */
-function main(scriptPath: string, ...args: string[]) {
+async function main(scriptPath: string, ...args: string[]) {
 
     const options: IDataNode = OptionHelper.convertCommandlineArguments(args);
     const errors: string[]   = OptionHelper.validateOptions(options, CommandlineOptions);
@@ -67,7 +67,9 @@ function main(scriptPath: string, ...args: string[]) {
         }, config);
 
         builder.configure( builderConfig );
-        builder.run();
+        const result = await builder.run();
+
+        process.stdout.write(result);
     } catch ( err ) {
         logService.log(`${err}`, Log.LOG_ERROR);
     }

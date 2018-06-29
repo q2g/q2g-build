@@ -1,6 +1,5 @@
 import { Builders, IBuilder } from "../api";
-import { ExtensionBuilder } from "../lib/extension-builder/extension-builder";
-import { WebpackBuilder } from "../lib/webpack-builder";
+import { ExtensionBuilder,  TypescriptBuilder, WebpackBuilder } from "../lib";
 
 export class BuilderService {
 
@@ -49,12 +48,9 @@ export class BuilderService {
     public getBuilder(type: Builders): IBuilder {
         let builder: IBuilder;
         switch (type) {
-            case Builders.WEBPACK:
-                builder = new WebpackBuilder();
-                break;
-            case Builders.EXTENSION:
-                builder = new ExtensionBuilder();
-                break;
+            case Builders.WEBPACK:    builder = new WebpackBuilder();   break;
+            case Builders.EXTENSION:  builder = new ExtensionBuilder(); break;
+            case Builders.TYPESCRIPT: builder = new TypescriptBuilder();       break;
             default:
                 throw new Error(`Builder for ${type}
                     does not exists please use one of these types [webpack, extension]`);

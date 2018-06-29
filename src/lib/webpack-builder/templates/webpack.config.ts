@@ -17,6 +17,8 @@ const webpackConfig: Configuration = {
 
     module: {
         rules: [{
+            sideEffects: false,
+        }, {
             test: /text!.*\.html$/,
             use: [{
                 loader: "raw-loader",

@@ -1,10 +1,11 @@
 export enum Builders {
-    WEBPACK = "webpack",
-    EXTENSION = "extension",
+    TYPESCRIPT = "typescript",
+    EXTENSION  = "extension",
+    WEBPACK    = "webpack",
 }
 
 export interface IBuilder {
     configure(config: any): void;
 
-    run(): void;
+    run(): Promise<string>;
 }
