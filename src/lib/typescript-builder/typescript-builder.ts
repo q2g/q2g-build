@@ -73,20 +73,11 @@ export class TypescriptBuilder implements IBuilder {
      */
     public run(): Promise<string> {
 
-        return new Promise( (success, error) => {
-            const process: ChildProcess = this.typescriptService.createTsProcess();
-            let tsOut: string = "";
-
-            process.stdout.on("data", (chunk: Buffer) => {
-                tsOut = tsOut.concat(chunk.toString());
-            });
-
-            process.on("close", () => {
-                if ( this.hasError(tsOut) ) {
-                    return error(tsOut);
-                }
-                return success(tsOut);
-            });
+        return Promise.all([
+            this.typescriptService.compileTypescriptFiles(),
+            this.typescriptService.deployBinaryFiles(),
+        ]).then( (result: string[]) => {
+            return "done";
         });
     }
 
@@ -103,20 +94,5 @@ export class TypescriptBuilder implements IBuilder {
 
         config.setProjectSource(sourceRoot);
         config.setNodePackageTS(resolve(appRoot, "../node_modules/typescript/lib/tsc"));
-    }
-
-    /**
-     * check typescript response got an error
-     *
-     * @private
-     * @param {string} tsData
-     * @returns {boolean}
-     * @memberof TypescriptBuilder
-     */
-    private hasError(tsData: string): boolean {
-        if ( tsData.match(/^error/) ) {
-            return true;
-        }
-        return false;
     }
 }

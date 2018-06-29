@@ -21,6 +21,7 @@
     "css-loader": "^0.28.11",
     "less": "^3.0.4",
     "less-loader": "^4.1.0",
+    "ncp": "^2.0.0",
     "path-override-webpack-plugin": "^0.1.2",
     "raw-loader": "0.5.1",
     "rh-utils": "git+https://github.com/r-hannuschka/rh-utils.git",

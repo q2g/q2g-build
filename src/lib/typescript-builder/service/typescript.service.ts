@@ -1,4 +1,6 @@
 import { ChildProcess, spawn} from "child_process";
+import * as nodeCopy from "ncp";
+import { resolve } from "path";
 import { ConfigModel } from "../model/config.model";
 
 export class TypescriptService {
@@ -53,13 +55,79 @@ export class TypescriptService {
     }
 
     /**
+     * get typescript builder configuration
+     *
+     * @returns {ConfigModel}
+     * @memberof TypescriptService
+     */
+    public getConfig(): ConfigModel {
+        return this.config;
+    }
+
+    /**
+     * compile typescript files
+     *
+     * @returns {Promise<string>}
+     * @memberof TypescriptService
+     */
+    public compileTypescriptFiles(): Promise<string> {
+        return new Promise( (success, error) => {
+            const process: ChildProcess = this.createTsProcess();
+            let tsOut: string = "";
+
+            process.stdout.on("data", (chunk: Buffer) => {
+                tsOut = tsOut.concat(chunk.toString());
+            });
+
+            process.on("close", () => {
+                if ( this.hasError(tsOut) ) {
+                    return error(tsOut);
+                }
+                return success(tsOut);
+            });
+        });
+    }
+
+    /**
+     * copy binary files to dist folder
+     *
+     * @returns {Promise<string>}
+     * @memberof TypescriptService
+     */
+    public deployBinaryFiles(): Promise<string> {
+
+        const sourceDir: string      = this.config.getProjectSource();
+        const destinationDir: string = resolve(this.config.getProjectSource(), "./dist/esm");
+        const options = {
+            filter: (source) => {
+
+                if ( source.match(/node_modules|dist/) ) {
+                    return false;
+                }
+
+                if ( source.match(/\.(ts|d\.ts|\tsx)$/) ) {
+                    return false;
+                }
+
+                return true;
+            },
+        };
+
+        return new Promise( (success, reject) => {
+            nodeCopy(sourceDir, destinationDir, options, (result) => {
+                success("all is done");
+            });
+        });
+    }
+
+    /**
      * create new child process and running type script compiler
      * on specific directory
      *
      * @returns {ChildProcess}
      * @memberof TypescriptService
      */
-    public createTsProcess(): ChildProcess {
+    private createTsProcess(): ChildProcess {
         const process: ChildProcess = spawn("node", [
             this.config.getNodePackageTS(),
             "--p",  `${this.config.getProjectSource()}/${this.config.getTsConfigFile() || "tsconfig.json"}`,
@@ -70,12 +138,17 @@ export class TypescriptService {
     }
 
     /**
-     * get typescript builder configuration
+     * check typescript response got an error
      *
-     * @returns {ConfigModel}
-     * @memberof TypescriptService
+     * @private
+     * @param {string} tsData
+     * @returns {boolean}
+     * @memberof TypescriptBuilder
      */
-    public getConfig(): ConfigModel {
-        return this.config;
+    private hasError(tsData: string): boolean {
+        if ( tsData.match(/^error/) ) {
+            return true;
+        }
+        return false;
     }
 }
