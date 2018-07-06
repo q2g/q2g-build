@@ -1,5 +1,4 @@
 import * as nodeCopy from "ncp";
-import { resolve } from "path";
 
 export class DeployHelper {
 
@@ -26,13 +25,13 @@ export class DeployHelper {
      */
     public static copyFiles( sourceDir: string, targetDir: string, filterPattern?: RegExp): Promise<string> {
 
-        const sourceDirectory: string      = sourceDir;
+        const sourceDirectory: string = sourceDir;
         const targetDirectory: string = targetDir;
-        const filter: RegExp         = filterPattern;
+        const filter: RegExp          = filterPattern;
 
         const options = {
             filter: (source: string): boolean => {
-                if ( source.match(filter) ) {
+                if ( filter && source.match(filter) ) {
                     return false;
                 }
                 return true;

@@ -88,6 +88,12 @@ export class TypescriptService {
         });
     }
 
+    /**
+     * deploy binary files like html, less into dist directory
+     *
+     * @returns {Promise<string>}
+     * @memberof TypescriptService
+     */
     public deployBinaryFiles(): Promise<string> {
         const sourceDir = this.config.getProjectSource();
         const targetDir = this.config.getOutDirectory();
