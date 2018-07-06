@@ -5,8 +5,9 @@ export interface IOption {
     [optionName: string]: {
         required: boolean;
         validator?: {
-            test: RegExp;
             errorMsg: string;
+            validatorFn?: (data: any) => boolean;
+            test?: RegExp;
         },
         values?: string[];
     };

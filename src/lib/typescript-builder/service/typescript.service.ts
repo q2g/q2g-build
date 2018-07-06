@@ -1,6 +1,6 @@
 import { ChildProcess, spawn} from "child_process";
-import * as nodeCopy from "ncp";
-import { resolve } from "path";
+import { resolve, sep as pathDelimeter } from "path";
+import { DeployHelper } from "../../../helper";
 import { ConfigModel } from "../model/config.model";
 
 export class TypescriptService {
@@ -88,36 +88,15 @@ export class TypescriptService {
         });
     }
 
-    /**
-     * copy binary files to dist folder
-     *
-     * @returns {Promise<string>}
-     * @memberof TypescriptService
-     */
     public deployBinaryFiles(): Promise<string> {
+        const sourceDir = this.config.getProjectSource();
+        const targetDir = this.config.getOutDirectory();
 
-        const sourceDir: string      = this.config.getProjectSource();
-        const destinationDir: string = resolve(this.config.getProjectSource(), "./dist/esm");
-        const options = {
-            filter: (source) => {
+        this.config.setExcludeNcp(
+            this.config.getExcludeNcp().concat([".ts", ".tsx", "d.ts"]));
 
-                if ( source.match(/node_modules|dist/) ) {
-                    return false;
-                }
-
-                if ( source.match(/\.(ts|d\.ts|\tsx)$/) ) {
-                    return false;
-                }
-
-                return true;
-            },
-        };
-
-        return new Promise( (success, reject) => {
-            nodeCopy(sourceDir, destinationDir, options, (result) => {
-                success("all is done");
-            });
-        });
+        const filesToExclude = DeployHelper.createNcpExcludeRegExp(this.config.getExcludeNcp());
+        return DeployHelper.copyFiles( sourceDir, resolve(sourceDir, targetDir), filesToExclude);
     }
 
     /**
@@ -129,8 +108,9 @@ export class TypescriptService {
      */
     private createTsProcess(): ChildProcess {
         const process: ChildProcess = spawn("node", [
-            this.config.getNodePackageTS(),
-            "--p",  `${this.config.getProjectSource()}/${this.config.getTsConfigFile() || "tsconfig.json"}`,
+            this.config.getTypescriptCompiler(),
+            "--project", resolve( this.config.getProjectSource(), this.config.getTsConfigFile() ),
+            "--outDir",  resolve( this.config.getProjectSource(), this.config.getOutDirectory() ),
         ], {
             stdio: [ "pipe" ], // pipe childprocess stdio channels to nodejs
         });

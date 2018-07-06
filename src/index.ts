@@ -1,9 +1,9 @@
 import { dirname, resolve } from "path";
 import { Config, IDataNode, Log } from "rh-utils";
 import { IBuilder } from "./api";
-import { AppConfigProperties } from "./model/data/app.config";
-import { CommandlineOptions } from "./model/data/commandline.options";
-import { BuilderService, OptionHelper } from "./services";
+import { AppConfigProperties, CommandlineOptions } from "./data";
+import { OptionHelper } from "./helper";
+import { BuilderService } from "./services";
 
 const logService     = Log.getInstance();
 const configService  = Config.getInstance();

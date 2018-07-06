@@ -2,9 +2,10 @@ import { resolve } from "path";
 import { Config, IDataNode } from "rh-utils";
 import { Compiler, Plugin } from "webpack";
 import { IBuilder } from "../../api";
-import { AppConfigProperties } from "../../model";
-import { OptionHelper } from "../../services";
-import { WebpackConfigModel, WebpackOption } from "./model";
+import { AppConfigProperties } from "../../data/app.config";
+import { OptionHelper } from "../../helper";
+import { WebpackOption } from "./data/webpack.options";
+import { WebpackConfigModel } from "./model";
 import { CleanWebpackPlugin, LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
 
@@ -70,11 +71,13 @@ export class WebpackBuilder implements IBuilder {
         const options: IDataNode = OptionHelper.cleanOptions(config, WebpackOption);
         const errors: string[]   = OptionHelper.validateOptions(config, WebpackOption);
 
-        if ( ! errors.length ) {
-            for (const name in options) {
-                if ( options.hasOwnProperty(name) ) {
-                    this.webpackService.setOption(name, options[name]);
-                }
+        if ( errors.length ) {
+            throw new Error(errors.join("\n"));
+        }
+
+        for (const name in options) {
+            if ( options.hasOwnProperty(name) ) {
+                this.webpackService.setOption(name, options[name]);
             }
         }
     }

@@ -1,10 +1,9 @@
-import { ChildProcess } from "child_process";
 import { resolve } from "path";
 import { Config, IDataNode } from "rh-utils";
 import { IBuilder } from "../../api";
-import { AppConfigProperties } from "../../model";
-import { OptionHelper } from "../../services";
-import { TypescriptOption } from "./model/data/typescript.options";
+import { AppConfigProperties } from "../../data/app.config";
+import { OptionHelper } from "../../helper";
+import { Options } from "./data/options";
 import { TypescriptService } from "./service/typescript.service";
 
 /**
@@ -53,15 +52,21 @@ export class TypescriptBuilder implements IBuilder {
      * @memberof TypescriptBuilder
      */
     public configure(config: IDataNode): void {
-        const options: IDataNode = OptionHelper.cleanOptions(config, TypescriptOption);
-        const errors: string[]   = OptionHelper.validateOptions(config, TypescriptOption);
+        const options: IDataNode = OptionHelper.cleanOptions(config, Options);
+        const errors: string[]   = OptionHelper.validateOptions(config, Options);
 
         if ( ! errors.length || Object.keys(options).length ) {
-            for (const name in options) {
-                if ( options.hasOwnProperty(name) ) {
-                    this.typescriptService.setOption(name, options[name]);
+            Object.keys(options).forEach( (name) => {
+                const value = options[name];
+
+                // load only ts config data if outDirectory is not given via options
+                if ( name === "tsConfigFile" && ! options.outDirectory ) {
+                    this.loadConfigurationFromTsConfig(value);
+                    delete config.outDirectory;
                 }
-            }
+
+                this.typescriptService.setOption(name, value);
+            });
         }
     }
 
@@ -77,7 +82,7 @@ export class TypescriptBuilder implements IBuilder {
             this.typescriptService.compileTypescriptFiles(),
             this.typescriptService.deployBinaryFiles(),
         ]).then( (result: string[]) => {
-            return "done";
+            return result.join("\n");
         });
     }
 
@@ -92,7 +97,27 @@ export class TypescriptBuilder implements IBuilder {
         const config     = this.typescriptService.getConfig();
         const sourceRoot = this.appConfig.get(AppConfigProperties.sourceRoot);
 
+        config.setTypescriptCompiler(resolve(appRoot, "../node_modules/typescript/lib/tsc"));
+        config.setOutDirectory("./dist");
         config.setProjectSource(sourceRoot);
-        config.setNodePackageTS(resolve(appRoot, "../node_modules/typescript/lib/tsc"));
+        config.setTsConfigFile("tsconfig.json");
+    }
+
+    /**
+     * load configuration data from ts config file
+     *
+     * @private
+     * @param {*} file
+     * @memberof TypescriptBuilder
+     */
+    private loadConfigurationFromTsConfig(file) {
+
+        const tsConfig = OptionHelper.loadFromFile(
+            resolve(this.appConfig.get(AppConfigProperties.sourceRoot), file));
+
+        if ( tsConfig.compilerOptions.outDir ) {
+            this.typescriptService.setOption(
+                "outDirectory", tsConfig.compilerOptions.outDir);
+        }
     }
 }

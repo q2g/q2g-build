@@ -48,9 +48,9 @@ export class BuilderService {
     public getBuilder(type: Builders): IBuilder {
         let builder: IBuilder;
         switch (type) {
-            case Builders.WEBPACK:    builder = new WebpackBuilder();   break;
-            case Builders.EXTENSION:  builder = new ExtensionBuilder(); break;
-            case Builders.TYPESCRIPT: builder = new TypescriptBuilder();       break;
+            case Builders.WEBPACK:    builder = new WebpackBuilder();    break;
+            case Builders.EXTENSION:  builder = new ExtensionBuilder();  break;
+            case Builders.TYPESCRIPT: builder = new TypescriptBuilder(); break;
             default:
                 throw new Error(`Builder for ${type}
                     does not exists please use one of these types [webpack, extension]`);

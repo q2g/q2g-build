@@ -1,4 +1,4 @@
-import { IOption } from "../../api/option.interface";
+import { IOption } from "../api/option.interface";
 
 export const CommandlineOptions: IOption  = {
    builder: {

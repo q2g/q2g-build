@@ -78,10 +78,23 @@ export class OptionHelper {
 
             if ( optionSet ) {
 
-                if (option.hasOwnProperty("validator") ) {
-                    const isInvalid = ! value.match(option.validator.test);
+                if ( option.hasOwnProperty("validator") ) {
+                    /**
+                     * convert regexp value into validation function
+                     */
+                    if ( option.validator.test ) {
+                        option.validator.validatorFn = (): boolean => {
+                            return value.match(option.validator.test);
+                        };
+                        delete option.validator.test;
+                    }
+
+                    const isInvalid = ! option.validator.validatorFn(value);
                     errors = errors.concat( isInvalid ? [option.validator.errorMsg] : []);
-                } else {
+                    continue;
+                }
+
+                if (option.hasOwnProperty("values") ) {
                     const isInvalid = option.values.indexOf(value) === -1;
                     errors = errors.concat( isInvalid
                         ? `invalid property value submitted: "${value}" for option --${property}\n
@@ -90,7 +103,6 @@ export class OptionHelper {
                 }
             }
         }
-
         return errors;
     }
 
