@@ -35,7 +35,7 @@ Create UMD Module Bundle.
 | entryFile | false | Relative path to entry file from source root for Webpack. Default value _index.ts_|
 | environment | false | environment for webpack, overrides builder environment property default _development_ |
 |outFileName|false| out file name default _bundle.js_ |
-|outputDirectory| false | output directory where to save bundle, relative path from projectSource |
+|outputDirectory| false | output directory where to save bundle, relative path from projectRoot |
 |tsConfigFile| false | tyscript configuration file to use for webpackplugin ts-loader. default _tsconfig.json_ |
 
 ```
