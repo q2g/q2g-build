@@ -78,6 +78,8 @@ export class TypescriptBuilder implements IBuilder {
      */
     public run(): Promise<string> {
 
+        this.typescriptService.clearDistDirectory();
+
         return Promise.all([
             this.typescriptService.compileTypescriptFiles(),
             this.typescriptService.deployBinaryFiles(),

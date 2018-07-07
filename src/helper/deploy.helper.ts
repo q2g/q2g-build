@@ -1,15 +1,36 @@
+import { existsSync, readdirSync, rmdirSync, statSync, unlinkSync } from "fs";
 import * as nodeCopy from "ncp";
+import { resolve } from "path";
 
 export class DeployHelper {
 
     /**
-     * remove directory
+     * delete a directory sync
      *
      * @static
      * @memberof DeployHelper
      */
-    public static removeDirectory() {
-        // not empty
+    public static removeDirectory(dir: string) {
+
+        if ( ! existsSync(dir) ) {
+            return;
+        }
+
+        const files = readdirSync(dir);
+
+        if ( files.length > 0 ) {
+            files.forEach( (file) => {
+                const filePath = resolve(dir, file);
+                const fileStat = statSync(filePath);
+
+                if ( fileStat.isDirectory() ) {
+                    DeployHelper.removeDirectory(filePath);
+                } else {
+                    unlinkSync(filePath);
+                }
+            });
+        }
+        rmdirSync(dir);
     }
 
     /**
@@ -38,9 +59,9 @@ export class DeployHelper {
             },
         };
 
-        return new Promise( (success, reject) => {
+        return new Promise( (success) => {
             nodeCopy(sourceDirectory, targetDirectory, options, () => {
-                success("all is done");
+                success("done");
             });
         });
     }

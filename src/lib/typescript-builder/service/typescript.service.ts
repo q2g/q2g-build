@@ -89,6 +89,18 @@ export class TypescriptService {
     }
 
     /**
+     * clear dist directory
+     *
+     * @memberof TypescriptService
+     */
+    public clearDistDirectory(): void {
+        const sourceDir = this.config.getProjectSource();
+        const targetDir = this.config.getOutDirectory();
+
+        DeployHelper.removeDirectory(resolve(sourceDir, targetDir));
+    }
+
+    /**
      * deploy binary files like html, less into dist directory
      *
      * @returns {Promise<string>}
