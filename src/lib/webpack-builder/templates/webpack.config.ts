@@ -45,6 +45,7 @@ const webpackConfig: Configuration = {
                 },
             }],
         }, {
+            sideEffects: true,
             test: /\.less$/,
             use: [{
                 loader: "style-loader",
@@ -54,6 +55,7 @@ const webpackConfig: Configuration = {
                 loader: "less-loader",
             }],
         }, {
+            sideEffects: true,
             test: /\.css$/,
             use: [{
                 loader: "style-loader",
