@@ -101,12 +101,6 @@ export class WebpackService {
             this.configModel[setterMethod]).slice(8, -1) === "Function";
 
         if ( methodExists ) {
-
-            switch (option) {
-                case "outputDirectory":
-                    value = `${this.configModel.getContextPath()}/${value}`;
-                    break;
-            }
             this.configModel[setterMethod](value);
         }
     }

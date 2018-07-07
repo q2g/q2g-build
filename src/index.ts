@@ -1,6 +1,6 @@
 import { dirname, resolve } from "path";
 import { Config, IDataNode, Log } from "rh-utils";
-import { IBuilder } from "./api";
+import { IBuilder, IOption } from "./api";
 import { AppConfigProperties, CommandlineOptions } from "./data";
 import { OptionHelper } from "./helper";
 import { BuilderService } from "./services";
@@ -24,14 +24,17 @@ Log.configure({
  *
  * @param {string} root
  */
-function initAppConfiguration(root: string) {
+function initAppConfiguration(root: string, options) {
+
+    const projectRoot = process.cwd();
 
     /** create base configuration values */
     configService.set(AppConfigProperties.appRoot, `${root}/bin`);
     configService.set(AppConfigProperties.root, root);
-    configService.set(AppConfigProperties.sourceRoot , process.cwd());
+    configService.set(AppConfigProperties.projectRoot , projectRoot );
+    configService.set(AppConfigProperties.sourceRoot, resolve(projectRoot, options.sourceRoot || "."));
 
-    const pkgJsonData = OptionHelper.loadFromFile(`${process.cwd()}/package.json`);
+    const pkgJsonData = OptionHelper.loadFromFile(`${projectRoot}/package.json`);
     configService.set(AppConfigProperties.packageName, pkgJsonData.name );
 }
 
@@ -52,7 +55,7 @@ async function main(scriptPath: string, ...args: string[]) {
     }
 
     try {
-        initAppConfiguration(scriptPath);
+        initAppConfiguration(scriptPath, options);
 
         const builder: IBuilder = builderService.getBuilder(options.builder);
         let config = {};
@@ -71,9 +74,11 @@ async function main(scriptPath: string, ...args: string[]) {
 
         process.stdout.write(result);
     } catch ( err ) {
+        console.log(err);
         logService.log(`${err}`, Log.LOG_ERROR);
     }
 }
+
 /**
  * call main method and pass process arguments, remove first argument
  * since this is only the node excecution file path

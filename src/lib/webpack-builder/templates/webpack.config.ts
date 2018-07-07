@@ -95,11 +95,10 @@ const webpackConfig: Configuration = {
     resolveLoader: {
         /**
          * tell webpack where to find our loaders
-         * otherwise it will search in the current working directory
-         * which is that directory which has consumed base_loader module
+         * otherwise it will search in the project root directory
          */
         alias: {
-            css: "css-loader",
+            css:  "css-loader",
             text: "raw-loader",
         },
         mainFields: ["loader", "main"],

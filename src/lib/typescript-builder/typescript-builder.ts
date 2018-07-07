@@ -95,12 +95,15 @@ export class TypescriptBuilder implements IBuilder {
      * @memberof TypescriptBuilder
      */
     protected initialize() {
-        const appRoot    = this.appConfig.get(AppConfigProperties.appRoot);
-        const config     = this.typescriptService.getConfig();
-        const sourceRoot = this.appConfig.get(AppConfigProperties.sourceRoot);
+
+        const appRoot     = this.appConfig.get(AppConfigProperties.appRoot);
+        const config      = this.typescriptService.getConfig();
+        const projectRoot = this.appConfig.get(AppConfigProperties.projectRoot);
+        const sourceRoot  = this.appConfig.get(AppConfigProperties.sourceRoot);
 
         config.setTypescriptCompiler(resolve(appRoot, "../node_modules/typescript/lib/tsc"));
         config.setOutDirectory("./dist");
+        config.setProjectRoot(projectRoot);
         config.setProjectSource(sourceRoot);
         config.setTsConfigFile("tsconfig.json");
     }
@@ -115,7 +118,7 @@ export class TypescriptBuilder implements IBuilder {
     private loadConfigurationFromTsConfig(file) {
 
         const tsConfig = OptionHelper.loadFromFile(
-            resolve(this.appConfig.get(AppConfigProperties.sourceRoot), file));
+            resolve(this.appConfig.get(AppConfigProperties.projectRoot), file));
 
         if ( tsConfig.compilerOptions.outDir ) {
             this.typescriptService.setOption(

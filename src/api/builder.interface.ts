@@ -1,5 +1,5 @@
 export enum Builders {
-    TYPESCRIPT = "typescript",
+    TYPESCRIPT = "tsc",
     EXTENSION  = "extension",
     WEBPACK    = "webpack",
 }

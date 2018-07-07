@@ -28,6 +28,15 @@ export class ConfigModel {
     private outDirectory: string;
 
     /**
+     * project root directory
+     *
+     * @private
+     * @type {string}
+     * @memberof ConfigModel
+     */
+    private projectRoot: string;
+
+    /**
      * project source directory
      *
      * @private
@@ -76,6 +85,16 @@ export class ConfigModel {
     }
 
     /**
+     * return project root directory
+     *
+     * @returns {string}
+     * @memberof ConfigModel
+     */
+    public getProjectRoot(): string {
+        return this.projectRoot;
+    }
+
+    /**
      * get project source directory
      *
      * @returns {string}
@@ -113,6 +132,16 @@ export class ConfigModel {
      */
     public setOutDirectory(path: string) {
         this.outDirectory = path;
+    }
+
+    /**
+     * set project root directory
+     *
+     * @param {string} path
+     * @memberof ConfigModel
+     */
+    public setProjectRoot(path: string) {
+        this.projectRoot = path;
     }
 
     /**

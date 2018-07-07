@@ -94,10 +94,10 @@ export class TypescriptService {
      * @memberof TypescriptService
      */
     public clearDistDirectory(): void {
-        const sourceDir = this.config.getProjectSource();
-        const targetDir = this.config.getOutDirectory();
+        const rootDir = this.config.getProjectRoot();
+        const distDir = this.config.getOutDirectory();
 
-        DeployHelper.removeDirectory(resolve(sourceDir, targetDir));
+        DeployHelper.removeDirectory(resolve(rootDir, distDir));
     }
 
     /**
@@ -107,6 +107,8 @@ export class TypescriptService {
      * @memberof TypescriptService
      */
     public deployBinaryFiles(): Promise<string> {
+
+        const rootDir   = this.config.getProjectRoot();
         const sourceDir = this.config.getProjectSource();
         const targetDir = this.config.getOutDirectory();
 
@@ -114,7 +116,7 @@ export class TypescriptService {
             this.config.getExcludeNcp().concat([".ts", ".tsx", "d.ts"]));
 
         const filesToExclude = DeployHelper.createNcpExcludeRegExp(this.config.getExcludeNcp());
-        return DeployHelper.copyFiles( sourceDir, resolve(sourceDir, targetDir), filesToExclude);
+        return DeployHelper.copyFiles( sourceDir, resolve(rootDir, targetDir), filesToExclude);
     }
 
     /**
@@ -127,8 +129,9 @@ export class TypescriptService {
     private createTsProcess(): ChildProcess {
         const process: ChildProcess = spawn("node", [
             this.config.getTypescriptCompiler(),
-            "--project", resolve( this.config.getProjectSource(), this.config.getTsConfigFile() ),
-            "--outDir",  resolve( this.config.getProjectSource(), this.config.getOutDirectory() ),
+            "--project", resolve( this.config.getProjectRoot(), this.config.getTsConfigFile() ),
+            "--outDir",  resolve( this.config.getProjectRoot(), this.config.getOutDirectory() ),
+            "--rootDir", this.config.getProjectSource(),
         ], {
             stdio: [ "pipe" ], // pipe childprocess stdio channels to nodejs
         });

@@ -38,7 +38,16 @@ export class WebpackBuilder implements IBuilder {
     private webpackService: WebpackService;
 
     /**
-     * source root path
+     * project root folder
+     *
+     * @private
+     * @type {string}
+     * @memberof WebpackBuilder
+     */
+    private projectRoot: string;
+
+    /**
+     * project source root folder
      *
      * @private
      * @type {string}
@@ -55,6 +64,7 @@ export class WebpackBuilder implements IBuilder {
         this.webpackService = WebpackService.getInstance();
         this.configService  = Config.getInstance();
         this.sourceRoot     = this.configService.get(AppConfigProperties.sourceRoot);
+        this.projectRoot    = this.configService.get(AppConfigProperties.projectRoot);
 
         this.configureWebpack();
     }
@@ -75,11 +85,19 @@ export class WebpackBuilder implements IBuilder {
             throw new Error(errors.join("\n"));
         }
 
-        for (const name in options) {
-            if ( options.hasOwnProperty(name) ) {
-                this.webpackService.setOption(name, options[name]);
+        Object.keys(options).forEach( (option) => {
+            let value = options[option];
+
+            if ( option === "tsConfigFile" ) {
+                value = resolve(this.projectRoot, value);
             }
-        }
+
+            if ( option === "outputDirectory" ) {
+                value = resolve(this.projectRoot, value);
+            }
+
+            this.webpackService.setOption(option, value);
+        });
     }
 
     /**
@@ -141,10 +159,11 @@ export class WebpackBuilder implements IBuilder {
      */
     protected configureWebpack(): WebpackConfigModel {
 
-        const sourceRoot = this.sourceRoot;
+        const sourceRoot  = this.sourceRoot;
+        const projectRoot = this.projectRoot;
 
         /** @var {string} q2gBuilderSource q2g-build path in source package node_modules folder */
-        const q2gBuilderSource = `${sourceRoot}/node_modules/q2g-build/bin`;
+        const q2gBuilderSource = `${projectRoot}/node_modules/q2g-build/bin`;
 
         /** @var {string} q2gLoaderContext own loader paths */
         const q2gLoaderContext = resolve(q2gBuilderSource, "./lib/webpack-builder/loader");
@@ -156,9 +175,9 @@ export class WebpackBuilder implements IBuilder {
         config.setPackageName(packageName);
         config.setContextPath(sourceRoot);
         config.setEntryFile("./index.ts");
-        config.setOutputDirectory(`${sourceRoot}/dist`);
+        config.setOutputDirectory(`${projectRoot}/dist`);
         config.setOutFileName(`${packageName}.js`);
-        config.setTsConfigFile(`${sourceRoot}/tsconfig.json`);
+        config.setTsConfigFile( resolve(projectRoot, "./tsconfig.json"));
         config.setLoaderContextPaths([
             // vendor loader path (aka ts-loader, css-loader, ...)
             resolve(q2gBuilderSource, "../node_modules"),
