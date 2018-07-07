@@ -5,12 +5,18 @@ export const Options: IOption  = {
     excludeNcp: {
         required: false,
     },
-    outputDirectory: {
+    outDirectory: {
         required: false,
         validator: {
             errorMsg: `Output directory must be a relative path like "./dist" .`,
             validatorFn: ValidationHelper.relativePath,
         },
+    },
+    projectRoot: {
+        required: false,
+    },
+    projectSource: {
+        required: false,
     },
     tsConfigFile: {
         required: false,

@@ -5,7 +5,6 @@ import { AppConfigProperties, CommandlineOptions } from "./data";
 import { OptionHelper } from "./helper";
 import { BuilderService } from "./services";
 
-const logService     = Log.getInstance();
 const configService  = Config.getInstance();
 const builderService = BuilderService.getInstance();
 const logPath = resolve( dirname(__filename), "..");
@@ -32,10 +31,34 @@ function initAppConfiguration(root: string, options) {
     configService.set(AppConfigProperties.appRoot, `${root}/bin`);
     configService.set(AppConfigProperties.root, root);
     configService.set(AppConfigProperties.projectRoot , projectRoot );
-    configService.set(AppConfigProperties.sourceRoot, resolve(projectRoot, options.sourceRoot || "."));
 
     const pkgJsonData = OptionHelper.loadFromFile(`${projectRoot}/package.json`);
     configService.set(AppConfigProperties.packageName, pkgJsonData.name );
+}
+
+/**
+ * read configuration values from tsconfig.json
+ *
+ * @param {*} tsConfigFile
+ * @returns {IDataNode}
+ */
+function readTypeScriptConfiguration(tsconfig): IDataNode {
+    const projectRoot     = configService.get(AppConfigProperties.projectRoot);
+    const tsConfigOptions = OptionHelper.loadFromFile(resolve(projectRoot, tsconfig));
+
+    if ( ! tsConfigOptions.hasOwnProperty("compilerOptions") ) {
+        tsConfigOptions.compilerOptions = {};
+    }
+
+    const outDirectory  = resolve( projectRoot, tsConfigOptions.compilerOptions.outDir || "./dist");
+    const projectSource = resolve( projectRoot, tsConfigOptions.compilerOptions.rootDir || "." );
+    const tsConfigFile  = resolve( projectRoot, tsconfig);
+
+    return {
+        outDirectory,
+        projectSource,
+        tsConfigFile,
+    };
 }
 
 /**
@@ -58,24 +81,40 @@ async function main(scriptPath: string, ...args: string[]) {
         initAppConfiguration(scriptPath, options);
 
         const builder: IBuilder = builderService.getBuilder(options.builder);
-        let config = {};
+        let config: IDataNode = {};
 
         if ( options.hasOwnProperty("config") && options.config ) {
             const configFile = resolve(process.cwd(), options.config);
             config = OptionHelper.loadFromFile(configFile);
         }
 
-        const builderConfig = Object.assign({
-            environment: options.env || "development",
-        }, config);
+        let tsConfig = "tsconfig.json";
+        if ( config.hasOwnProperty("tsConfigFile") ) {
+            tsConfig = config.tsConfigFile;
+        }
+
+        // typescript config rauswerfen
+        delete config.tsConfigFile;
+
+        /**
+         * combine configuration values
+         * get data from tsconfig to determine source folder ( rootDir ) and outDirectory ( outDir )
+         * all configuration values will be overriden by config file
+         */
+        const builderConfig = Object.assign(
+            {
+                environment: options.env || "development",
+                projectRoot: process.cwd(),
+            },
+            readTypeScriptConfiguration(tsConfig),
+            config);
 
         builder.configure( builderConfig );
         const result = await builder.run();
 
         process.stdout.write(result);
     } catch ( err ) {
-        console.log(err);
-        logService.log(`${err}`, Log.LOG_ERROR);
+        process.stderr.write(err.toString());
     }
 }
 

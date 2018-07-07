@@ -58,13 +58,6 @@ export class TypescriptBuilder implements IBuilder {
         if ( ! errors.length || Object.keys(options).length ) {
             Object.keys(options).forEach( (name) => {
                 const value = options[name];
-
-                // load only ts config data if outDirectory is not given via options
-                if ( name === "tsConfigFile" && ! options.outDirectory ) {
-                    this.loadConfigurationFromTsConfig(value);
-                    delete config.outDirectory;
-                }
-
                 this.typescriptService.setOption(name, value);
             });
         }
@@ -98,31 +91,7 @@ export class TypescriptBuilder implements IBuilder {
 
         const appRoot     = this.appConfig.get(AppConfigProperties.appRoot);
         const config      = this.typescriptService.getConfig();
-        const projectRoot = this.appConfig.get(AppConfigProperties.projectRoot);
-        const sourceRoot  = this.appConfig.get(AppConfigProperties.sourceRoot);
 
         config.setTypescriptCompiler(resolve(appRoot, "../node_modules/typescript/lib/tsc"));
-        config.setOutDirectory("./dist");
-        config.setProjectRoot(projectRoot);
-        config.setProjectSource(sourceRoot);
-        config.setTsConfigFile("tsconfig.json");
-    }
-
-    /**
-     * load configuration data from ts config file
-     *
-     * @private
-     * @param {*} file
-     * @memberof TypescriptBuilder
-     */
-    private loadConfigurationFromTsConfig(file) {
-
-        const tsConfig = OptionHelper.loadFromFile(
-            resolve(this.appConfig.get(AppConfigProperties.projectRoot), file));
-
-        if ( tsConfig.compilerOptions.outDir ) {
-            this.typescriptService.setOption(
-                "outDirectory", tsConfig.compilerOptions.outDir);
-        }
     }
 }

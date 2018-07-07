@@ -47,15 +47,6 @@ export class WebpackBuilder implements IBuilder {
     private projectRoot: string;
 
     /**
-     * project source root folder
-     *
-     * @private
-     * @type {string}
-     * @memberof WebpackBuilder
-     */
-    private sourceRoot: string;
-
-    /**
      * Creates an instance of WebpackBuilder.
      * @memberof WebpackBuilder
      */
@@ -63,7 +54,6 @@ export class WebpackBuilder implements IBuilder {
 
         this.webpackService = WebpackService.getInstance();
         this.configService  = Config.getInstance();
-        this.sourceRoot     = this.configService.get(AppConfigProperties.sourceRoot);
         this.projectRoot    = this.configService.get(AppConfigProperties.projectRoot);
 
         this.configureWebpack();
@@ -87,10 +77,6 @@ export class WebpackBuilder implements IBuilder {
 
         Object.keys(options).forEach( (option) => {
             let value = options[option];
-
-            if ( option === "tsConfigFile" ) {
-                value = resolve(this.projectRoot, value);
-            }
 
             if ( option === "outputDirectory" ) {
                 value = resolve(this.projectRoot, value);
@@ -159,7 +145,6 @@ export class WebpackBuilder implements IBuilder {
      */
     protected configureWebpack(): WebpackConfigModel {
 
-        const sourceRoot  = this.sourceRoot;
         const projectRoot = this.projectRoot;
 
         /** @var {string} q2gBuilderSource q2g-build path in source package node_modules folder */
@@ -173,11 +158,8 @@ export class WebpackBuilder implements IBuilder {
 
         const config = this.webpackService.getConfiguration();
         config.setPackageName(packageName);
-        config.setContextPath(sourceRoot);
         config.setEntryFile("./index.ts");
-        config.setOutputDirectory(`${projectRoot}/dist`);
         config.setOutFileName(`${packageName}.js`);
-        config.setTsConfigFile( resolve(projectRoot, "./tsconfig.json"));
         config.setLoaderContextPaths([
             // vendor loader path (aka ts-loader, css-loader, ...)
             resolve(q2gBuilderSource, "../node_modules"),
@@ -200,7 +182,7 @@ export class WebpackBuilder implements IBuilder {
         const config = this.webpackService.getConfiguration();
         const plugins: Plugin[] = [
             new LogPlugin(),
-            new CleanWebpackPlugin(config.getOutputDirectory(), {allowExternal: true}),
+            new CleanWebpackPlugin(config.getOutDirectory(), {allowExternal: true}),
         ];
         return plugins;
     }

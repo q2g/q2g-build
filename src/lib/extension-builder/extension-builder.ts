@@ -50,7 +50,7 @@ export class ExtensionBuilder extends WebpackBuilder {
             ]),
             new ZipWebpackPlugin({
                 filename: `${packageName}.zip`,
-                path: config.getOutputDirectory(),
+                path: config.getOutDirectory(),
             }),
         ]);
     }

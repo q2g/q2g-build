@@ -96,7 +96,6 @@ export class TypescriptService {
     public clearDistDirectory(): void {
         const rootDir = this.config.getProjectRoot();
         const distDir = this.config.getOutDirectory();
-
         DeployHelper.removeDirectory(resolve(rootDir, distDir));
     }
 

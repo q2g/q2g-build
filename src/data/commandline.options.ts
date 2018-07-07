@@ -17,11 +17,4 @@ export const CommandlineOptions: IOption  = {
        required: false,
        values: ["development", "production"],
    },
-   sourceRoot: {
-       required: false,
-       validator: {
-           errorMsg: `source root parameter should be a relative path.`,
-           validatorFn: ValidationHelper.relativePath,
-       },
-   },
 };

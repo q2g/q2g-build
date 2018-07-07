@@ -1,3 +1,4 @@
+import { basename } from "path";
 import { Configuration, Options } from "webpack";
 import { WebpackService } from "../service/webpack.service";
 
@@ -5,7 +6,7 @@ const config = WebpackService.getInstance().getConfiguration();
 
 const webpackConfig: Configuration = {
 
-    context: config.getContextPath(),
+    context: config.getProjectSource(),
 
     entry: config.getEntryFile(),
 
@@ -37,6 +38,9 @@ const webpackConfig: Configuration = {
             use: [{
                 loader: "ts-loader",
                 options: {
+                    compilerOptions: {
+                        outDir: basename(config.getOutDirectory()),
+                    },
                     configFile: config.getTsConfigFile(),
                 },
             }],
@@ -108,7 +112,7 @@ const webpackConfig: Configuration = {
     output: {
         filename: config.getOutFileName(),
         libraryTarget: "umd",
-        path: config.getOutputDirectory(),
+        path: config.getOutDirectory(),
     },
 
     plugins: config.getPlugins(),

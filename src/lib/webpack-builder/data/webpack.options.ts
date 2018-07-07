@@ -13,6 +13,13 @@ export const WebpackOption: IOption  = {
         required: false,
         values: ["development", "production"],
     },
+    outDirectory: {
+        required: false,
+        validator: {
+            errorMsg: "option outDir could not be empty",
+            validatorFn: ValidationHelper.notEmptyAndNoWhitespace,
+        },
+    },
     outFileName: {
         required: false,
         validator: {
@@ -20,12 +27,11 @@ export const WebpackOption: IOption  = {
             validatorFn: ValidationHelper.notEmptyAndNoWhitespace,
         },
     },
-    outputDirectory: {
+    projectRoot: {
         required: false,
-        validator: {
-            errorMsg: "option outDir could not be empty",
-            validatorFn: ValidationHelper.notEmptyAndNoWhitespace,
-        },
+    },
+    projectSource: {
+        required: false,
     },
     tsConfigFile: {
         required: false,

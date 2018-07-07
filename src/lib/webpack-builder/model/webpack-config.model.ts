@@ -1,5 +1,6 @@
 import { IDataNode } from "rh-utils";
 import { Options, Plugin } from "webpack";
+import { BuilderConfigModel } from "../../../model/builder-config.model";
 
 /**
  * Webpack configuration model
@@ -7,7 +8,7 @@ import { Options, Plugin } from "webpack";
  * @export
  * @class WebpackConfigModel
  */
-export class WebpackConfigModel {
+export class WebpackConfigModel extends BuilderConfigModel {
 
     /**
      * set context path for webpack to set directory
@@ -66,15 +67,6 @@ export class WebpackConfigModel {
     private optimization: Options.Optimization;
 
     /**
-     * webpack out directory
-     *
-     * @private
-     * @type {string}
-     * @memberof WebpackConfigModel
-     */
-    private outputDirectory: string;
-
-    /**
      * out file name where bundle is saved to
      *
      * @private
@@ -100,15 +92,6 @@ export class WebpackConfigModel {
      * @memberof WebpackConfigModel
      */
     private plugins: Plugin[];
-
-    /**
-     * tsconfig file path from source
-     *
-     * @private
-     * @type {string}
-     * @memberof WebpackConfigModel
-     */
-    private tsConfigFile: string;
 
     /**
      * get source directory which where the project is located
@@ -171,16 +154,6 @@ export class WebpackConfigModel {
     }
 
     /**
-     * get output directory
-     *
-     * @returns {string}
-     * @memberof WebpackConfigModel
-     */
-    public getOutputDirectory(): string {
-        return this.outputDirectory;
-    }
-
-    /**
      * get output file name
      *
      * @returns {string}
@@ -211,16 +184,6 @@ export class WebpackConfigModel {
     }
 
     /**
-     * get tsconfig.json for ts-loader
-     *
-     * @returns {string}
-     * @memberof WebpackConfigModel
-     */
-    public getTsConfigFile(): string {
-        return this.tsConfigFile;
-    }
-
-    /**
      * set optimizations for webpack
      *
      * @param {Options.Optimization} optimization
@@ -228,16 +191,6 @@ export class WebpackConfigModel {
      */
     public setOptimization(optimization: Options.Optimization) {
         this.optimization = optimization;
-    }
-
-    /**
-     * set output for bundle
-     *
-     * @param {string} dir
-     * @memberof WebpackConfigModel
-     */
-    public setOutputDirectory(dir: string) {
-        this.outputDirectory = dir;
     }
 
     /**
@@ -278,16 +231,6 @@ export class WebpackConfigModel {
      */
     public setPackageName(packageName: string) {
         this.packageName = packageName;
-    }
-
-    /**
-     * set tsconfig file for ts-loader
-     *
-     * @param {string} filepath
-     * @memberof WebpackConfigModel
-     */
-    public setTsConfigFile(filepath: string) {
-        this.tsConfigFile = filepath;
     }
 
     /**
