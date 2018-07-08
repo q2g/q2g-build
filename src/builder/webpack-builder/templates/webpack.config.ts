@@ -12,7 +12,7 @@ const webpackConfig: Configuration = {
 
     externals: config.getExternalModules() || [],
 
-    mode: config.getEnvironment(),
+    mode: config.getWebpackEnvironment(),
 
     optimization:  config.getOptimization(),
 

@@ -45,7 +45,7 @@ export class WebpackConfigModel extends BuilderConfigModel {
      * @type {string}
      * @memberof WebpackConfigModel
      */
-    private environment: "development" | "production" | "none";
+    private webpackEnvrionment: "development" | "production" | "none";
 
     /**
      * context paths to tell webpack where to find specific loaders
@@ -129,8 +129,8 @@ export class WebpackConfigModel extends BuilderConfigModel {
      * @returns {string}
      * @memberof WebpackConfigModel
      */
-    public getEnvironment(): "development" | "production" | "none" {
-        return this.environment;
+    public getWebpackEnvironment(): "development" | "production" | "none" {
+        return this.webpackEnvrionment;
     }
 
     /**
@@ -209,8 +209,8 @@ export class WebpackConfigModel extends BuilderConfigModel {
      * @param {string} env
      * @memberof WebpackConfigModel
      */
-    public setEnvironment(env: "development" | "production" | "none") {
-        this.environment = env;
+    public setWebpackEnvironment(env: "development" | "production" | "none") {
+        this.webpackEnvrionment = env;
     }
 
     /**

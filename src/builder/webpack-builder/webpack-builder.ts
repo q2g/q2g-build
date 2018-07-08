@@ -51,8 +51,18 @@ export class WebpackBuilder extends AbstractBuilder {
      * @memberof WebpackBuilder
      */
     public configure(config: IDataNode): void {
+
         this.webpackService.setOptions(config);
         this.webpackService.setOptions( {plugins: this.loadWebpackPlugins() }, false);
+
+        const env = this.webpackService.getConfig().getEnvrionment();
+        const envConfig = {
+            optimization: {
+                minimize: env === "production" ? true : false,
+            },
+            webpackEnvrionment: env === "debug" ? "none" : env,
+        };
+        this.webpackService.setOptions(envConfig);
     }
 
     /**
@@ -73,9 +83,6 @@ export class WebpackBuilder extends AbstractBuilder {
                 resolve(environment.builderRoot, "./builder/webpack-builder/loader"),
                 resolve(environment.builderRoot, "../node_modules"),
             ],
-            optimization: {
-                minimize: env === "production" ? true : false,
-            },
             outFileName: `${environment.projectName}.js`,
             packageName: environment.projectName,
         };

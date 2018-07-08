@@ -37,6 +37,19 @@ export class BuilderConfigModel {
     private tsConfigFile: string;
 
     /**
+     * envrionment
+     *
+     * @private
+     * @type {("debug" | "development" | "production")}
+     * @memberof BuilderConfigModel
+     */
+    private environment: "debug" | "development" | "production";
+
+    public getEnvrionment(): "debug" | "development" | "production" {
+        return this.environment;
+    }
+
+    /**
      * get output directory where to deploy all files
      *
      * @returns {string}
@@ -74,6 +87,16 @@ export class BuilderConfigModel {
      */
     public getTsConfigFile(): string {
         return this.tsConfigFile;
+    }
+
+    /**
+     * set builder environment
+     *
+     * @param {("debug" | "development" | "production")} env
+     * @memberof BuilderConfigModel
+     */
+    public setEnvironment(env: "debug" | "development" | "production") {
+        this.environment = env;
     }
 
     /**
