@@ -10,27 +10,27 @@
   "author": "Ralf Hannuschka",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^10.3.4",
-    "@types/webpack": "^4.4.2",
-    "ajv": "^6.5.1"
+    "@types/node": "^10.5.2",
+    "@types/webpack": "^4.4.5",
+    "ajv": "^6.5.2"
   },
   "types": "./typings/index.d.ts",
   "dependencies": {
     "clean-webpack-plugin": "^0.1.19",
     "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^0.28.11",
-    "less": "^3.0.4",
+    "less": "^3.5.3",
     "less-loader": "^4.1.0",
     "ncp": "^2.0.0",
     "path-override-webpack-plugin": "^0.1.2",
     "raw-loader": "0.5.1",
     "rh-utils": "git+https://github.com/r-hannuschka/rh-utils.git",
     "style-loader": "^0.21.0",
-    "ts-loader": "^4.4.1",
+    "ts-loader": "^4.4.2",
     "tslint": "^5.10.0",
     "typescript": "^2.9.2",
     "url-loader": "^1.0.1",
-    "webpack": "^4.12.0",
+    "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8",
     "zip-webpack-plugin": "^3.0.0"
   }
