@@ -1,3 +1,5 @@
+import { isAbsolute } from "path";
+
 export class ValidationHelper {
 
     /**
@@ -46,6 +48,29 @@ export class ValidationHelper {
      */
     public static relativePath(path: string): boolean {
         return path.match(/^\.{1,2}\/.{1,}$/) !== null;
+    }
+
+    public static absolutePath(path: string): boolean {
+        return isAbsolute(path);
+    }
+
+    /**
+     * validate value is in array
+     *
+     * @static
+     * @param {string[]} accepetedValues
+     * @param {string} value
+     * @returns {boolean}
+     * @memberof ValidationHelper
+     */
+    public static containsValue(accepetedValues: string[]): (value: string) => boolean {
+        return (value: string): boolean => {
+            return accepetedValues.indexOf(value) > -1;
+        };
+    }
+
+    public static isArray(value): boolean {
+        return Array.isArray(value);
     }
 
     /**

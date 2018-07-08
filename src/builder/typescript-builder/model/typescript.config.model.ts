@@ -1,6 +1,6 @@
-import { BuilderConfigModel } from "../../../model/builder-config.model";
+import { ConfigModel } from "../../../model/config.model";
 
-export class ConfigModel extends BuilderConfigModel {
+export class TscConfigModel extends ConfigModel {
 
     /**
      * exclude from node copy process

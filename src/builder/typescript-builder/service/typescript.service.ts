@@ -1,9 +1,11 @@
 import { ChildProcess, spawn} from "child_process";
-import { resolve, sep as pathDelimeter } from "path";
+import { resolve } from "path";
+import { IDataNode } from "rh-utils";
 import { DeployHelper } from "../../../helper";
-import { ConfigModel } from "../model/config.model";
+import { TscConfigModel } from "../model/typescript.config.model";
+import { TscConfigService } from "./tsc-config.service";
 
-export class TypescriptService {
+export class TypescriptService  {
 
     public static getInstance(): TypescriptService {
         return this.instance;
@@ -11,14 +13,9 @@ export class TypescriptService {
 
     private static instance: TypescriptService = new TypescriptService();
 
-    /**
-     * typescript builder configuration
-     *
-     * @private
-     * @type {ConfigModel}
-     * @memberof TypescriptService
-     */
-    private config: ConfigModel;
+    private configModel: TscConfigModel;
+
+    private configService: TscConfigService;
 
     /**
      * Creates an instance of TypescriptService.
@@ -32,36 +29,13 @@ export class TypescriptService {
             use TypescriptService.getInstance() instead`);
         }
 
-        this.config = new ConfigModel();
+        this.configService = new TscConfigService();
+        this.configModel   = this.configService.getConfig();
         TypescriptService.instance = this;
     }
 
-    /**
-     * set typescript builder option
-     *
-     * @param {string} option
-     * @param {string} value
-     * @memberof WebpackService
-     */
-    public setOption(option: string, value: string) {
-
-        const setterMethod = `set${option.charAt(0).toUpperCase()}${option.slice(1)}`;
-        const methodExists = Object.prototype.toString.call(
-            this.config[setterMethod]).slice(8, -1) === "Function";
-
-        if ( methodExists ) {
-            this.config[setterMethod](value);
-        }
-    }
-
-    /**
-     * get typescript builder configuration
-     *
-     * @returns {ConfigModel}
-     * @memberof TypescriptService
-     */
-    public getConfig(): ConfigModel {
-        return this.config;
+    public setOptions(config: IDataNode) {
+        this.configService.setOptions(config);
     }
 
     /**
@@ -94,9 +68,7 @@ export class TypescriptService {
      * @memberof TypescriptService
      */
     public clearDistDirectory(): void {
-        const rootDir = this.config.getProjectRoot();
-        const distDir = this.config.getOutDirectory();
-        DeployHelper.removeDirectory(resolve(rootDir, distDir));
+        DeployHelper.removeDirectory(this.configModel.getOutDirectory());
     }
 
     /**
@@ -107,15 +79,14 @@ export class TypescriptService {
      */
     public deployBinaryFiles(): Promise<string> {
 
-        const rootDir   = this.config.getProjectRoot();
-        const sourceDir = this.config.getProjectSource();
-        const targetDir = this.config.getOutDirectory();
+        const sourceDir = this.configModel.getProjectSource();
+        const targetDir = this.configModel.getOutDirectory();
 
-        this.config.setExcludeNcp(
-            this.config.getExcludeNcp().concat([".ts", ".tsx", "d.ts"]));
+        this.configModel.setExcludeNcp(
+            this.configModel.getExcludeNcp().concat([".ts", ".tsx", "d.ts"]));
 
-        const filesToExclude = DeployHelper.createNcpExcludeRegExp(this.config.getExcludeNcp());
-        return DeployHelper.copyFiles( sourceDir, resolve(rootDir, targetDir), filesToExclude);
+        const filesToExclude = DeployHelper.createNcpExcludeRegExp(this.configModel.getExcludeNcp());
+        return DeployHelper.copyFiles( sourceDir, targetDir, filesToExclude);
     }
 
     /**
@@ -126,11 +97,12 @@ export class TypescriptService {
      * @memberof TypescriptService
      */
     private createTsProcess(): ChildProcess {
+
         const process: ChildProcess = spawn("node", [
-            this.config.getTypescriptCompiler(),
-            "--project", resolve( this.config.getProjectRoot(), this.config.getTsConfigFile() ),
-            "--outDir",  resolve( this.config.getProjectRoot(), this.config.getOutDirectory() ),
-            "--rootDir", this.config.getProjectSource(),
+            this.configModel.getTypescriptCompiler(),
+            "--project", this.configModel.getTsConfigFile(),
+            "--outDir",  this.configModel.getOutDirectory(),
+            "--rootDir", this.configModel.getProjectSource(),
         ], {
             stdio: [ "pipe" ], // pipe childprocess stdio channels to nodejs
         });

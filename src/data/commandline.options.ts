@@ -1,20 +1,22 @@
-import { IOption } from "../api/option.interface";
+import { IOptionRuleSet } from "../api/option-rule.interface";
 import { ValidationHelper } from "../helper";
 
-export const CommandlineOptions: IOption  = {
+export const CommandlineOptions: IOptionRuleSet  = {
    builder: {
        required: true,
-       values: ["webpack", "extension", "tsc"],
+       validatorFn: ValidationHelper.containsValue(
+            ["webpack", "extension", "tsc"]),
    },
    config: {
        required: false,
-       validator: {
-           errorMsg: `Invalid argument for "config", use --config [filename].json\n\n`,
-           test: /\.json$/,
+       validatorFn: (): boolean => {
+           // test json
+           return true;
        },
    },
    env: {
        required: false,
-       values: ["development", "production"],
+       validatorFn: ValidationHelper.containsValue(
+            ["development", "production"]),
    },
 };

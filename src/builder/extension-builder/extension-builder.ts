@@ -1,7 +1,6 @@
 import { Plugin } from "webpack";
+import { IBuilderEnvironment } from "../../api";
 import { WebpackBuilder } from "../webpack-builder";
-import { WebpackConfigModel } from "../webpack-builder/model/webpack-config.model";
-import { WebpackService } from "../webpack-builder/service/webpack.service";
 import { CopyWebpackPlugin, PathOverridePlugin, ZipWebpackPlugin } from "./plugins";
 
 /**
@@ -19,15 +18,18 @@ export class ExtensionBuilder extends WebpackBuilder {
      * @returns {WebpackConfigModel}
      * @memberof ExtensionBuilder
      */
-    protected configureWebpack(): WebpackConfigModel {
-        const config = super.configureWebpack();
-        config.setEntryFile(`./${config.getPackageName()}.ts`);
-        config.setExternalModules([{
-            angular   : "angular",
-            qlik      : "qlik",
-            qvangular : "qvangular",
-        }]);
-        return config;
+    public initialize(env: IBuilderEnvironment) {
+
+        super.initialize(env);
+
+        this.webpackService.setOptions({
+            entryFile: `./${env.projectName}.ts`,
+            externalModules: [
+                { angular  : "angular"},
+                { qlik     : "qlik" },
+                { qvangular: "qvangular" },
+            ],
+        }, false);
     }
 
     /**
@@ -38,11 +40,10 @@ export class ExtensionBuilder extends WebpackBuilder {
      */
     protected loadWebpackPlugins(): Plugin[] {
 
-        const config: WebpackConfigModel  = WebpackService.getInstance().getConfiguration();
-        const plugins = super.loadWebpackPlugins();
-        const packageName = config.getPackageName();
+        const packageName = this.webpackService.getConfig().getPackageName();
+        const outDir      = this.webpackService.getConfig().getOutDirectory();
 
-        return plugins.concat([
+        return [
             new PathOverridePlugin(/\/umd\//, "/esm/"),
             new CopyWebpackPlugin([
                 { from: `${packageName}.qext`, to: `${packageName}.qext` },
@@ -50,8 +51,8 @@ export class ExtensionBuilder extends WebpackBuilder {
             ]),
             new ZipWebpackPlugin({
                 filename: `${packageName}.zip`,
-                path: config.getOutDirectory(),
+                path: outDir,
             }),
-        ]);
+        ];
     }
 }

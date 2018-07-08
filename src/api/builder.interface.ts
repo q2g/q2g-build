@@ -1,3 +1,5 @@
+import { IBuilderEnvironment } from "./builder-environment.interface";
+
 export enum Builders {
     TYPESCRIPT = "tsc",
     EXTENSION  = "extension",
@@ -5,7 +7,10 @@ export enum Builders {
 }
 
 export interface IBuilder {
+
     configure(config: any): void;
+
+    initialize(baseConfig: IBuilderEnvironment): void;
 
     run(): Promise<string>;
 }

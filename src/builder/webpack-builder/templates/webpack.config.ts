@@ -2,7 +2,7 @@ import { basename } from "path";
 import { Configuration, Options } from "webpack";
 import { WebpackService } from "../service/webpack.service";
 
-const config = WebpackService.getInstance().getConfiguration();
+const config = WebpackService.getInstance().getConfig();
 
 const webpackConfig: Configuration = {
 
@@ -10,7 +10,7 @@ const webpackConfig: Configuration = {
 
     entry: config.getEntryFile(),
 
-    externals: config.getExternalModules(),
+    externals: config.getExternalModules() || [],
 
     mode: config.getEnvironment(),
 
@@ -18,13 +18,12 @@ const webpackConfig: Configuration = {
 
     module: {
         rules: [{
-            sideEffects: false,
-        }, {
             test: /text!.*\.html$/,
             use: [{
                 loader: "raw-loader",
             }],
         }, {
+            sideEffects: false,
             test: /\.(tsx?|js)$/,
             use: [{
                 /**
@@ -34,6 +33,7 @@ const webpackConfig: Configuration = {
                 loader: "clean-requirejs-imports.loader",
             }],
         }, {
+            sideEffects: true,
             test: /.*\.tsx?$/,
             use: [{
                 loader: "ts-loader",

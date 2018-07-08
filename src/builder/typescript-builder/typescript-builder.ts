@@ -1,9 +1,7 @@
 import { resolve } from "path";
 import { Config, IDataNode } from "rh-utils";
-import { IBuilder } from "../../api";
-import { AppConfigProperties } from "../../data/app.config";
-import { OptionHelper } from "../../helper";
-import { Options } from "./data/options";
+import { IBuilderEnvironment } from "../../api";
+import { AbstractBuilder } from "../abstract.builder";
 import { TypescriptService } from "./service/typescript.service";
 
 /**
@@ -14,7 +12,7 @@ import { TypescriptService } from "./service/typescript.service";
  * @class TypescriptBuilder
  * @implements {IBuilder}
  */
-export class TypescriptBuilder implements IBuilder {
+export class TypescriptBuilder extends AbstractBuilder {
 
     /**
      * typescript service
@@ -40,9 +38,9 @@ export class TypescriptBuilder implements IBuilder {
      * @memberof TypescriptBuilder
      */
     constructor() {
+        super();
         this.appConfig  = Config.getInstance();
         this.typescriptService = TypescriptService.getInstance();
-        this.initialize();
     }
 
     /**
@@ -52,15 +50,7 @@ export class TypescriptBuilder implements IBuilder {
      * @memberof TypescriptBuilder
      */
     public configure(config: IDataNode): void {
-        const options: IDataNode = OptionHelper.cleanOptions(config, Options);
-        const errors: string[]   = OptionHelper.validateOptions(config, Options);
-
-        if ( ! errors.length || Object.keys(options).length ) {
-            Object.keys(options).forEach( (name) => {
-                const value = options[name];
-                this.typescriptService.setOption(name, value);
-            });
-        }
+        this.typescriptService.setOptions(config);
     }
 
     /**
@@ -69,16 +59,14 @@ export class TypescriptBuilder implements IBuilder {
      * @returns {Promise<string>}
      * @memberof TypescriptBuilder
      */
-    public run(): Promise<string> {
+    public async run(): Promise<string> {
 
         this.typescriptService.clearDistDirectory();
 
-        return Promise.all([
-            this.typescriptService.compileTypescriptFiles(),
-            this.typescriptService.deployBinaryFiles(),
-        ]).then( (result: string[]) => {
-            return result.join("\n");
-        });
+        await this.typescriptService.compileTypescriptFiles();
+        await this.typescriptService.deployBinaryFiles();
+
+        return "nice one";
     }
 
     /**
@@ -87,11 +75,12 @@ export class TypescriptBuilder implements IBuilder {
      * @protected
      * @memberof TypescriptBuilder
      */
-    protected initialize() {
+    public initialize(environment: IBuilderEnvironment) {
 
-        const appRoot     = this.appConfig.get(AppConfigProperties.appRoot);
-        const config      = this.typescriptService.getConfig();
-
-        config.setTypescriptCompiler(resolve(appRoot, "../node_modules/typescript/lib/tsc"));
+        super.initialize(environment);
+        const tscConfig = {
+            typescriptCompiler: resolve(environment.builderRoot, "../node_modules/typescript/bin/tsc"),
+        };
+        this.typescriptService.setOptions(tscConfig);
     }
 }

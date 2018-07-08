@@ -2,7 +2,7 @@
   "name": "q2g-build",
   "version": "0.0.1",
   "description": "general build process",
-  "main": "bin/index.js",
+  "main": "bin/main.js",
   "scripts": {
     "build": "tsc",
     "postinstall": "tsc -p ./tsconfig.json"

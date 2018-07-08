@@ -1,5 +1,7 @@
-import { Builders, IBuilder } from "../api";
-import { ExtensionBuilder,  TypescriptBuilder, WebpackBuilder } from "../lib";
+import { existsSync, readFileSync} from "fs";
+import { IDataNode } from "rh-utils";
+import { Builders, IBuilder, IBuilderEnvironment } from "../api";
+import { ExtensionBuilder,  TypescriptBuilder, WebpackBuilder } from "../builder";
 
 export class BuilderService {
 
@@ -39,13 +41,31 @@ export class BuilderService {
     }
 
     /**
+     * read command line arguments into DataNode
+     *
+     * @static
+     * @param {string[]} args
+     * @returns {IDataNode}
+     * @memberof OptionHelper
+     */
+    public readCommandLineArguments(args: string[]): IDataNode {
+        const options: IDataNode = {};
+        for (let i = 0, ln = args.length; i < ln; i++) {
+            const option: string = args[i].slice(2);
+            options[option] = args[++i];
+        }
+        return options;
+    }
+
+    /**
      * get a builder instance
      *
      * @param {Builders} type
      * @returns {IBuilder}
      * @memberof BuilderService
      */
-    public getBuilder(type: Builders): IBuilder {
+    public createBuilder(type: string): IBuilder {
+
         let builder: IBuilder;
         switch (type) {
             case Builders.WEBPACK:    builder = new WebpackBuilder();    break;
