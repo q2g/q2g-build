@@ -76,8 +76,8 @@ export class WebpackBuilder extends AbstractBuilder {
             optimization: {
                 minimize: env === "production" ? true : false,
             },
+            outFileName: `${environment.projectName}.js`,
             packageName: environment.projectName,
-            setOutFileName: `${environment.projectName}.js`,
         };
 
         this.webpackService.setOptions(webpackConfiguration, false);

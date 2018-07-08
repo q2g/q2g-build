@@ -40,10 +40,12 @@ export class ExtensionBuilder extends WebpackBuilder {
      */
     protected loadWebpackPlugins(): Plugin[] {
 
+        const plugins = super.loadWebpackPlugins();
+
         const packageName = this.webpackService.getConfig().getPackageName();
         const outDir      = this.webpackService.getConfig().getOutDirectory();
 
-        return [
+        return plugins.concat([
             new PathOverridePlugin(/\/umd\//, "/esm/"),
             new CopyWebpackPlugin([
                 { from: `${packageName}.qext`, to: `${packageName}.qext` },
@@ -53,6 +55,6 @@ export class ExtensionBuilder extends WebpackBuilder {
                 filename: `${packageName}.zip`,
                 path: outDir,
             }),
-        ];
+        ]);
     }
 }
