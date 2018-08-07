@@ -4,8 +4,7 @@
   "description": "general build process",
   "main": "bin/main.js",
   "scripts": {
-    "build": "tsc",
-    "postinstall": "tsc -p ./tsconfig.json"
+    "build": "tsc"
   },
   "author": "Ralf Hannuschka",
   "license": "ISC",
@@ -24,7 +23,6 @@
     "ncp": "^2.0.0",
     "path-override-webpack-plugin": "^0.1.2",
     "raw-loader": "0.5.1",
-    "rh-utils": "git+https://github.com/r-hannuschka/rh-utils.git",
     "style-loader": "^0.21.0",
     "ts-loader": "^4.4.2",
     "tslint": "^5.10.0",

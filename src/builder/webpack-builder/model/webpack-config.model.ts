@@ -1,5 +1,5 @@
-import { IDataNode } from "rh-utils";
 import { Options, Plugin } from "webpack";
+import { IDataNode } from "../../../api/data-node";
 import { BuilderConfigModel } from "../../../model/app-config.model";
 
 /**

@@ -1,6 +1,5 @@
-import { existsSync, readFileSync} from "fs";
-import { IDataNode } from "rh-utils";
-import { Builders, IBuilder, IBuilderEnvironment } from "../api";
+import { Builders, IBuilder } from "../api";
+import { IDataNode } from "../api/data-node";
 import { ExtensionBuilder,  TypescriptBuilder, WebpackBuilder } from "../builder";
 
 export class BuilderService {

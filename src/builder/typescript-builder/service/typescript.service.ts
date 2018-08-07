@@ -1,6 +1,5 @@
 import { ChildProcess, spawn} from "child_process";
-import { resolve } from "path";
-import { IDataNode } from "rh-utils";
+import { IDataNode } from "../../../api/data-node";
 import { DeployHelper } from "../../../helper";
 import { TscConfigModel } from "../model/typescript.config.model";
 import { TscConfigService } from "./tsc-config.service";
