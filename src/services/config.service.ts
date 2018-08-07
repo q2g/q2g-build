@@ -1,5 +1,5 @@
-import { IDataNode } from "rh-utils";
 import { IOptionRule, IOptionRuleSet } from "../api";
+import { IDataNode } from "../api/data-node";
 import { BuilderConfigRules } from "../data/builder-config.rules";
 
 export abstract class ConfigService<T> {

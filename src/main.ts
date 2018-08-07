@@ -1,20 +1,10 @@
 import { existsSync, readFileSync } from "fs";
 import { dirname, resolve } from "path";
-import { IDataNode, Log } from "rh-utils";
 import { IBuilder, IBuilderEnvironment } from "./api";
+import { IDataNode } from "./api/data-node";
 import { BuilderService } from "./services";
 
 const builderService = BuilderService.getInstance();
-const logPath = resolve( dirname(__filename), "..");
-
-Log.configure({
-    LogModule: {
-        paths: {
-            debug: `${logPath}/log/debug.log`,
-            error: `${logPath}/log/error.log`,
-        },
-    },
-});
 
 /**
  * load options from file

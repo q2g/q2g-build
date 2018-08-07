@@ -1,5 +1,5 @@
-import { IDataNode, Log } from "rh-utils";
 import { Compiler, Plugin, Stats } from "webpack";
+import { IDataNode } from "../../../api/data-node";
 
 /**
  * log webpack errors into log/error.log directory
@@ -10,21 +10,12 @@ import { Compiler, Plugin, Stats } from "webpack";
  */
 export class LogPlugin implements Plugin {
 
-    private logService: Log;
-
-    /**
-     * Creates an instance of LogPlugin
-     *
-     * @memberof LogPlugin
-     */
-    constructor() {
-        this.logService = Log.getInstance();
-    }
-
     /**
      * entry point for webpack plugins
      * checks after compilation process has been finished errors
-     * exists and logs them into error.log file
+     * exists
+     *
+     * @todo implement logger again
      *
      * @param {Compiler} compiler
      * @memberof LogPlugin
@@ -39,8 +30,8 @@ export class LogPlugin implements Plugin {
             const statsJson: Stats.ToJsonOptions = result.toJson();
             const stats = statsJson.valueOf() as IDataNode;
             const errors: string[] = stats.errors;
-            this.logService.log(
-                errors.join("\n\n"), Log.LOG_ERROR);
+
+            throw new Error(errors.join(`\r\n`));
         });
     }
 }

@@ -1,7 +1,7 @@
 import { resolve } from "path";
-import { IDataNode } from "rh-utils";
 import { Compiler, Plugin } from "webpack";
 import { IBuilderEnvironment } from "../../api";
+import { IDataNode } from "../../api/data-node";
 import { AbstractBuilder } from "../abstract.builder";
 import { CleanWebpackPlugin, LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
