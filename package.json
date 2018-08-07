@@ -4,8 +4,7 @@
   "description": "general build process",
   "main": "bin/main.js",
   "scripts": {
-    "build": "tsc",
-    "postinstall": "tsc -p ./tsconfig.json"
+    "build": "tsc"
   },
   "author": "Ralf Hannuschka",
   "license": "ISC",
