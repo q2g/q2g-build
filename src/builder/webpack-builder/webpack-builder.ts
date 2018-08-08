@@ -82,6 +82,7 @@ export class WebpackBuilder extends AbstractBuilder {
             loaderContextPaths: [
                 resolve(environment.builderRoot, "./builder/webpack-builder/loader"),
                 resolve(environment.builderRoot, "../node_modules"),
+                resolve(environment.projectRoot, "./node_modules"),
             ],
             outFileName: `${environment.projectName}.js`,
             packageName: environment.projectName,
