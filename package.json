@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "pkg:publish" : "npm run build && node npm/publish",
+    "pkg:publish" : "npm run build && node npm/publish"
   },
   "author": "Ralf Hannuschka",
   "license": "ISC",
