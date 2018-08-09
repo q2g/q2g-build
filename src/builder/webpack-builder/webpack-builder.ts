@@ -53,16 +53,6 @@ export class WebpackBuilder extends AbstractBuilder {
     public configure(config: IDataNode): void {
 
         this.webpackService.setOptions(config);
-        this.webpackService.setOptions( {plugins: this.loadWebpackPlugins() }, false);
-
-        const env = this.webpackService.getConfig().getEnvrionment();
-        const envConfig = {
-            optimization: {
-                minimize: env === "production" ? true : false,
-            },
-            webpackEnvrionment: env === "debug" ? "none" : env,
-        };
-        this.webpackService.setOptions(envConfig);
     }
 
     /**
@@ -98,6 +88,9 @@ export class WebpackBuilder extends AbstractBuilder {
      * @memberof WebpackBuilder
      */
     public async run(): Promise<string> {
+
+        this.beforeRun();
+
         return new Promise<string>( async (success, error) => {
             /** create compiler */
             const compiler: Compiler = await this.webpackService.getWebpack();
@@ -110,6 +103,26 @@ export class WebpackBuilder extends AbstractBuilder {
                 success("completed");
             });
         });
+    }
+
+    /**
+     * before webpack runs finalize webpack configuration
+     * and load required plugins
+     *
+     * @protected
+     * @memberof WebpackBuilder
+     */
+    protected beforeRun() {
+        const env = this.webpackService.getConfig().getEnvrionment();
+        const envConfig = {
+            optimization: {
+                minimize: env === "production" ? true : false,
+            },
+            webpackEnvrionment: env === "debug" ? "none" : env,
+        };
+
+        this.webpackService.setOptions( {plugins: this.loadWebpackPlugins() }, false);
+        this.webpackService.setOptions(envConfig);
     }
 
     /**
