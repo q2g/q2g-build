@@ -1,5 +1,8 @@
+import { existsSync } from "fs";
+import { resolve } from "path";
 import { Plugin } from "webpack";
 import { IBuilderEnvironment } from "../../api";
+import { IDataNode } from "../../api/data-node";
 import { WebpackBuilder } from "../webpack-builder";
 import { CopyWebpackPlugin, PathOverridePlugin, ZipWebpackPlugin } from "./plugins";
 
@@ -47,14 +50,33 @@ export class ExtensionBuilder extends WebpackBuilder {
 
         return plugins.concat([
             new PathOverridePlugin(/\/umd\//, "/esm/"),
-            new CopyWebpackPlugin([
-                { from: `${packageName}.qext`, to: `${packageName}.qext` },
-                { from: "wbfolder.wbl" , to: "wbfolder.wbl" },
-            ]),
+            new CopyWebpackPlugin(this.getBinaryFiles()),
             new ZipWebpackPlugin({
                 filename: `${packageName}.zip`,
                 path: outDir,
             }),
         ]);
+    }
+
+    /**
+     * get binary files which should copied to dist folder
+     *
+     * @private
+     * @returns {IDataNode[]}
+     * @memberof ExtensionBuilder
+     */
+    private getBinaryFiles(): IDataNode[] {
+
+        const packageName = this.webpackService.getConfig().getPackageName();
+        const binFiles = [
+            { from: `${packageName}.qext`, to: `${packageName}.qext` },
+            { from: "wbfolder.wbl" , to: "wbfolder.wbl" },
+        ];
+
+        if ( existsSync( resolve(this.webpackService.getConfig().getProjectRoot(), "preview.png") )) {
+            binFiles.push({from: "preview.png", to: "preview.png" });
+        }
+
+        return binFiles;
     }
 }

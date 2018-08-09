@@ -1,5 +1,5 @@
 import { existsSync, readFileSync } from "fs";
-import { dirname, resolve } from "path";
+import { resolve } from "path";
 import { IBuilder, IBuilderEnvironment } from "./api";
 import { IDataNode } from "./api/data-node";
 import { BuilderService } from "./services";
