@@ -44,6 +44,7 @@ npmVersionProcess.on("exit", async (exitCode) => {
     }
 
     try {
+        await spawnProcess("git", 'push');
         await spawnProcess("git", 'push', 'origin', packageVersionNumber);
         await spawnProcess(npmCommand, `publish`);
     } catch ( error ) {
