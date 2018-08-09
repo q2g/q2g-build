@@ -8,7 +8,8 @@
     "bin"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "pkg:publish" : "npm run build && node npm/publish"
   },
   "author": "Ralf Hannuschka",
   "license": "ISC",

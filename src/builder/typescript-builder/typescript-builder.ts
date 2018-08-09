@@ -1,3 +1,4 @@
+import { existsSync } from "fs";
 import { resolve } from "path";
 import { IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
@@ -70,9 +71,18 @@ export class TypescriptBuilder extends AbstractBuilder {
     public initialize(environment: IBuilderEnvironment) {
 
         super.initialize(environment);
+
+        const typeScriptModulePath = "node_modules/typescript/bin/tsc";
+        let pathTypescriptCompiler = resolve(environment.projectRoot, `./${typeScriptModulePath}`);
+
+        if ( ! existsSync(pathTypescriptCompiler) ) {
+            pathTypescriptCompiler = resolve(environment.builderRoot, `../${typeScriptModulePath}`);
+        }
+
         const tscConfig = {
-            typescriptCompiler: resolve(environment.builderRoot, "../node_modules/typescript/bin/tsc"),
+            typescriptCompiler: pathTypescriptCompiler,
         };
+
         this.typescriptService.setOptions(tscConfig);
     }
 }
