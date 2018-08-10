@@ -4,6 +4,8 @@
         "tslint:recommended"
     ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+        "adjacent-overload-signatures": false
+    },
     "rulesDirectory": []
 }
