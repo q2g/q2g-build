@@ -5,6 +5,7 @@ import { IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
 import { WebpackBuilder } from "../webpack-builder";
 import { CopyWebpackPlugin, PathOverridePlugin, ZipWebpackPlugin } from "./plugins";
+import { ExtensionService } from "./service/extension.service";
 
 /**
  * Builder for Qlick 2 Go Extensions
@@ -14,6 +15,13 @@ import { CopyWebpackPlugin, PathOverridePlugin, ZipWebpackPlugin } from "./plugi
  * @extends {WebpackBuilder}
  */
 export class ExtensionBuilder extends WebpackBuilder {
+
+    private extensionService: ExtensionService;
+
+    public constructor() {
+        super();
+        this.extensionService = new ExtensionService();
+    }
 
     /**
      * @inheritDoc
@@ -36,6 +44,40 @@ export class ExtensionBuilder extends WebpackBuilder {
     }
 
     /**
+     * called before the build process start
+     *
+     * @protected
+     * @memberof ExtensionBuilder
+     */
+    protected beforeRun() {
+
+        try {
+            /**
+             * load extension data before we run this process
+             * if this fails we could abort the process since there is
+             * no valid qext file at the end
+             */
+            this.extensionService.initializeQextData();
+        } catch ( e ) {
+            process.stderr.write(e.message);
+            process.exit(1);
+        }
+
+        super.beforeRun();
+    }
+
+    /**
+     * webpack build process has completed without errors
+     *
+     * @override
+     * @protected
+     * @memberof ExtensionBuilder
+     */
+    protected completed() {
+        this.extensionService.createQextFile();
+    }
+
+    /**
      * @inheritDoc
      * @protected
      * @returns {Plugin[]}
@@ -43,8 +85,7 @@ export class ExtensionBuilder extends WebpackBuilder {
      */
     protected loadWebpackPlugins(): Plugin[] {
 
-        const plugins = super.loadWebpackPlugins();
-
+        const plugins     = super.loadWebpackPlugins();
         const packageName = this.webpackService.getConfig().getPackageName();
         const outDir      = this.webpackService.getConfig().getOutDirectory();
 
@@ -59,7 +100,7 @@ export class ExtensionBuilder extends WebpackBuilder {
     }
 
     /**
-     * get binary files which should copied to dist folder
+     * get binary files which should copy to dist folder
      *
      * @private
      * @returns {IDataNode[]}
@@ -69,7 +110,7 @@ export class ExtensionBuilder extends WebpackBuilder {
 
         const packageName = this.webpackService.getConfig().getPackageName();
         const binFiles = [
-            { from: `${packageName}.qext`, to: `${packageName}.qext` },
+            // { from: `${packageName}.qext`, to: `${packageName}.qext` },
             { from: "wbfolder.wbl" , to: "wbfolder.wbl" },
         ];
 

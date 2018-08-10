@@ -100,6 +100,7 @@ export class WebpackBuilder extends AbstractBuilder {
                     process.stderr.write(err.toString());
                     error(err);
                 }
+                this.completed();
                 success("completed");
             });
         });
@@ -124,6 +125,12 @@ export class WebpackBuilder extends AbstractBuilder {
         this.webpackService.setOptions( {plugins: this.loadWebpackPlugins() }, false);
         this.webpackService.setOptions(envConfig);
     }
+
+    /**
+     * called after build process completed
+     */
+    // tslint:disable-next-line:no-empty
+    protected completed() {}
 
     /**
      * add webpack plugins before we start since configuration

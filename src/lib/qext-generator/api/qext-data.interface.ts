@@ -1,4 +1,4 @@
-import { IDataNode } from "../../../../../api/data-node";
+import { IDataNode } from "../../../api/data-node";
 
 export interface IQextData {
 

@@ -1,4 +1,4 @@
-import { IDataNode } from "../../../../../api/data-node";
+import { IDataNode } from "../../../api/data-node";
 import { IQextData } from "../api/qext-data.interface";
 
 export class QextModel implements IQextData {
