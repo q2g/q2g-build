@@ -2,13 +2,12 @@ import { existsSync, lstatSync, PathLike, readFileSync, writeFileSync } from "fs
 import { resolve } from "path";
 import { IDataNode } from "../../api/data-node";
 import { IQextData } from "./api";
-import { QextCouldNotWriteFileException, QextMandatoryException } from "./data/exception";
 import { MANDATORY_PROPERTIES, QEXT_PROPERTIES } from "./data/qext-properties";
 import { QextModel } from "./model/qext.model";
 
 export class QextFileGenerator {
 
-    private model: QextModel;
+    private model: IQextData;
 
     constructor() {
         this.model = new QextModel();
@@ -36,6 +35,7 @@ export class QextFileGenerator {
     }
 
     public createFile(path: string) {
+        /*
         const data     = this.toJson();
         const fileName = `${this.model.name}.qext`;
         const filePath = resolve(path, fileName);
@@ -43,39 +43,85 @@ export class QextFileGenerator {
         const stats = lstatSync(path);
 
         if ( ! path || stats.isDirectory() ) {
-            throw new QextCouldNotWriteFileException(`given path ${path} is not a directory.`);
+            // throw new QextCouldNotWriteFileException(`given path ${path} is not a directory.`);
         }
 
         writeFileSync(filePath, data, { encoding: "utf8" });
-    }
-
-    private toJson(): IQextData {
-        const data = {};
-        Object.keys(QEXT_PROPERTIES).forEach( (property) => {
-            data[property] = this.model[property];
-        });
-        return data as IQextData;
+        */
     }
 
     private extractData(data: IDataNode) {
 
-        const source: IDataNode = data;
+        Object.keys(QEXT_PROPERTIES).forEach( (property: any) => {
 
-        Object.keys(QEXT_PROPERTIES).forEach( (property: string) => {
+            const prop  = QEXT_PROPERTIES[property];
+            const value = data[prop];
 
-            const prop        = QEXT_PROPERTIES[property];
-            const isMandatory = MANDATORY_PROPERTIES.indexOf(QEXT_PROPERTIES[property]) > -1;
-            const propVal     = source[prop];
+            let isValid: boolean = true;
 
-            if ( isMandatory && ! propVal ) {
-                throw new QextMandatoryException(`Missing mandatory property: ${prop}`);
+            if ( this.isMandatory(prop) ) {
+                isValid = isValid && this.isNotUndefined(value, prop);
+                isValid = isValid && this.isString(value, prop);
+                isValid = isValid && this.isNotEmpty(value, prop);
             }
 
-            if ( ! propVal ) {
-                return;
+            if ( isValid ) {
+                this.model[prop] = value;
             }
-
-            this.model[prop] = propVal;
         });
+    }
+
+    /**
+     * checks property is mandatory for extension
+     *
+     * @private
+     * @param {string} prop
+     * @returns {boolean}
+     * @memberof QextFileGenerator
+     */
+    private isMandatory(prop: string): boolean {
+        return MANDATORY_PROPERTIES.indexOf(prop as any) > -1;
+    }
+
+    /**
+     * checks value is set in extension configuration
+     *
+     * @private
+     * @param {string} prop
+     * @memberof QextFileGenerator
+     */
+    private isNotUndefined(val: string, prop: string): boolean {
+        if ( val === undefined) {
+            throw new Error(`Missing mandatory property: ${prop}`);
+        }
+        return true;
+    }
+
+    /**
+     * checks property value is string
+     *
+     * @private
+     * @param {string} prop
+     * @memberof QextFileGenerator
+     */
+    private isString(val: string, prop: string): boolean {
+        if ( ! val as any instanceof String ) {
+            throw new Error(`Mandatory property ${val} must be a string.`);
+        }
+        return true;
+    }
+
+    /**
+     * checks property value is not empty
+     *
+     * @private
+     * @param {string} prop
+     * @memberof QextFileGenerator
+     */
+    private isNotEmpty(val: string, prop: string): boolean {
+        if ( val.replace(/(^\s*|\s*$)/gm, "") === "" ) {
+            throw new Error(`Mandatory property ${prop} could not be empty.`);
+        }
+        return true;
     }
 }

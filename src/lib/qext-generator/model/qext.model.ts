@@ -3,123 +3,123 @@ import { IQextData } from "../api/qext-data.interface";
 
 export class QextModel implements IQextData {
 
-    private qextAuthor: string;
+    private author: string = "";
 
-    private qextDependencies: IDataNode;
+    private dependencies: IDataNode = {};
 
-    private qextDescription: string;
+    private description: string = "";
 
-    private qextIcon: string;
+    private icon: string = "";
 
-    private qextName: string;
+    private name: string = "";
 
-    private qextType: string;
+    private type: string = "";
 
-    private qextVersion: string;
+    private version: string = "";
 
-    private qextPreview: string;
+    private preview: string = "";
 
-    private qextHomepage: string;
+    private homepage: string = "";
 
-    private qextKeywords: string;
+    private keywords: string = "";
 
-    private qextLicense: string;
+    private license: string = "";
 
-    private qextRepository: string;
+    private repository: string = "";
 
-    public get author(): string {
-        return this.qextAuthor;
+    public getAuthor(): string {
+        return this.author;
     }
 
-    public get dependencies(): IDataNode {
-        return this.qextDependencies;
+    public getDependencies(): IDataNode {
+        return this.dependencies;
     }
 
-    public get description(): string {
-        return this.qextDescription;
+    public getDescription(): string {
+        return this.description;
     }
 
-    public get icon(): string {
-        return this.qextIcon;
+    public getIcon(): string {
+        return this.icon;
     }
 
-    public get name(): string {
-        return this.qextName;
+    public getName(): string {
+        return this.name;
     }
 
-    public get type(): string {
-        return this.qextType;
+    public getType(): string {
+        return this.type;
     }
 
-    public get version(): string {
-        return this.qextVersion;
+    public getVersion(): string {
+        return this.version;
     }
 
-    public get preview(): string {
-        return this.qextPreview;
+    public getPreview(): string {
+        return this.preview;
     }
 
-    public get homepage(): string {
-        return this.qextHomepage;
+    public getHomepage(): string {
+        return this.homepage;
     }
 
-    public get keywords(): string {
-        return this.qextKeywords;
+    public getKeywords(): string {
+        return this.keywords;
     }
 
-    public get license(): string {
-        return this.qextLicense;
+    public getLicense(): string {
+        return this.license;
     }
 
-    public get repository(): string {
-        return this.qextRepository;
+    public getRepository(): string {
+        return this.repository;
     }
 
-    public set author(val: string) {
-        this.qextAuthor = val;
+    public setAuthor(val: string) {
+        this.author = val;
     }
 
-    public set dependencies(dep: IDataNode) {
-        this.qextDependencies = dep;
+    public setDependencies(dep: IDataNode) {
+        this.dependencies = dep;
     }
 
-    public set description(val: string) {
-        this.qextDescription = val;
+    public setDescription(val: string) {
+        this.description = val;
     }
 
-    public set icon(val: string) {
-        this.qextIcon = val;
+    public setIcon(val: string) {
+        this.icon = val;
     }
 
-    public set name(val: string) {
-        this.qextName = val;
+    public setName(val: string) {
+        this.name = val;
     }
 
-    public set type(val: string) {
-        this.qextType = val;
+    public setType(val: string) {
+        this.type = val;
     }
 
-    public set version(val: string) {
-        this.qextVersion = val;
+    public setVersion(val: string) {
+        this.version = val;
     }
 
-    public set preview(val: string) {
-        this.qextPreview = val;
+    public setPreview(val: string) {
+        this.preview = val;
     }
 
-    public set homepage(val: string) {
-        this.qextHomepage = val;
+    public setHomepage(val: string) {
+        this.homepage = val;
     }
 
-    public set keywords(val: string) {
-        this.qextKeywords = val;
+    public setKeywords(val: string) {
+        this.keywords = val;
     }
 
-    public set license(val: string) {
-        this.qextLicense = val;
+    public setLicense(val: string) {
+        this.license = val;
     }
 
-    public set repository(val: string) {
-        this.qextRepository = val;
+    public setRepository(val: string) {
+        this.repository = val;
     }
 }

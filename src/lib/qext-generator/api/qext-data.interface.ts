@@ -2,27 +2,27 @@ import { IDataNode } from "../../../api/data-node";
 
 export interface IQextData {
 
-    author: string;
+    getAuthor(): string;
 
-    description: string;
+    getDescription(): string;
 
-    icon: string;
+    getIcon(): string;
 
-    name: string;
+    getName(): string;
 
-    type: string;
+    getType(): string;
 
-    version: string;
+    getVersion(): string;
 
-    preview?: string;
+    getPreview(): string;
 
-    homepage?: string;
+    getHomepage(): string;
 
-    keywords?: string;
+    getKeywords(): string;
 
-    license?: string;
+    getLicense(): string;
 
-    repository?: string;
+    getRepository(): string;
 
-    dependencies?: IDataNode;
+    getDependencies(): IDataNode;
 }

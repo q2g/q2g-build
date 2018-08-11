@@ -1,6 +1,6 @@
-import { IOptionRule, IOptionRuleSet } from "../api";
+import { IOptionResult, IOptionRule, IOptionRuleSet } from "../api";
 import { IDataNode } from "../api/data-node";
-import { BuilderConfigRules } from "../data/builder-config.rules";
+import { IValidationResult } from "../api/validation-result.interface";
 
 export abstract class ConfigService<T> {
 
@@ -10,10 +10,7 @@ export abstract class ConfigService<T> {
 
     constructor() {
         this.configModel   = this.getConfigModel();
-        this.configOptions = {
-            ...BuilderConfigRules,
-            ...this.getConfigRules(),
-        };
+        this.configOptions = this.getConfigRules();
     }
 
     /**
@@ -22,21 +19,23 @@ export abstract class ConfigService<T> {
      * @param {IDataNode} options
      * @memberof BuilderService
      */
-    public setOptions(options: IDataNode, validate = true) {
+    public setOptions(options: IDataNode, validate = true): IOptionResult[] {
 
         let cleanedOptions = options;
-        let errors = [];
+        let optionResults: IOptionResult[];
 
         if ( validate ) {
             cleanedOptions = this.cleanOptions(options);
-            errors = this.validateOptions(cleanedOptions);
+            optionResults  = this.validateOptions(cleanedOptions);
         }
 
-        if ( ! errors.length ) {
-            Object.keys(cleanedOptions).forEach( (optionName) => {
-                this.setOption(optionName, cleanedOptions[optionName]);
-            });
-        }
+        optionResults.forEach( (result) => {
+            if ( ! result.errors.length ) {
+                this.setOption(result.name, cleanedOptions[result.name]);
+            }
+        });
+
+        return optionResults;
     }
 
     public getConfig(): T {
@@ -95,27 +94,28 @@ export abstract class ConfigService<T> {
      * @static
      * @param {IDataNode} source
      * @param {IOption} target
-     * @returns {string[]}
      * @memberof OptionHelper
      */
-    private validateOptions( source: IDataNode): string[] {
+    private validateOptions(source: IDataNode): IOptionResult[] {
 
-        const errors: string[] = [];
-        const options: IOptionRuleSet = this.configOptions;
+        const options: IOptionRuleSet  = this.configOptions;
+        const results: IOptionResult[] = [];
 
         Object.keys(options).forEach( (optionName) => {
             const rule: IOptionRule      = options[optionName];
             const optionValue: IDataNode = source[optionName];
 
-            if ( rule.required ) {
-                this.validateRequiredOption(rule, optionValue);
-                return;
-            }
+            const validationResult = rule.required
+                ? this.validateRequiredOption(rule, optionValue)
+                : this.validateOption(rule, optionValue);
 
-            this.validateOption(rule, optionValue);
+            results.push({
+                errors: [].concat(validationResult.error),
+                name:  optionName,
+            });
         });
 
-        return errors;
+        return results;
     }
 
     /**
@@ -127,15 +127,18 @@ export abstract class ConfigService<T> {
      * @returns
      * @memberof ConfigService
      */
-    private validateRequiredOption(rule: IOptionRule, optionValue: any) {
+    private validateRequiredOption(rule: IOptionRule, optionValue: any): IValidationResult {
         if ( ! optionValue )  {
-            return false;
+            return {
+                error: "required",
+                isValid: false,
+            };
         }
-        this.validateOption(rule, optionValue);
+        return this.validateOption(rule, optionValue);
     }
 
     /**
-     * valuedate option value
+     * validate all options
      *
      * @private
      * @param {IOptionRule} rule
@@ -143,12 +146,27 @@ export abstract class ConfigService<T> {
      * @returns
      * @memberof ConfigService
      */
-    private validateOption(rule: IOptionRule, value: any) {
-        // better check for undefined
-        if ( ! value ) {
-            return true;
+    private validateOption(rule: IOptionRule, value: any): IValidationResult {
+
+        let validator = rule.validatorFn;
+        const validationResults: IValidationResult[] = [];
+
+        if ( ! Array.isArray(validator) ) {
+            validator = [validator];
         }
-        // check against validator function
-        return rule.validatorFn(value);
+
+        validator.forEach( (validatorFn) => {
+            validationResults.push(validatorFn(value));
+        });
+
+        return validationResults.reduce( (previous, current): IValidationResult => {
+            if ( ! Array.isArray(previous.error)  ) {
+                previous.error = [previous.error];
+            }
+            return {
+                error: previous.error.concat(current.error),
+                isValid: previous.isValid && current.isValid,
+            };
+        }, validationResults.shift());
     }
 }

@@ -11,6 +11,9 @@
         "lib": [
             "es6"
         ],
+        "typeRoots": [
+            "node_modules/@types"
+        ],
         "types": [ "node", "webpack" ]
     },
     "exclude": [
