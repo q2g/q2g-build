@@ -14,7 +14,7 @@
   "author": "Ralf Hannuschka",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "10.5.7",
+    "@types/node": "10.5.8",
     "@types/webpack": "4.4.9",
     "ajv": "6.5.2"
   },
