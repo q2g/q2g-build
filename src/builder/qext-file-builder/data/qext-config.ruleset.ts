@@ -28,7 +28,7 @@ export const QextConfigRuleset: IOptionRuleSet = {
     get dependencies(): IOptionRule {
         return {
             required: false,
-        }
+        };
     },
 
     get description(): IOptionRule {

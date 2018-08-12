@@ -39,7 +39,7 @@ const webpackConfig: Configuration = {
                 loader: "ts-loader",
                 options: {
                     compilerOptions: {
-                        outDir: basename(config.getOutDirectory()),
+                        outDir: ".",
                     },
                     configFile: config.getTsConfigFile(),
                 },

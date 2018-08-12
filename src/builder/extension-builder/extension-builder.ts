@@ -76,8 +76,9 @@ export class ExtensionBuilder extends WebpackBuilder {
      * @protected
      * @memberof ExtensionBuilder
      */
-    protected completed() {
-        this.extensionService.createQextFile();
+    protected async completed() {
+        await this.extensionService.createQextFile();
+        process.stdout.write("extension successfully created.");
     }
 
     /**
@@ -113,7 +114,6 @@ export class ExtensionBuilder extends WebpackBuilder {
 
         const packageName = this.webpackService.getConfig().getPackageName();
         const binFiles = [
-            // { from: `${packageName}.qext`, to: `${packageName}.qext` },
             { from: "wbfolder.wbl" , to: "wbfolder.wbl" },
         ];
 

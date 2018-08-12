@@ -51,15 +51,12 @@ export class QextFileBuilder implements IBuilder {
 
     public run(): Promise<string> {
 
-        const settings: IDataNode = this.configService.toJson();
-
-        // create file and save it
         return new Promise( (resolve, reject) => {
-
             try {
                 this.fileService.createFile();
+                resolve();
             } catch (error) {
-                // not empy
+                reject(error.message);
             }
         });
     }
