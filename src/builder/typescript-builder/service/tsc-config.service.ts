@@ -1,4 +1,5 @@
 import { IOptionRuleSet } from "../../../api";
+import { BuilderConfigRules } from "../../../data";
 import { ConfigService } from "../../../services/config.service";
 import { TscConfigRules } from "../data/tsc.option.rules";
 import { TscConfigModel } from "../model/typescript.config.model";
@@ -18,7 +19,10 @@ export class TscConfigService extends ConfigService<TscConfigModel> {
     }
 
     protected getConfigRules(): IOptionRuleSet {
-        return TscConfigRules;
+        return {
+            ...BuilderConfigRules,
+            ...TscConfigRules,
+        };
     }
 
     protected getConfigModel(): TscConfigModel {

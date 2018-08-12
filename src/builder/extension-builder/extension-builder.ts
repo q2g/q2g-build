@@ -35,12 +35,13 @@ export class ExtensionBuilder extends WebpackBuilder {
 
         this.webpackService.setOptions({
             entryFile: `./${env.projectName}.ts`,
-            externalModules: [
-                { angular  : "angular"},
-                { qlik     : "qlik" },
-                { qvangular: "qvangular" },
-            ],
         });
+
+        this.webpackService.getConfig().setExternalModules([
+            { angular  : "angular"},
+            { qlik     : "qlik" },
+            { qvangular: "qvangular"},
+        ]);
     }
 
     /**

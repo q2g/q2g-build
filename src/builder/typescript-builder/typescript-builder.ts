@@ -1,8 +1,7 @@
 import { existsSync } from "fs";
 import { resolve } from "path";
-import { IBuilderEnvironment } from "../../api";
+import { IBuilder, IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
-import { AbstractBuilder } from "../abstract.builder";
 import { TypescriptService } from "./service/typescript.service";
 
 /**
@@ -13,7 +12,7 @@ import { TypescriptService } from "./service/typescript.service";
  * @class TypescriptBuilder
  * @implements {IBuilder}
  */
-export class TypescriptBuilder extends AbstractBuilder {
+export class TypescriptBuilder implements IBuilder {
 
     /**
      * typescript service
@@ -24,13 +23,14 @@ export class TypescriptBuilder extends AbstractBuilder {
      */
     private typescriptService: TypescriptService;
 
+    private initialConfig: IDataNode;
+
     /**
      * Creates an instance of TypescriptBuilder.
      *
      * @memberof TypescriptBuilder
      */
     constructor() {
-        super();
         this.typescriptService = TypescriptService.getInstance();
     }
 
@@ -41,7 +41,11 @@ export class TypescriptBuilder extends AbstractBuilder {
      * @memberof TypescriptBuilder
      */
     public configure(config: IDataNode): void {
-        this.typescriptService.setOptions(config);
+
+        this.typescriptService.setOptions({
+            ...this.initialConfig,
+            ...config,
+        });
     }
 
     /**
@@ -70,8 +74,6 @@ export class TypescriptBuilder extends AbstractBuilder {
      */
     public initialize(environment: IBuilderEnvironment) {
 
-        super.initialize(environment);
-
         const typeScriptModulePath = "node_modules/typescript/bin/tsc";
         let pathTypescriptCompiler = resolve(environment.projectRoot, `./${typeScriptModulePath}`);
 
@@ -79,10 +81,8 @@ export class TypescriptBuilder extends AbstractBuilder {
             pathTypescriptCompiler = resolve(environment.builderRoot, `../${typeScriptModulePath}`);
         }
 
-        const tscConfig = {
+        this.initialConfig = {
             typescriptCompiler: pathTypescriptCompiler,
         };
-
-        this.typescriptService.setOptions(tscConfig);
     }
 }

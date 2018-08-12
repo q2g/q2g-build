@@ -86,10 +86,6 @@ describe("Configuration Service", () => {
         let testService: TestConfigService;
         let optionResult: IOptionResult[];
 
-        after( () => {
-            testService = null;
-        });
-
         before( () => {
             TestConfigService.RULES = TestConfigRulesValid;
             testService = new TestConfigService();
@@ -123,10 +119,6 @@ describe("Configuration Service", () => {
         let testService: TestConfigService;
         let optionResult: IOptionResult[];
 
-        after( () => {
-            testService = null;
-        });
-
         before( () => {
             TestConfigService.RULES = TestConfigRulesNotRequired;
             testService = new TestConfigService();
@@ -145,10 +137,6 @@ describe("Configuration Service", () => {
         });
 
         it("description should not validated", () => {
-            const errors = optionResult.filter( (result) => {
-                return result.name === "description";
-            })[0].errors;
-
             expect(testService.getConfig().getDescription()).to.be.undefined;
         });
     });

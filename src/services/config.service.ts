@@ -19,13 +19,13 @@ export abstract class ConfigService<T> {
      * @param {IDataNode} options
      * @memberof BuilderService
      */
-    public setOptions(options: IDataNode): IOptionResult[] {
+    public setOptions(options: IDataNode, patch: boolean = false): IOptionResult[] {
 
         const cleanedOptions = this.cleanOptions(options);
-        const optionResults  = this.validateOptions(cleanedOptions);
+        const optionResults  = this.validateOptions(cleanedOptions, patch);
 
         optionResults.forEach( (result) => {
-            if ( ! result.errors.length ) {
+            if ( result.errors.length === 0 ) {
                 this.setOption(result.name, cleanedOptions[result.name]);
             }
         });
@@ -90,25 +90,32 @@ export abstract class ConfigService<T> {
      * @param {IOption} target
      * @memberof OptionHelper
      */
-    private validateOptions(source: IDataNode): IOptionResult[] {
+    private validateOptions(source: IDataNode, patch: boolean = false): IOptionResult[] {
 
-        const options: IOptionRuleSet  = this.configOptions;
+        const options: IOptionRuleSet  = patch ? source : this.configOptions;
         const results: IOptionResult[] = [];
 
         Object.keys(options).forEach( (optionName) => {
-            const rule: IOptionRule      = options[optionName];
-            const optionValue: IDataNode = source[optionName];
+            const rule: IOptionRule = this.configOptions[optionName];
 
-            const validationResult = rule.required
-                ? this.validateRequiredOption(rule, optionValue)
-                : this.validateOption(rule, optionValue);
+            if ( ! rule.required && ! source.hasOwnProperty(optionName) ) {
+                results.push({
+                    errors: [],
+                    name:  optionName,
+                });
+            } else {
+                const optionValue: IDataNode = source[optionName];
 
-            results.push({
-                errors: [].concat(validationResult.error),
-                name:  optionName,
-            });
+                const validationResult = rule.required
+                    ? this.validateRequiredOption(rule, optionValue)
+                    : this.validateOption(rule, optionValue);
+
+                results.push({
+                    errors: ([] as string[]).concat(validationResult.error),
+                    name:  optionName,
+                });
+            }
         });
-
         return results;
     }
 

@@ -9,10 +9,6 @@ export const CommandlineOptions: IOptionRuleSet  = {
    },
    config: {
        required: false,
-       validatorFn: (): boolean => {
-           // test json
-           return true;
-       },
    },
    env: {
        required: false,

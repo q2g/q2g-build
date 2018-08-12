@@ -15,7 +15,7 @@ export class ValidationHelper {
         const isValid = ValidationHelper.trim(text).length > 0;
 
         return {
-            error: isValid ? "" : "is empty",
+            error: isValid ? [] : [ "is empty" ],
             isValid,
         };
     }
@@ -34,10 +34,10 @@ export class ValidationHelper {
         let isValid = true;
 
         isValid = data.length !== 0;
-        isValid = isValid && !! text.match(/^.*?(?=\s)/g).length;
+        isValid = isValid && !! text.match(/^.*?(?=\s)/g);
 
         return {
-            error: isValid ? "" : "no whitespaces allowed",
+            error: isValid ? [] : ["could not be empty and no whitespaces allowed"],
             isValid,
         };
     }
@@ -52,11 +52,13 @@ export class ValidationHelper {
      */
     public static relativePath(path: string): IValidationResult {
         const isValid = path.match(/^\.{1,2}\/.{1,}$/) !== null;
+        const error   = [];
 
-        return {
-            error: isValid ? "" : "given value is not a relative path",
-            isValid,
-        };
+        if ( ! isValid ) {
+            error.push("given value is not a relative path");
+        }
+
+        return { error, isValid };
     }
 
     /**
@@ -70,7 +72,7 @@ export class ValidationHelper {
     public static absolutePath(path: string): IValidationResult {
         const isValid = isAbsolute(path);
         return {
-            error: isValid ? "" : "must be a absolute path",
+            error: isValid ? [] : ["must be a absolute path"],
             isValid,
         };
     }
@@ -89,8 +91,9 @@ export class ValidationHelper {
             const isValid = accepetedValues.indexOf(value) > -1;
 
             return {
-                error: isValid ? "" : `given value is not accepted.
-                Possible values are ${accepetedValues.join(", ")}`,
+                error: isValid
+                    ? []
+                    : [`given value is not accepted Possible values are ${accepetedValues.join(", ")}`],
                 isValid,
             };
         };
@@ -108,7 +111,7 @@ export class ValidationHelper {
         const isValid = Array.isArray(value);
 
         return {
-            error: isValid ? "" : `no array`,
+            error: isValid ? [] : [`no array`],
             isValid,
         };
     }
@@ -121,9 +124,14 @@ export class ValidationHelper {
      * @returns {boolean}
      * @memberof ValidationHelper
      */
-    public static isString(value): boolean {
-        const type = this.getType(value);
-        return type.slice(8, -1).toLowerCase() === "string";
+    public static isString(value): IValidationResult {
+        const type    = this.getType(value);
+        const isValid = type.slice(8, -1).toLowerCase() === "string";
+
+        return {
+            error: isValid ? [] : [`no string value`],
+            isValid,
+        };
     }
 
     /**
