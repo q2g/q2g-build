@@ -5,8 +5,10 @@ import { TestConfigRulesInvalid } from "./test-config.rules";
 
 export class TestConfigService extends ConfigService<TestConfigModel> {
 
+    public static RULES: IOptionRuleSet = TestConfigRulesInvalid;
+
     protected getConfigRules(): IOptionRuleSet {
-        return TestConfigRulesInvalid;
+        return TestConfigService.RULES;
     }
 
     protected getConfigModel(): TestConfigModel {

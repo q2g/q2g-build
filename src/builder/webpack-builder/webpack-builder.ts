@@ -38,7 +38,6 @@ export class WebpackBuilder extends AbstractBuilder {
      * @memberof WebpackBuilder
      */
     public constructor() {
-
         super();
         this.webpackService = WebpackService.getInstance();
     }
@@ -51,7 +50,6 @@ export class WebpackBuilder extends AbstractBuilder {
      * @memberof WebpackBuilder
      */
     public configure(config: IDataNode): void {
-
         this.webpackService.setOptions(config);
     }
 
@@ -78,7 +76,7 @@ export class WebpackBuilder extends AbstractBuilder {
             packageName: environment.projectName,
         };
 
-        this.webpackService.setOptions(webpackConfiguration, false);
+        this.webpackService.setOptions(webpackConfiguration);
     }
 
     /**
@@ -122,7 +120,7 @@ export class WebpackBuilder extends AbstractBuilder {
             webpackEnvrionment: env === "debug" ? "none" : env,
         };
 
-        this.webpackService.setOptions( {plugins: this.loadWebpackPlugins() }, false);
+        this.webpackService.addPlugins(this.loadWebpackPlugins());
         this.webpackService.setOptions(envConfig);
     }
 
@@ -142,9 +140,7 @@ export class WebpackBuilder extends AbstractBuilder {
      * @memberof WebpackBuilder
      */
     protected loadWebpackPlugins(): Plugin[] {
-
         const outDir = this.webpackService.getConfig().getOutDirectory();
-
         const plugins: Plugin[] = [
             new LogPlugin(),
             new CleanWebpackPlugin(outDir, {allowExternal: true}),

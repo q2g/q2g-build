@@ -30,6 +30,10 @@ export class WebpackService extends ConfigService<WebpackConfigModel> {
         WebpackService.instance = this;
     }
 
+    public addPlugins(plugins) {
+        this.getConfig().setPlugins(plugins);
+    }
+
     /**
      * create new webpack instance and returns compiler
      *

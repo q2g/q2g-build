@@ -15,7 +15,6 @@ export const WebpackOptionRules: IOptionRuleSet  = {
 
     optimization: {
         required: false,
-        validatorFn: () => true,
     },
 
     outFileName: {

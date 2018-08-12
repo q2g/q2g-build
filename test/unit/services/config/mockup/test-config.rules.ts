@@ -6,7 +6,7 @@ export const TestConfigRulesInvalid: IOptionRuleSet = {
         required: true,
         validatorFn: (val: string): IValidationResult => {
             return {
-                error: "name must have 10 chars",
+                error: ["name must have 10 chars"],
                 isValid: false,
             };
         },
@@ -17,13 +17,13 @@ export const TestConfigRulesInvalid: IOptionRuleSet = {
         validatorFn: [
             (val: string): IValidationResult => {
                 return {
-                    error: "description could not be empty",
+                    error: ["description could not be empty"],
                     isValid: false,
                 };
             },
             (val: string): IValidationResult => {
                 return {
-                    error: "20 chars required",
+                    error: ["20 chars required"],
                     isValid: false,
                 };
             },
@@ -37,7 +37,7 @@ export const TestConfigRulesValid: IOptionRuleSet = {
         required: true,
         validatorFn: (val: string): IValidationResult => {
             return {
-                error: "",
+                error: [],
                 isValid: true,
             };
         },
@@ -48,10 +48,33 @@ export const TestConfigRulesValid: IOptionRuleSet = {
         validatorFn: [
             (val: string): IValidationResult => {
                 return {
-                    error: "",
-                    isValid: false,
+                    error: [],
+                    isValid: true,
+                };
+            },
+            (val: string): IValidationResult => {
+                return {
+                    error: [],
+                    isValid: true,
                 };
             },
         ],
+    },
+};
+
+export const TestConfigRulesNotRequired: IOptionRuleSet = {
+
+    name: {
+        required: false,
+        validatorFn: (val: string): IValidationResult => {
+            return {
+                error: ["name is not required but has error"],
+                isValid: false,
+            };
+        },
+    },
+
+    description: {
+        required: false,
     },
 };

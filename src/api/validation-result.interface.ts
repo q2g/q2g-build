@@ -2,5 +2,5 @@ export interface IValidationResult {
 
     isValid: boolean;
 
-    error: string[] | (string);
+    error: string[];
 }

@@ -40,7 +40,7 @@ export class ExtensionBuilder extends WebpackBuilder {
                 { qlik     : "qlik" },
                 { qvangular: "qvangular" },
             ],
-        }, false);
+        });
     }
 
     /**

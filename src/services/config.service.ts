@@ -19,15 +19,10 @@ export abstract class ConfigService<T> {
      * @param {IDataNode} options
      * @memberof BuilderService
      */
-    public setOptions(options: IDataNode, validate = true): IOptionResult[] {
+    public setOptions(options: IDataNode): IOptionResult[] {
 
-        let cleanedOptions = options;
-        let optionResults: IOptionResult[];
-
-        if ( validate ) {
-            cleanedOptions = this.cleanOptions(options);
-            optionResults  = this.validateOptions(cleanedOptions);
-        }
+        const cleanedOptions = this.cleanOptions(options);
+        const optionResults  = this.validateOptions(cleanedOptions);
 
         optionResults.forEach( (result) => {
             if ( ! result.errors.length ) {
@@ -76,7 +71,6 @@ export abstract class ConfigService<T> {
      * @memberof BuilderService
      */
     private setOption(option: string, value: any) {
-
         // write configuration data to model
         const setterMethod = `set${option.charAt(0).toUpperCase()}${option.slice(1)}`;
         const methodExists = Object.prototype.toString.call(
@@ -128,9 +122,9 @@ export abstract class ConfigService<T> {
      * @memberof ConfigService
      */
     private validateRequiredOption(rule: IOptionRule, optionValue: any): IValidationResult {
-        if ( ! optionValue )  {
+        if ( optionValue === undefined )  {
             return {
-                error: "required",
+                error: ["required"],
                 isValid: false,
             };
         }
@@ -151,6 +145,10 @@ export abstract class ConfigService<T> {
         let validator = rule.validatorFn;
         const validationResults: IValidationResult[] = [];
 
+        if ( ! validator ) {
+            return { isValid: true, error: [] };
+        }
+
         if ( ! Array.isArray(validator) ) {
             validator = [validator];
         }
@@ -160,9 +158,6 @@ export abstract class ConfigService<T> {
         });
 
         return validationResults.reduce( (previous, current): IValidationResult => {
-            if ( ! Array.isArray(previous.error)  ) {
-                previous.error = [previous.error];
-            }
             return {
                 error: previous.error.concat(current.error),
                 isValid: previous.isValid && current.isValid,
