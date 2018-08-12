@@ -56,14 +56,10 @@ export class WebpackBuilder implements IBuilder {
     public initialize(environment: IBuilderEnvironment) {
 
         const env = environment.environment;
-
-        // set values without validation
-        this.initialConfig = {
-            entryFile: "./index.ts",
-            outFileName: `${environment.projectName}.js`,
-        };
-
         const settings = this.webpackService.getConfig();
+
+        this.initialConfig = this.getInitialConfig(environment);
+
         settings.setLoaderContextPaths([
             resolve(environment.builderRoot, "./builder/webpack-builder/loader"),
             resolve(environment.builderRoot, "../node_modules"),
@@ -122,6 +118,22 @@ export class WebpackBuilder implements IBuilder {
      */
     // tslint:disable-next-line:no-empty
     protected completed() {}
+
+    /**
+     * get initial webpack configuration, this will merged with outer configuration
+     * for builder.
+     *
+     * @protected
+     * @param {IBuilderEnvironment} environment
+     * @returns {IDataNode}
+     * @memberof WebpackBuilder
+     */
+    protected getInitialConfig(environment: IBuilderEnvironment): IDataNode {
+        const initialConfig: IDataNode = environment;
+        initialConfig.entryFile   = "./index.ts";
+        initialConfig.outFileName = `${environment.projectName}.js`;
+        return initialConfig;
+    }
 
     /**
      * add webpack plugins before we start since configuration

@@ -24,24 +24,26 @@ export class ExtensionBuilder extends WebpackBuilder {
     }
 
     /**
+     *
      * @inheritDoc
-     * @protected
-     * @returns {WebpackConfigModel}
+     * @param {IBuilderEnvironment} env
      * @memberof ExtensionBuilder
      */
     public initialize(env: IBuilderEnvironment) {
 
         super.initialize(env);
 
-        this.webpackService.setOptions({
-            entryFile: `./${env.projectName}.ts`,
-        });
-
         this.webpackService.getConfig().setExternalModules([
             { angular  : "angular"},
             { qlik     : "qlik" },
             { qvangular: "qvangular"},
         ]);
+    }
+
+    protected getInitialConfig(env: IBuilderEnvironment): IDataNode {
+        const initialConfig = super.getInitialConfig(env);
+        initialConfig.entryFile = `./${env.projectName}.ts`;
+        return initialConfig;
     }
 
     /**
