@@ -41,7 +41,6 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     public configure(config: IDataNode): void {
-
         this.webpackService.setOptions({
             ...this.initialConfig,
             ...config,

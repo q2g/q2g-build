@@ -34,7 +34,7 @@ export class ValidationHelper {
         let isValid = true;
 
         isValid = data.length !== 0;
-        isValid = isValid && !! text.match(/^.*?(?=\s)/g);
+        isValid = isValid && text.match(/^.*?(?=\s)/g) === null;
 
         return {
             error: isValid ? [] : ["could not be empty and no whitespaces allowed"],
