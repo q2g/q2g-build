@@ -11,11 +11,24 @@ export class ValidationHelper {
      * @returns {boolean}
      * @memberof ValidatorHelper
      */
-    public static notEmpty(text: string): IValidationResult {
-        const isValid = ValidationHelper.trim(text).length > 0;
+    public static notEmpty(val: string | any[]): IValidationResult {
+
+        let isValid: boolean = true;
+
+        switch ( ValidationHelper.getType(val) ) {
+
+            case "array":
+                isValid = val.length > 0;
+                break;
+            case "string":
+                isValid = ValidationHelper.trim(val).length > 0;
+                break;
+            default:
+                isValid = false;
+        }
 
         return {
-            error: isValid ? [] : [ "is empty" ],
+            error: isValid ? [] : ["not empty"],
             isValid,
         };
     }
@@ -125,8 +138,8 @@ export class ValidationHelper {
      * @memberof ValidationHelper
      */
     public static isString(value): IValidationResult {
-        const type    = this.getType(value);
-        const isValid = type.slice(8, -1).toLowerCase() === "string";
+        const type    = ValidationHelper.getType(value);
+        const isValid = type === "string";
 
         return {
             error: isValid ? [] : [`no string value`],
@@ -157,6 +170,6 @@ export class ValidationHelper {
      * @memberof ValidationHelper
      */
     private static getType(value): string {
-        return Object.prototype.toString.call(value);
+        return Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
     }
 }

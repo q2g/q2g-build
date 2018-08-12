@@ -1,44 +1,49 @@
 import { readFileSync } from "fs";
 import { resolve } from "path";
 import { IDataNode } from "../../../api/data-node";
-import { QextFileGenerator } from "../../../lib/qext-generator";
+import { QextFileBuilder } from "../../qext-file-builder/qext-file.builder";
 import { WebpackService } from "../../webpack-builder/service/webpack.service";
 
 export class ExtensionService {
 
     private webpackService: WebpackService;
 
-    private qextFileGenerator: QextFileGenerator;
+    private qextFileBuilder: QextFileBuilder;
 
     public constructor() {
-        this.webpackService    = WebpackService.getInstance();
-        this.qextFileGenerator = new QextFileGenerator();
+        this.webpackService  = WebpackService.getInstance();
+        this.qextFileBuilder = new QextFileBuilder();
     }
 
     public initializeQextData() {
+
         let data = this.readPackageJSON();
+        const qext = data.qext || {};
 
-        if ( data.repository && typeof data.repository  !== "string" ) {
-            data.repository = data.repository.url;
-        }
+        data = {
+            author: data.author,
+            description: data.description,
+            homepage: data.homepage || "",
+            keywords: data.keywords ? data.keywords.join(",") : "",
+            license: data.license || "",
+            name: data.name,
+            repository: data.repository ? data.repository.url : "",
+            version: data.version,
+        };
 
-        if ( ! data.hasOwnProperty("qext") ) {
-            data.qext = {};
-        }
-
-        data = { ...data, ...data.qext };
-        delete data.qext;
-
-        this.qextFileGenerator.loadData(data);
+        this.qextFileBuilder.configure({
+            ...data,
+            ...qext,
+            outDirectory: this.webpackService.getConfig().getOutDirectory(),
+        });
     }
 
     public createQextFile() {
-
         const target = resolve(
                 this.webpackService.getConfig().getProjectRoot(),
                 this.webpackService.getConfig().getOutDirectory());
 
-        this.qextFileGenerator.createFile(target);
+        this.qextFileBuilder.run();
     }
 
     private readPackageJSON(): IDataNode {

@@ -1,7 +1,6 @@
 import { IDataNode } from "../../../api/data-node";
-import { IQextData } from "../api/qext-data.interface";
 
-export class QextModel implements IQextData {
+export class QextConfigModel {
 
     private author: string = "";
 
@@ -24,6 +23,8 @@ export class QextModel implements IQextData {
     private keywords: string = "";
 
     private license: string = "";
+
+    private outDirectory: string = "";
 
     private repository: string = "";
 
@@ -69,6 +70,10 @@ export class QextModel implements IQextData {
 
     public getLicense(): string {
         return this.license;
+    }
+
+    public getOutDirectory(): string {
+        return this.outDirectory;
     }
 
     public getRepository(): string {
@@ -117,6 +122,10 @@ export class QextModel implements IQextData {
 
     public setLicense(val: string) {
         this.license = val;
+    }
+
+    public setOutDirectory(val: string) {
+        this.outDirectory = val;
     }
 
     public setRepository(val: string) {
