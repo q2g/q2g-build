@@ -43,7 +43,10 @@ npmVersionProcess.on("exit", async (exitCode) => {
         return;
     }
 
-    try {
+        await spawnProcess("git", "add", "--all");
+        await spawnProcess("git", "commit", "-m", `set new version to: ${packageVersionNumber}`);
+        await spawnProcess("git", 'tag', packageVersionNumber);
+>>>>>>> 13582e5... fixed bug npm:version not create tag and commit if git directory not in
         await spawnProcess("git", 'push');
         await spawnProcess("git", 'push', 'origin', packageVersionNumber);
         await spawnProcess(npmCommand, `publish`);
