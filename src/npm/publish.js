@@ -10,6 +10,20 @@ const PUBLISH_BREAK = "break";
 let version = "";
 let packageVersionNumber;
 
+function spawnProcess(command, ...args) {
+    return new Promise((resolve, reject) => {
+        spawn(command, args, { stdio: 'inherit'})
+            .on("exit", (exitCode) => {
+                if ( exitCode !== 0 ) {
+                    reject(`process exited with ${exitCode}`);
+                } else {
+                    resolve();
+                }
+            })
+            .on("error", (e) => reject(`process ${command} error ${e}`) );
+    });
+}
+
 switch ( process.argv.slice(-1)[0] ) {
 
     case PUBLISH_MINOR: case PUBLISH_ADD: 
@@ -46,25 +60,11 @@ npmVersionProcess.on("exit", async (exitCode) => {
     try{
         await spawnProcess("git", "add", "--all");
         await spawnProcess("git", "commit", "-m", `set new version to: ${packageVersionNumber}`);
-        await spawnProcess("git", 'tag', packageVersionNumber);
-        await spawnProcess("git", 'push');
-        await spawnProcess("git", 'push', 'origin', packageVersionNumber);
+        await spawnProcess("git", "tag", packageVersionNumber);
+        await spawnProcess("git", "push");
+        await spawnProcess("git", "push", "origin", packageVersionNumber);
         await spawnProcess(npmCommand, `publish`);
     } catch ( error ) {
         process.exit(1);
     }
 });
-
-function spawnProcess(command, ...args) {
-    return new Promise((resolve, reject) => {
-        spawn(command, args, { stdio: 'inherit'})
-            .on("exit", (exitCode) => {
-                if ( exitCode !== 0 ) {
-                    reject(`process exited with ${exitCode}`);
-                } else {
-                    resolve();
-                }
-            })
-            .on("error", (e) => reject(`process ${command} error ${e}`) );
-    });
-}
