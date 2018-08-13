@@ -3,6 +3,7 @@ src/node_modules/*
 test/node_modules/*
 log/debug.log
 log/error.log
+bin/*
 .vscode
 .nyc-output/
 coverage
