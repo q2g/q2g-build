@@ -1,5 +1,7 @@
 # Qlik-2-Go Builder (q2g-build)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/48294aa49a3c4f2db610df9e2676ccfd)](https://app.codacy.com/app/konne/q2g-build?utm_source=github.com&utm_medium=referral&utm_content=q2g/q2g-build&utm_campaign=badger)
+
 - projectRoot: absolute path to the project, this is the path where we start the build process ( package.json ).
 - sourceRoot: relative path from project root where to find all source files default _projectRoot_
 
