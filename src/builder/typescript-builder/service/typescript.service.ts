@@ -47,14 +47,19 @@ export class TypescriptService  {
         return new Promise( (success, error) => {
             const process: ChildProcess = this.createTsProcess();
             let tsOut: string = "";
+            let tsError: string = "";
 
             process.stdout.on("data", (chunk: Buffer) => {
                 tsOut = tsOut.concat(chunk.toString());
             });
 
-            process.on("close", () => {
-                if ( this.hasError(tsOut) ) {
-                    return error(tsOut);
+            process.stderr.on("data", (chunk: Buffer) => {
+                tsError = tsError.concat(chunk.toString());
+            });
+
+            process.on("exit", () => {
+                if ( tsError.length ) {
+                    return error(tsError);
                 }
                 return success(tsOut);
             });
@@ -103,7 +108,7 @@ export class TypescriptService  {
             "--outDir",  this.configModel.getOutDirectory(),
             "--rootDir", this.configModel.getProjectSource(),
         ], {
-            stdio: ["pipe", "pipe", 3], // pipe childprocess stdio channels to nodejs
+            stdio: ["pipe"],
         });
         return process;
     }
