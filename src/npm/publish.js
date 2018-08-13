@@ -43,6 +43,7 @@ npmVersionProcess.on("exit", async (exitCode) => {
         return;
     }
 
+    try{
         await spawnProcess("git", "add", "--all");
         await spawnProcess("git", "commit", "-m", `set new version to: ${packageVersionNumber}`);
         await spawnProcess("git", 'tag', packageVersionNumber);
