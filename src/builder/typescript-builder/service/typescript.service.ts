@@ -103,7 +103,7 @@ export class TypescriptService  {
             "--outDir",  this.configModel.getOutDirectory(),
             "--rootDir", this.configModel.getProjectSource(),
         ], {
-            stdio: [ "pipe", "pipe", "inherit" ], // pipe childprocess stdio channels to nodejs
+            stdio: ["pipe", "pipe", 2], // pipe childprocess stdio channels to nodejs
         });
         return process;
     }
