@@ -5,7 +5,6 @@
     ],
     "jsRules": {},
     "rules": {
-        "adjacent-overload-signatures": false
-    },
-    "rulesDirectory": []
+        "no-unused-expression": false
+    }
 }

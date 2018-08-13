@@ -1,5 +1,6 @@
 import * as Webpack from "webpack";
 import { IOptionRuleSet } from "../../../api";
+import { BuilderConfigRules } from "../../../data";
 import { ConfigService } from "../../../services/config.service";
 import { WebpackOptionRules } from "../data/webpack.option.rules";
 import { WebpackConfigModel } from "../model/webpack-config.model";
@@ -22,13 +23,15 @@ export class WebpackService extends ConfigService<WebpackConfigModel> {
     private configService: WebpackService;
 
     public constructor() {
-
         if (WebpackService.instance) {
             throw new Error("could not create instance of WebpackService, use WebpackService.getInstance() instead");
         }
-
         super();
         WebpackService.instance = this;
+    }
+
+    public addPlugins(plugins) {
+        this.getConfig().setPlugins(plugins);
     }
 
     /**
@@ -49,7 +52,11 @@ export class WebpackService extends ConfigService<WebpackConfigModel> {
      * @memberof WebpackService
      */
     protected getConfigRules(): IOptionRuleSet {
-        return WebpackOptionRules;
+
+        return {
+            ...BuilderConfigRules,
+            ...WebpackOptionRules,
+        };
     }
 
     /**

@@ -1,4 +1,5 @@
 import { isAbsolute } from "path";
+import { IValidationResult } from "../api/validation-result.interface";
 
 export class ValidationHelper {
 
@@ -10,8 +11,26 @@ export class ValidationHelper {
      * @returns {boolean}
      * @memberof ValidatorHelper
      */
-    public static notEmpty(text: string): boolean {
-        return ValidationHelper.trim(text).length > 0;
+    public static notEmpty(val: string | any[]): IValidationResult {
+
+        let isValid: boolean = true;
+
+        switch ( ValidationHelper.getType(val) ) {
+
+            case "array":
+                isValid = val.length > 0;
+                break;
+            case "string":
+                isValid = ValidationHelper.trim(val).length > 0;
+                break;
+            default:
+                isValid = false;
+        }
+
+        return {
+            error: isValid ? [] : ["not empty"],
+            isValid,
+        };
     }
 
     /**
@@ -22,20 +41,18 @@ export class ValidationHelper {
      * @returns {boolean}
      * @memberof ValidatorHelper
      */
-    public static notEmptyAndNoWhitespace(text: string): boolean {
+    public static notEmptyAndNoWhitespace(text: string): IValidationResult {
 
         const data = ValidationHelper.trim(text);
+        let isValid = true;
 
-        if ( data.length === 0 ) {
-            return false;
-        }
+        isValid = data.length !== 0;
+        isValid = isValid && text.match(/^.*?(?=\s)/g) === null;
 
-        // find any match which is followed by an whitespace
-        if ( text.match(/^.*?(?=\s)/g) ) {
-            return false;
-        }
-
-        return true;
+        return {
+            error: isValid ? [] : ["could not be empty and no whitespaces allowed"],
+            isValid,
+        };
     }
 
     /**
@@ -46,12 +63,31 @@ export class ValidationHelper {
      * @returns {boolean}
      * @memberof ValidatorHelper
      */
-    public static relativePath(path: string): boolean {
-        return path.match(/^\.{1,2}\/.{1,}$/) !== null;
+    public static relativePath(path: string): IValidationResult {
+        const isValid = path.match(/^\.{1,2}\/.{1,}$/) !== null;
+        const error   = [];
+
+        if ( ! isValid ) {
+            error.push("given value is not a relative path");
+        }
+
+        return { error, isValid };
     }
 
-    public static absolutePath(path: string): boolean {
-        return isAbsolute(path);
+    /**
+     * validate given value is an absolute path
+     *
+     * @static
+     * @param {string} path
+     * @returns {IValidationResult}
+     * @memberof ValidationHelper
+     */
+    public static absolutePath(path: string): IValidationResult {
+        const isValid = isAbsolute(path);
+        return {
+            error: isValid ? [] : ["must be a absolute path"],
+            isValid,
+        };
     }
 
     /**
@@ -63,14 +99,52 @@ export class ValidationHelper {
      * @returns {boolean}
      * @memberof ValidationHelper
      */
-    public static containsValue(accepetedValues: string[]): (value: string) => boolean {
-        return (value: string): boolean => {
-            return accepetedValues.indexOf(value) > -1;
+    public static containsValue(accepetedValues: string[]): (value: string) => IValidationResult {
+        return (value: string): IValidationResult => {
+            const isValid = accepetedValues.indexOf(value) > -1;
+
+            return {
+                error: isValid
+                    ? []
+                    : [`given value is not accepted Possible values are ${accepetedValues.join(", ")}`],
+                isValid,
+            };
         };
     }
 
-    public static isArray(value): boolean {
-        return Array.isArray(value);
+    /**
+     * validate given value is an object
+     *
+     * @static
+     * @param {*} value
+     * @returns {IValidationResult}
+     * @memberof ValidationHelper
+     */
+    public static isArray(value): IValidationResult {
+        const isValid = Array.isArray(value);
+
+        return {
+            error: isValid ? [] : [`no array`],
+            isValid,
+        };
+    }
+
+    /**
+     * validate value is string value
+     *
+     * @static
+     * @param {*} value
+     * @returns {boolean}
+     * @memberof ValidationHelper
+     */
+    public static isString(value): IValidationResult {
+        const type    = ValidationHelper.getType(value);
+        const isValid = type === "string";
+
+        return {
+            error: isValid ? [] : [`no string value`],
+            isValid,
+        };
     }
 
     /**
@@ -84,5 +158,18 @@ export class ValidationHelper {
      */
     private static trim(text): string {
         return text.replace(/^\s*|\s*$/gm, "");
+    }
+
+    /**
+     * get type of value
+     *
+     * @private
+     * @static
+     * @param {*} value
+     * @returns {string}
+     * @memberof ValidationHelper
+     */
+    private static getType(value): string {
+        return Object.prototype.toString.call(value).slice(8, -1).toLowerCase();
     }
 }

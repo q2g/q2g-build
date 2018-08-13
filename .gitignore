@@ -1,4 +1,8 @@
 bin/*
 node_modules/*
+test/node_modules/*
 log/debug.log
 log/error.log
+.vscode
+.nyc-output/
+coverage

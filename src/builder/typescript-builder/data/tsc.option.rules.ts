@@ -6,12 +6,8 @@ export const TscConfigRules: IOptionRuleSet  = {
         required: false,
         validatorFn: ValidationHelper.isArray,
     },
-    tsConfigFile: {
-        required: false,
-        validatorFn: ValidationHelper.relativePath,
-    },
     typescriptCompiler: {
         required: false,
-        validatorFn: ValidationHelper.relativePath,
+        validatorFn: ValidationHelper.absolutePath,
     },
 };

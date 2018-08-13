@@ -1,8 +1,7 @@
 import { resolve } from "path";
 import { Compiler, Plugin } from "webpack";
-import { IBuilderEnvironment } from "../../api";
+import { IBuilder, IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
-import { AbstractBuilder } from "../abstract.builder";
 import { CleanWebpackPlugin, LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
 
@@ -13,7 +12,7 @@ import { WebpackService } from "./service/webpack.service";
  * @class WebpackBuilder
  * @implements {IBuilder}
  */
-export class WebpackBuilder extends AbstractBuilder {
+export class WebpackBuilder implements IBuilder {
 
     /**
      * webpack service to add new plugins or set/get configuration
@@ -24,22 +23,13 @@ export class WebpackBuilder extends AbstractBuilder {
      */
     protected webpackService: WebpackService;
 
-    /**
-     * project root folder
-     *
-     * @private
-     * @type {string}
-     * @memberof WebpackBuilder
-     */
-    private projectRoot: string;
+    private initialConfig: IDataNode;
 
     /**
      * Creates an instance of WebpackBuilder.
      * @memberof WebpackBuilder
      */
     public constructor() {
-
-        super();
         this.webpackService = WebpackService.getInstance();
     }
 
@@ -51,8 +41,10 @@ export class WebpackBuilder extends AbstractBuilder {
      * @memberof WebpackBuilder
      */
     public configure(config: IDataNode): void {
-
-        this.webpackService.setOptions(config);
+        this.webpackService.setOptions({
+            ...this.initialConfig,
+            ...config,
+        });
     }
 
     /**
@@ -62,23 +54,18 @@ export class WebpackBuilder extends AbstractBuilder {
      * @memberof TypescriptBuilder
      */
     public initialize(environment: IBuilderEnvironment) {
-        super.initialize(environment);
 
         const env = environment.environment;
+        const settings = this.webpackService.getConfig();
 
-        // set values without validation
-        const webpackConfiguration = {
-            entryFile: "./index.ts",
-            loaderContextPaths: [
-                resolve(environment.builderRoot, "./builder/webpack-builder/loader"),
-                resolve(environment.builderRoot, "../node_modules"),
-                resolve(environment.projectRoot, "./node_modules"),
-            ],
-            outFileName: `${environment.projectName}.js`,
-            packageName: environment.projectName,
-        };
+        this.initialConfig = this.getInitialConfig(environment);
 
-        this.webpackService.setOptions(webpackConfiguration, false);
+        settings.setLoaderContextPaths([
+            resolve(environment.builderRoot, "./builder/webpack-builder/loader"),
+            resolve(environment.builderRoot, "../node_modules"),
+            resolve(environment.projectRoot, "./node_modules"),
+        ]);
+        settings.setPackageName(environment.projectName);
     }
 
     /**
@@ -100,6 +87,7 @@ export class WebpackBuilder extends AbstractBuilder {
                     process.stderr.write(err.toString());
                     error(err);
                 }
+                this.completed();
                 success("completed");
             });
         });
@@ -121,8 +109,30 @@ export class WebpackBuilder extends AbstractBuilder {
             webpackEnvrionment: env === "debug" ? "none" : env,
         };
 
-        this.webpackService.setOptions( {plugins: this.loadWebpackPlugins() }, false);
-        this.webpackService.setOptions(envConfig);
+        this.webpackService.addPlugins(this.loadWebpackPlugins());
+        this.webpackService.setOptions(envConfig, true);
+    }
+
+    /**
+     * called after build process completed
+     */
+    // tslint:disable-next-line:no-empty
+    protected completed() {}
+
+    /**
+     * get initial webpack configuration, this will merged with outer configuration
+     * for builder.
+     *
+     * @protected
+     * @param {IBuilderEnvironment} environment
+     * @returns {IDataNode}
+     * @memberof WebpackBuilder
+     */
+    protected getInitialConfig(environment: IBuilderEnvironment): IDataNode {
+        const initialConfig: IDataNode = environment;
+        initialConfig.entryFile   = "./index.ts";
+        initialConfig.outFileName = `${environment.projectName}.js`;
+        return initialConfig;
     }
 
     /**
@@ -135,9 +145,7 @@ export class WebpackBuilder extends AbstractBuilder {
      * @memberof WebpackBuilder
      */
     protected loadWebpackPlugins(): Plugin[] {
-
         const outDir = this.webpackService.getConfig().getOutDirectory();
-
         const plugins: Plugin[] = [
             new LogPlugin(),
             new CleanWebpackPlugin(outDir, {allowExternal: true}),
