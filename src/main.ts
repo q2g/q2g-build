@@ -91,7 +91,7 @@ async function main(root: string, ...args: string[]) {
     }
 
     const baseConfig: IBuilderEnvironment = {
-        builderRoot: `${root}/bin`,
+        builderRoot: `${root}/dist`,
         environment: commandLineOptions.env || "development",
         projectName: getProjectName(),
         projectRoot: process.cwd(),

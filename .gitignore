@@ -1,5 +1,5 @@
-bin/*
-node_modules/*
+src/dist/*
+src/node_modules/*
 test/node_modules/*
 log/debug.log
 log/error.log
