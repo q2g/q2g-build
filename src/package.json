@@ -27,7 +27,7 @@
     "ncp": "2.0.0",
     "path-override-webpack-plugin": "0.1.2",
     "raw-loader": "0.5.1",
-    "style-loader": "0.22.0",
+    "style-loader": "0.22.1",
     "ts-loader": "4.4.2",
     "tslint": "5.11.0",
     "typescript": "3.0.1",
