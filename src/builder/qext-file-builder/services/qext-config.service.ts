@@ -42,7 +42,7 @@ export class QextConfigService extends ConfigService<QextConfigModel> {
 
             const value = methodExists ? this.configModel[getterMethod]() : "";
 
-            if ( rule.required || value !== undefined ) {
+            if ( rule.required || value !== undefined && value !== "" ) {
                 data[setting] = value;
             }
         });
