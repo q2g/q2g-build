@@ -24,6 +24,7 @@ export class ExtensionService {
             author: data.author,
             description: data.description,
             homepage: data.homepage || "",
+            id: data.name,
             keywords: data.keywords ? data.keywords.join(",") : "",
             license: data.license || "",
             name: data.name,
@@ -36,13 +37,13 @@ export class ExtensionService {
             ...qext,
             outDirectory: this.webpackService.getConfig().getOutDirectory(),
         });
+
+        this.webpackService.setOptions({
+            outFileName: qext.id || data.name,
+        }, true);
     }
 
     public createQextFile() {
-        const target = resolve(
-                this.webpackService.getConfig().getProjectRoot(),
-                this.webpackService.getConfig().getOutDirectory());
-
         this.qextFileBuilder.run();
     }
 

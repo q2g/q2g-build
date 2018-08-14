@@ -43,14 +43,30 @@ export class ValidationHelper {
      */
     public static notEmptyAndNoWhitespace(text: string): IValidationResult {
 
-        const data = ValidationHelper.trim(text);
         let isValid = true;
-
-        isValid = data.length !== 0;
         isValid = isValid && text.match(/^.*?(?=\s)/g) === null;
 
         return {
-            error: isValid ? [] : ["could not be empty and no whitespaces allowed"],
+            error: isValid ? [] : ["no whitespaces allowed"],
+            isValid,
+        };
+    }
+
+    /**
+     * validate string does not contain any whitespaces
+     *
+     * @static
+     * @param {string} text
+     * @returns {IValidationResult}
+     * @memberof ValidationHelper
+     */
+    public static noWhitespaces(text: string): IValidationResult {
+
+        let isValid = true;
+        isValid = isValid && text.match(/^.*?(?=\s)/gm) === null;
+
+        return {
+            error: isValid ? [] : ["no whitespaces allowed"],
             isValid,
         };
     }

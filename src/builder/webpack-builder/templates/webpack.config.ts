@@ -112,7 +112,7 @@ const webpackConfig: Configuration = {
     },
 
     output: {
-        filename: config.getOutFileName(),
+        filename: `${config.getOutFileName()}.js`,
         libraryTarget: "umd",
         path: config.getOutDirectory(),
     },

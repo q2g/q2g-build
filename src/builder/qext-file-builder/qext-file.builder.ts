@@ -1,4 +1,4 @@
-import { IBuilder, IBuilderEnvironment } from "../../api";
+import { IBuilder, IBuilderEnvironment, IOptionResult } from "../../api";
 import { IDataNode } from "../../api/data-node";
 import { IQextData } from "./api";
 import { QextConfigurationException } from "./data/exception/qext-config.exception";
@@ -28,6 +28,7 @@ export class QextFileBuilder implements IBuilder {
     }
 
     public configure(config: IDataNode): void {
+
         const configuration = {
             ...this.initConfig,
             ...config,
@@ -35,6 +36,7 @@ export class QextFileBuilder implements IBuilder {
 
         const results = this.configService.setOptions(configuration);
         const errors  = {};
+
         let hasError: boolean = false;
 
         results.forEach( (result) => {

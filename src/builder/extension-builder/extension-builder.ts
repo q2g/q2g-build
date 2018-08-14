@@ -89,15 +89,15 @@ export class ExtensionBuilder extends WebpackBuilder {
      */
     protected loadWebpackPlugins(): Plugin[] {
 
-        const plugins     = super.loadWebpackPlugins();
-        const packageName = this.webpackService.getConfig().getPackageName();
-        const outDir      = this.webpackService.getConfig().getOutDirectory();
+        const plugins  = super.loadWebpackPlugins();
+        const fileName = this.webpackService.getConfig().getOutFileName();
+        const outDir   = this.webpackService.getConfig().getOutDirectory();
 
         return plugins.concat([
             new PathOverridePlugin(/\/umd\//, "/esm/"),
             new CopyWebpackPlugin(this.getBinaryFiles()),
             new ZipWebpackPlugin({
-                filename: `${packageName}.zip`,
+                filename: `${fileName}.zip`,
                 path: outDir,
             }),
         ]);

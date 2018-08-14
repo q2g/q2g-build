@@ -8,6 +8,8 @@ export class QextConfigModel {
 
     private description: string = "";
 
+    private id: string = "";
+
     private icon: string = "";
 
     private name: string = "";
@@ -38,6 +40,10 @@ export class QextConfigModel {
 
     public getDescription(): string {
         return this.description;
+    }
+
+    public getId(): string {
+        return this.id;
     }
 
     public getIcon(): string {
@@ -90,6 +96,10 @@ export class QextConfigModel {
 
     public setDescription(val: string) {
         this.description = val;
+    }
+
+    public setId(val: string) {
+        this.id = val;
     }
 
     public setIcon(val: string) {
