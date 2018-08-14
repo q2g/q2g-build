@@ -51,7 +51,7 @@ export abstract class ConfigService<T> {
      * @memberof OptionHelper
      */
     private cleanOptions( source: IDataNode): IDataNode {
-        const filtered: IDataNode = Object.assign({}, source);
+        const filtered: IDataNode = { ...source };
         const validOptions = this.configOptions;
 
         Object.keys(source).forEach( (option) => {

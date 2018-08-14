@@ -13,7 +13,7 @@ export class QextFileService {
     public createFile() {
         const data         = this.configService.toJson();
         const outDirectory = this.configService.getConfig().getOutDirectory();
-        const filePath     = resolve(outDirectory, `${this.configService.getConfig().getName()}.qext` );
+        const filePath     = resolve(outDirectory, `${this.configService.getConfig().getId()}.qext` );
 
         if ( ! existsSync (outDirectory) ) {
             this.createDirectory(outDirectory);

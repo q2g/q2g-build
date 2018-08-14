@@ -21,6 +21,7 @@ Add extension informations will defined in package.json under qext
         name: "q2gDemoExtension",
         homepage: "",
         icon: "filterpane",
+        id: "q2g-awesome-extension',
         keywords: "qlik-sense, viszualization",
         license: "MIT",
         repository: "https://github.com/q2g/q2g-demo-extension",
@@ -44,6 +45,7 @@ Configuration Values read from package.json
 | description | :white_check_mark: | string | description of the extension | :white_check_mark: |
 | name | :white_check_mark: | string | name of the extension | :white_check_mark: |
 | icon | :white_check_mark: | string | | - |
+| id | :white_check_mark: | string | | would be taken as qext filename, and also used as outFilename |
 | type | :white_check_mark: | string | | - |
 | version | :white_check_mark: | string | version number of the extension like 1.0.0 | :white_check_mark: |
 | preview | - | string | preview image filename | - |

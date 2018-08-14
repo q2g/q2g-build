@@ -44,7 +44,7 @@ export class DeployHelper {
      * @returns {Promise<string>}
      * @memberof DeployHelper
      */
-    public static copyFiles( sourceDir: string, targetDir: string, filterPattern?: RegExp): Promise<string> {
+    public static copyFiles( sourceDir: string, targetDir: string, filterPattern: RegExp): Promise<string> {
 
         const sourceDirectory: string = sourceDir;
         const targetDirectory: string = targetDir;

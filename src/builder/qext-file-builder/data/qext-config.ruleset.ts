@@ -43,6 +43,16 @@ export const QextConfigRuleset: IOptionRuleSet = {
         return mandatoryRule;
     },
 
+    get id(): IOptionRule {
+        return {
+            required: true,
+            validatorFn: [
+                ValidationHelper.notEmpty,
+                ValidationHelper.noWhitespaces,
+            ],
+        };
+    },
+
     get keywords(): IOptionRule {
         return optionalRule;
     },
