@@ -55,8 +55,8 @@ export class QextFileBuilder implements IBuilder {
 
         return new Promise( (resolve, reject) => {
             try {
-                this.fileService.createFile();
-                resolve();
+                const file = this.fileService.createFile();
+                resolve(file);
             } catch (error) {
                 reject(error.message);
             }

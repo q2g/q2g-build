@@ -5,3 +5,4 @@ import * as WebpackZipPlugin from "zip-webpack-plugin";
 export const CopyWebpackPlugin  = WebpackCopyPlugin;
 export const PathOverridePlugin = WebpackPathOverridePlugin;
 export const ZipWebpackPlugin   = WebpackZipPlugin;
+export * from "./qext/qext-file.plugin";

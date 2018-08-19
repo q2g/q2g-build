@@ -1,4 +1,3 @@
-import { basename } from "path";
 import { Configuration, Options } from "webpack";
 import { WebpackService } from "../service/webpack.service";
 
@@ -112,7 +111,7 @@ const webpackConfig: Configuration = {
     },
 
     output: {
-        filename: `${config.getOutFileName()}.js`,
+        filename: `${config.getOutFileName()}`,
         libraryTarget: "umd",
         path: config.getOutDirectory(),
     },

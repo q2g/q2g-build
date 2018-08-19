@@ -10,7 +10,7 @@ export class QextFileService {
         this.configService = QextConfigService.getInstance();
     }
 
-    public createFile() {
+    public createFile(): string {
         const data         = this.configService.toJson();
         const outDirectory = this.configService.getConfig().getOutDirectory();
         const filePath     = resolve(outDirectory, `${this.configService.getConfig().getId()}.qext` );
@@ -19,6 +19,7 @@ export class QextFileService {
             this.createDirectory(outDirectory);
         }
         writeFileSync( filePath, JSON.stringify(data, null, 4), { encoding: "utf8" });
+        return filePath;
     }
 
     private createDirectory(path: string) {
