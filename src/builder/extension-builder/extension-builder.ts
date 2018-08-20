@@ -4,7 +4,7 @@ import { Plugin } from "webpack";
 import { IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
 import { WebpackBuilder } from "../webpack-builder";
-import { CopyWebpackPlugin, PathOverridePlugin, ZipWebpackPlugin } from "./plugins";
+import { CopyWebpackPlugin, PathOverridePlugin, QextFilePlugin, ZipWebpackPlugin } from "./plugins";
 import { ExtensionService } from "./service/extension.service";
 
 /**
@@ -47,29 +47,6 @@ export class ExtensionBuilder extends WebpackBuilder {
     }
 
     /**
-     * called before the build process start
-     *
-     * @protected
-     * @memberof ExtensionBuilder
-     */
-    protected beforeRun() {
-
-        try {
-            /**
-             * load extension data before we run this process
-             * if this fails we could abort the process since there is
-             * no valid qext file at the end
-             */
-            this.extensionService.initializeQextData();
-        } catch ( e ) {
-            process.stderr.write(e.message);
-            process.exit(1);
-        }
-
-        super.beforeRun();
-    }
-
-    /**
      * webpack build process has completed without errors
      *
      * @override
@@ -77,7 +54,6 @@ export class ExtensionBuilder extends WebpackBuilder {
      * @memberof ExtensionBuilder
      */
     protected async completed() {
-        await this.extensionService.createQextFile();
         process.stdout.write("extension successfully created.");
     }
 
@@ -96,6 +72,8 @@ export class ExtensionBuilder extends WebpackBuilder {
         return plugins.concat([
             new PathOverridePlugin(/\/umd\//, "/esm/"),
             new CopyWebpackPlugin(this.getBinaryFiles()),
+            new QextFilePlugin(
+                this.extensionService.getQextConfiguration()),
             new ZipWebpackPlugin({
                 filename: `${fileName}.zip`,
                 path: outDir,
@@ -112,7 +90,6 @@ export class ExtensionBuilder extends WebpackBuilder {
      */
     private getBinaryFiles(): IDataNode[] {
 
-        const packageName = this.webpackService.getConfig().getPackageName();
         const binFiles = [
             { from: "wbfolder.wbl" , to: "wbfolder.wbl" },
         ];
