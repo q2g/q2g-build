@@ -14,8 +14,8 @@
   "author": "Ralf Hannuschka",
   "license": "ISC",
   "devDependencies": {
+    "@types/webpack": "4.4.11",
     "@types/node": "10.10.1",
-    "@types/webpack": "4.4.10",
     "ajv": "6.5.3"
   },
   "dependencies": {
@@ -32,7 +32,7 @@
     "tslint": "5.11.0",
     "typescript": "3.0.3",
     "url-loader": "1.1.1",
-    "webpack": "4.16.5",
+    "webpack": "4.17.1",
     "webpack-cli": "3.1.0",
     "zip-webpack-plugin": "3.0.0"
   }
