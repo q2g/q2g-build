@@ -21,7 +21,7 @@
   "dependencies": {
     "clean-webpack-plugin": "0.1.19",
     "copy-webpack-plugin": "4.5.2",
-    "css-loader": "1.0.0",
+    "css-loader": "1.0.1",
     "less": "3.8.1",
     "less-loader": "4.1.0",
     "ncp": "2.0.0",
