@@ -1,6 +1,7 @@
-import { Options, Plugin } from "webpack";
+import { basename } from "path";
+import { Module, Options, Plugin } from "webpack";
 import { IDataNode } from "../../../api/data-node";
-import { BuilderConfigModel } from "../../../model/app-config.model";
+import { ConfigModel } from "../../../model/config.model";
 
 /**
  * Webpack configuration model
@@ -8,7 +9,16 @@ import { BuilderConfigModel } from "../../../model/app-config.model";
  * @export
  * @class WebpackConfigModel
  */
-export class WebpackConfigModel extends BuilderConfigModel {
+export class WebpackConfigModel extends ConfigModel {
+
+    /**
+     * envrionment
+     *
+     * @private
+     * @type {("debug" | "development" | "production")}
+     * @memberof BuilderConfigModel
+     */
+    private environment: "debug" | "development" | "production";
 
     /**
      * set context path for webpack to set directory
@@ -36,7 +46,16 @@ export class WebpackConfigModel extends BuilderConfigModel {
      * @type {string}
      * @memberof WebpackConfigModel
      */
-    private entryFile: string;
+    private entryFile: {[name: string]: string} = {};
+
+    /**
+     * webpack module rules
+     *
+     * @private
+     * @type {IDataNode}
+     * @memberof WebpackConfigModel
+     */
+    private webpackModuleRules: Module;
 
     /**
      * environment development or production
@@ -109,7 +128,7 @@ export class WebpackConfigModel extends BuilderConfigModel {
      * @returns {string}
      * @memberof WebpackConfigModel
      */
-    public getEntryFile(): string {
+    public getEntryFile(): {[name: string]: string} {
         return this.entryFile;
     }
 
@@ -141,6 +160,16 @@ export class WebpackConfigModel extends BuilderConfigModel {
      */
     public getLoaderContextPaths(): string[] {
         return this.loaderContextPaths;
+    }
+
+    /**
+     * get module rules for webpack
+     *
+     * @type {IDataNode}
+     * @memberof WebpackConfigModel
+     */
+    public get moduleRules(): Module {
+        return this.webpackModuleRules;
     }
 
     /**
@@ -200,7 +229,8 @@ export class WebpackConfigModel extends BuilderConfigModel {
      * @memberof WebpackConfigModel
      */
     public setEntryFile(filename: string) {
-        this.entryFile = filename;
+        const fileName = basename(filename, ".ts");
+        this.entryFile[fileName] = filename;
     }
 
     /**
@@ -253,6 +283,10 @@ export class WebpackConfigModel extends BuilderConfigModel {
         this.loaderContextPaths = paths;
     }
 
+    public set moduleRules(rules: Module) {
+        this.webpackModuleRules = rules;
+    }
+
     /**
      * set output filename
      *
@@ -271,5 +305,19 @@ export class WebpackConfigModel extends BuilderConfigModel {
      */
     public setPlugins(plugins: Plugin[]) {
         this.plugins = plugins;
+    }
+
+    public getEnvrionment(): "debug" | "development" | "production" {
+        return this.environment;
+    }
+
+    /**
+     * set builder environment
+     *
+     * @param {("debug" | "development" | "production")} env
+     * @memberof BuilderConfigModel
+     */
+    public setEnvironment(env: "debug" | "development" | "production") {
+        this.environment = env;
     }
 }

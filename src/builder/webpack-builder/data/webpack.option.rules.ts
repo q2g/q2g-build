@@ -4,8 +4,7 @@ import { ValidationHelper } from "../../../helper";
 export const WebpackOptionRules: IOptionRuleSet  = {
 
     entryFile: {
-        required: false,
-        validatorFn: ValidationHelper.relativePath,
+        required: true,
     },
 
     externalModule: {

@@ -1,7 +1,8 @@
 import { resolve } from "path";
-import { Compiler, Plugin } from "webpack";
+import { Compiler, Module, Plugin } from "webpack";
 import { IBuilder, IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
+import { IWebpackConfig } from "./api/config.interface";
 import { CleanWebpackPlugin, LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
 
@@ -40,7 +41,7 @@ export class WebpackBuilder implements IBuilder {
      * @param {IDataNode} config
      * @memberof WebpackBuilder
      */
-    public configure(config: IDataNode): void {
+    public configure(config: IWebpackConfig): void {
         this.webpackService.setOptions({
             ...this.initialConfig,
             ...config,
@@ -60,9 +61,11 @@ export class WebpackBuilder implements IBuilder {
 
         this.initialConfig = this.getInitialConfig(environment);
 
+        // set context paths were to watch for webpack plugins / loader
         settings.setLoaderContextPaths([
+            resolve(environment.builderRoot, "./dist/builder/webpack-builder/loader"),
             resolve(environment.builderRoot, "./builder/webpack-builder/loader"),
-            resolve(environment.builderRoot, "../node_modules"),
+            resolve(environment.builderRoot, "./node_modules"),
             resolve(environment.projectRoot, "./node_modules"),
         ]);
         settings.setPackageName(environment.projectName);
@@ -76,7 +79,7 @@ export class WebpackBuilder implements IBuilder {
      */
     public async run(): Promise<string> {
 
-        this.beforeRun();
+        await this.beforeRun();
 
         return new Promise<string>( async (success, error) => {
             /** create compiler */
@@ -100,7 +103,7 @@ export class WebpackBuilder implements IBuilder {
      * @protected
      * @memberof WebpackBuilder
      */
-    protected beforeRun() {
+    protected async beforeRun() {
         const env = this.webpackService.getConfig().getEnvrionment();
         const envConfig = {
             optimization: {
@@ -109,6 +112,7 @@ export class WebpackBuilder implements IBuilder {
             webpackEnvrionment: env === "debug" ? "none" : env,
         };
 
+        this.webpackService.getConfig().moduleRules = await this.loadModuleRules();
         this.webpackService.addPlugins(this.loadWebpackPlugins());
         this.webpackService.setOptions(envConfig, true);
     }
@@ -151,5 +155,17 @@ export class WebpackBuilder implements IBuilder {
             new CleanWebpackPlugin(outDir, {allowExternal: true}),
         ];
         return plugins;
+    }
+
+    /**
+     * load module rules for webpack
+     *
+     * @protected
+     * @returns {Promise<IDataNode>}
+     * @memberof WebpackBuilder
+     */
+    protected async loadModuleRules(): Promise<Module> {
+        const moduleRules: any = await import("./templates/module-rules.config");
+        return moduleRules.default;
     }
 }

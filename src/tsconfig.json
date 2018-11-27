@@ -6,6 +6,7 @@
         "target": "es6",
         "moduleResolution": "node",
         "sourceMap": false,
+        "declaration": true,
         "allowJs": false,
         "removeComments": true,
         "lib": [

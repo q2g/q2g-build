@@ -4,8 +4,6 @@ import { ValidationHelper } from "../helper";
 export const CommandlineOptions: IOptionRuleSet  = {
    builder: {
        required: true,
-       validatorFn: ValidationHelper.containsValue(
-            ["webpack", "extension", "tsc"]),
    },
    config: {
        required: false,
