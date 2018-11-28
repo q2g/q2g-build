@@ -1,50 +1,84 @@
-import { ICommandLineArgument, ICommandLineData } from "../api/cmdline-observer";
-import {Webpack} from "./webpack";
+import { IBuilderProperty, ICommandLineBuilderData, ICommandLineResult } from "../api/cmdline-observer";
+import { Namespaces, QextProperties } from "../model/extension/qext-properties";
+import { QextPropertiesModel } from "../model/extension/qext-properties.model";
+import { PackageJsonWriter } from "./package-json.writer";
+import { Webpack } from "./webpack";
 
-// tslint:disable-next-line:max-classes-per-file
 export class Extension extends Webpack {
 
+    /**
+     * qext data model
+     *
+     * @private
+     * @type {QextPropertiesModel}
+     * @memberof Extension
+     */
+    private qextModel: QextPropertiesModel;
+
+    /**
+     * instance from package.json writer
+     *
+     * @private
+     * @type {PackageJsonWriter}
+     * @memberof Extension
+     */
+    private writer: PackageJsonWriter;
+
+    public constructor() {
+        super();
+
+        this.qextModel = new QextPropertiesModel();
+        this.writer = PackageJsonWriter.getInstance();
+    }
+
+    /**
+     * @inheritdoc
+     * @returns {Promise<void>}
+     * @memberof Extension
+     */
     public async run(): Promise<void> {
         /** call parent */
         await super.run();
-        console.log("nun bin ich fertig hier");
+
+        this.writer.write("qext", this.qextModel.raw);
     }
 
-    public readCommandlineArgument(arg: ICommandLineArgument) {
+    /**
+     * @inheritdoc
+     * @param {ICommandLineResult} result
+     * @memberof Extension
+     */
+    public readCommandlineArgument(result: ICommandLineResult) {
 
-        if (arg.namespace !== "extension") {
-            super.readCommandlineArgument(arg);
-            return;
+        switch (result.namespace) {
+            case Namespaces.QEXT:
+                this.writeProperty(this.qextModel, result.property as IBuilderProperty);
+                break;
+            default:
+                super.readCommandlineArgument(result);
         }
-
-        console.log(arg);
     }
 
-    protected get commandLineData(): ICommandLineData[] {
+    /**
+     * @inheritdoc
+     * @readonly
+     * @protected
+     * @type {ICommandLineBuilderData[]}
+     * @memberof Extension
+     */
+    protected get commandLineData(): ICommandLineBuilderData[] {
+        return [...super.commandLineData, QextProperties];
+    }
 
-        return [
-            ...super.commandLineData,
-            {
-                data: [
-                    {
-                        cId: "icon",
-                        text: "Wir suchen das Super Icon: ",
-                        validator: (value) => {
-                            return true;
-                        },
-                        value: "",
-                    },
-                    {
-                        cId: "type",
-                        text: "Der Type ist entscheidend: ",
-                        validator: (value) => {
-                            return true;
-                        },
-                        value: "",
-                    },
-                ],
-                namespace: "extension",
-            },
-        ];
+    /**
+     * write property to existing model
+     *
+     * @private
+     * @param {*} model
+     * @param {ICommandLineProperty} property
+     * @memberof Extension
+     */
+    private writeProperty(model, property: IBuilderProperty) {
+        model[property.name] = property.value;
     }
 }

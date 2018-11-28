@@ -1,4 +1,4 @@
-import { ICommandLineArgument, ICommandLineData, ICommandLineReaderObserver } from "../api/cmdline-observer";
+import { ICommandLineBuilderData, ICommandLineReaderObserver, ICommandLineResult } from "../api/cmdline-observer";
 import { CommandlineReader } from "./cmdline-reader";
 
 export class Webpack implements ICommandLineReaderObserver {
@@ -26,8 +26,8 @@ export class Webpack implements ICommandLineReaderObserver {
      * @param {ICommandLineArgument} data
      * @memberof Webpack
      */
-    public readCommandlineArgument(data: ICommandLineArgument) {
-        console.log(data);
+    public readCommandlineArgument(result: ICommandLineResult) {
+        // not empty
     }
 
     /**
@@ -38,10 +38,10 @@ export class Webpack implements ICommandLineReaderObserver {
      * @type {ICommandLineData[]}
      * @memberof Webpack
      */
-    protected get commandLineData(): ICommandLineData[] {
+    protected get commandLineData(): ICommandLineBuilderData[] {
         return [{
             data: [{
-                cId: "foobar",
+                name: "foobar",
                 text: "was ist dein Lieblings Haustier",
                 value: "Katze",
             }],

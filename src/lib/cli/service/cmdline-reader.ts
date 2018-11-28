@@ -1,9 +1,9 @@
 import * as ReadLine from "readline";
 import {
-    ICommandLineArgument,
     ICommandLineData,
     ICommandLineProperty,
     ICommandLineReaderObserver,
+    ICommandLineResult,
 } from "../api/cmdline-observer";
 import { ICommandLineReaderObservable } from "../api/observable";
 
@@ -75,9 +75,11 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
      *
      * @param {any} data
      */
-    private notifyObserver(data: string, ns: string) {
-
-        const a: ICommandLineArgument = {data, namespace: ns};
+    private notifyObserver(
+        property: ICommandLineProperty,
+        namespace: string,
+    ) {
+        const a: ICommandLineResult = {property, namespace};
 
         if ( this.observer.size > 0 ) {
             this.observer.forEach((observer) => {
@@ -113,12 +115,11 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
             process.stdout.write(property.text);
 
             this.lineReader.on("line", (line: string) => {
-                const result = line.trim();
+                property.value = line.trim();
 
                 /** if answer validate pull next property from section.property queue */
-                if ( this.validateProperty(line, property) ) {
-
-                    this.notifyObserver(result, currentSection.namespace);
+                if ( this.validateProperty(property.value, property) ) {
+                    this.notifyObserver(property, currentSection.namespace);
 
                     /** no questions and no other sections we are done */
                     if (!sectionData.length && !sections.length) {
@@ -137,8 +138,8 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
                     property = sectionData.shift();
                 }
 
-                this.lineReader.prompt(false);
-                process.stdout.write(property.text);
+                this.lineReader.prompt();
+                process.stdout.write(`${property.text}: `);
             });
         });
     }

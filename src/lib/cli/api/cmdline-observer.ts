@@ -1,13 +1,13 @@
-export interface ICommandLineArgument {
+import { IBuilder } from "../../../api";
+
+export interface ICommandLineResult {
     namespace: string;
 
-    // data: ICommandLineProperty;
-
-    data: string;
+    property: ICommandLineProperty;
 }
 
 export interface ICommandLineReaderObserver {
-    readCommandlineArgument(argument: ICommandLineArgument): void;
+    readCommandlineArgument(argument: ICommandLineResult): void;
 }
 
 export interface ICommandLineProperty {
@@ -17,8 +17,6 @@ export interface ICommandLineProperty {
     validator?: (value: string) => boolean;
 
     value?: string;
-
-    [key: string]: any;
 }
 
 export interface ICommandLineData {
@@ -26,4 +24,13 @@ export interface ICommandLineData {
     namespace: string;
 
     data: ICommandLineProperty[];
+}
+
+export interface IBuilderProperty extends ICommandLineProperty {
+    name: string;
+}
+
+export interface ICommandLineBuilderData extends ICommandLineData {
+
+    data: IBuilderProperty[];
 }
