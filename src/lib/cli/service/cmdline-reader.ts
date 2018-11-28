@@ -47,10 +47,8 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
      * @memberof CommandlineReader
      */
     public async read(data: ICommandLineData[]) {
-
         // read data from command line
-        await this.readSection(data);
-        this.lineReader.close();
+        await this.readData(data);
     }
 
     /**
@@ -73,7 +71,7 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
     }
 
     /**
-     * publish data
+     * publish data to observer if user give an answer
      *
      * @param {any} data
      */
@@ -89,72 +87,75 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
     }
 
     /**
-     * loop through all sections
+     * read all required propertys from sections
+     * and notify observer. If an answer not validate
+     * repeat the question
      *
      * @private
      * @param {ICommandLineData[]} data
-     * @returns
-     * @memberof CommandlineReader
-     */
-    private async readSection(data: ICommandLineData[]) {
-        return new Promise<void>(async (resolve) => {
-            const allData = data.slice();
-            const current = allData.shift();
-
-            await this.readCommandLineData(current.data, current.namespace);
-
-            if (!allData.length) {
-                /** close line reader now */
-                this.lineReader.close();
-                resolve();
-            } else {
-                this.readSection(allData)
-                    .then(() => resolve());
-            }
-        });
-    }
-
-    /**
-     * loops through all properties and loop through
-     *
-     * @private
-     * @param {ICommandLineProperty[]} data
-     * @param {string} ns
      * @returns {Promise<void>}
      * @memberof CommandlineReader
      */
-    private async readCommandLineData(data: ICommandLineProperty[], ns: string): Promise<void> {
+    private readData(data: ICommandLineData[]): Promise<void> {
 
-        return new Promise<void>(async (resolve) => {
-            const allData = data.slice();
-            const current = allData.shift();
+        return new Promise((resolve) => {
 
-            const answer = await this.readFromCommandLine(current);
-            this.notifyObserver(answer, ns);
+            const sections = [...data];
 
-            if (!allData.length) {
-                resolve();
-            } else {
-                this.readCommandLineData(allData, ns)
-                    .then(() => resolve());
-            }
+            let currentSection = sections.shift();
+            let sectionData    = [...currentSection.data];
+            let property       = sectionData.shift();
+
+            this.lineReader.setPrompt("q2g-build$ ");
+            this.lineReader.prompt();
+
+            /** write first question */
+            process.stdout.write(property.text);
+
+            this.lineReader.on("line", (line: string) => {
+                const result = line.trim();
+
+                /** if answer validate pull next property from section.property queue */
+                if ( this.validateProperty(line, property) ) {
+
+                    this.notifyObserver(result, currentSection.namespace);
+
+                    /** no questions and no other sections we are done */
+                    if (!sectionData.length && !sections.length) {
+                        this.lineReader.close();
+                        resolve();
+                        return;
+                    }
+
+                    /** no questions available anymore but we have an other section */
+                    if (!sectionData.length) {
+                        currentSection = sections.shift();
+                        sectionData    = [...currentSection.data];
+                    }
+
+                    /** pull next property */
+                    property = sectionData.shift();
+                }
+
+                this.lineReader.prompt(false);
+                process.stdout.write(property.text);
+            });
         });
     }
 
     /**
-     * read data from command line
+     * validate a property if a validator is given
      *
      * @private
-     * @param {ICommandLineProperty} data
-     * @returns {Promise<string>}
+     * @param {string} answer
+     * @param {ICommandLineProperty} property
+     * @returns {boolean}
      * @memberof CommandlineReader
      */
-    private readFromCommandLine(data: ICommandLineProperty): Promise<string> {
-
-        return new Promise<string>((resolve, reject) => {
-            this.lineReader.question(data.text, (answer) => {
-                resolve(answer);
-            });
-        });
+    private validateProperty(answer: string, property: ICommandLineProperty): boolean {
+        if (!property.hasOwnProperty("validator") || typeof property.validator !== "function") {
+            return true;
+        }
+        return property.validator(answer);
     }
 }
