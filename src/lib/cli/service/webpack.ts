@@ -1,13 +1,33 @@
-import { ICommandLineBuilderData, ICommandLineReaderObserver, ICommandLineResult } from "../api/cmdline-observer";
+import {
+    IBuilderProperty,
+    ICommandLineBuilderData,
+    ICommandLineReaderObserver,
+    ICommandLineResult,
+} from "../api/cmdline-observer";
+import { Namespaces } from "../api/namespaces";
+import WebpackProperties from "../model/webpack/webpack-properties";
+import { WebpackModel } from "../model/webpack/webpack-properties.model";
 import { CommandlineReader } from "./cmdline-reader";
+import { FileWriter } from "./file-writer";
+import { PackageJsonWriter } from "./package-json.writer";
 
 export class Webpack implements ICommandLineReaderObserver {
 
     private reader: CommandlineReader;
 
+    private model: WebpackModel;
+
+    private fileWriter: FileWriter;
+
+    private pkgJsonWriter: PackageJsonWriter;
+
     public constructor() {
         this.reader = new CommandlineReader();
         this.reader.subscribe(this);
+
+        this.model         = new WebpackModel();
+        this.fileWriter    = FileWriter.getInstance();
+        this.pkgJsonWriter = PackageJsonWriter.getInstance();
     }
 
     /**
@@ -18,6 +38,9 @@ export class Webpack implements ICommandLineReaderObserver {
      */
     public async run(): Promise<void> {
         await this.reader.read(this.commandLineData);
+
+        this.writeJsonConfigFile();
+        this.writeBuildScripts("q2g-build.webpack.json");
     }
 
     /**
@@ -27,7 +50,11 @@ export class Webpack implements ICommandLineReaderObserver {
      * @memberof Webpack
      */
     public readCommandlineArgument(result: ICommandLineResult) {
-        // not empty
+
+        if (result.namespace === Namespaces.WEBPACK) {
+            const property = result.property as IBuilderProperty;
+            this.model[property.name] = property.value;
+        }
     }
 
     /**
@@ -39,13 +66,36 @@ export class Webpack implements ICommandLineReaderObserver {
      * @memberof Webpack
      */
     protected get commandLineData(): ICommandLineBuilderData[] {
-        return [{
-            data: [{
-                name: "foobar",
-                text: "was ist dein Lieblings Haustier",
-                value: "Katze",
-            }],
-            namespace: "webpack",
-        }];
+        return [WebpackProperties];
+    }
+
+    /**
+     * write build scripts into package.json
+     *
+     * @protected
+     * @param {string} configFileName
+     * @memberof Webpack
+     */
+    protected writeBuildScripts(configFileName: string) {
+        const scripts = {
+            "q2g-build:dev": `node node_modules/q2g-build --builder webpack --config ${configFileName}`,
+            // tslint:disable-next-line:max-line-length
+            "q2g-build:prod": `node node_modules/q2g-build --builder webpack --env production --config ${configFileName}`,
+        };
+
+        this.pkgJsonWriter.write("scripts", scripts);
+    }
+
+    /**
+     * write json config file
+     *
+     * @private
+     * @memberof Webpack
+     */
+    private writeJsonConfigFile() {
+        this.fileWriter.write(
+            "q2g-build.webpack.json",
+            JSON.stringify(this.model.raw, null, 4),
+        );
     }
 }

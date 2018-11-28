@@ -1,35 +1,31 @@
 import { ICommandLineBuilderData } from "../../api/cmdline-observer";
 import { Namespaces } from "../../api/namespaces";
 
-/**
- * required properties for qext file which will be generated
- * from package.json file
- */
-export const QextProperties: ICommandLineBuilderData = {
+export const WebpackProperties: ICommandLineBuilderData = {
     data: [
         {
-            name: "icon",
-            text: "filename for extension icon",
+            name: "entryFile",
+            text: "relative path to entry file",
             validator: (value) => {
                 return true;
             },
         },
         {
-            name: "type",
-            text: "extension type",
+            name: "outFileName",
+            text: "name of the output file",
             validator: (value) => {
                 return true;
             },
         },
         {
-            name: "id",
-            text: "extension id",
+            name: "outputDirectory",
+            text: "relative path to output directory (will be created if not exists)",
             validator: (value) => {
                 return true;
             },
         },
     ],
-    namespace: Namespaces.QEXT,
+    namespace: Namespaces.WEBPACK,
 };
 
-export default QextProperties;
+export default WebpackProperties;

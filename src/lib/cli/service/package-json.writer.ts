@@ -48,7 +48,9 @@ export class PackageJsonWriter {
     }
 
     /**
-     * write data to package.json
+     * write data to package.json if property allready
+     * exists it will merged with existing data and override
+     * if property allready exists.
      *
      * @param {*} property
      * @param {*} data
@@ -61,6 +63,8 @@ export class PackageJsonWriter {
 
         if (!content.hasOwnProperty(property)) {
             content[property] = data;
+        } else {
+            content[property] = {...content[property], ...data};
         }
 
         // write file

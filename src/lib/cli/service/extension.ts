@@ -1,5 +1,6 @@
 import { IBuilderProperty, ICommandLineBuilderData, ICommandLineResult } from "../api/cmdline-observer";
-import { Namespaces, QextProperties } from "../model/extension/qext-properties";
+import { Namespaces } from "../api/namespaces";
+import { QextProperties } from "../model/extension/qext-properties";
 import { QextPropertiesModel } from "../model/extension/qext-properties.model";
 import { PackageJsonWriter } from "./package-json.writer";
 import { Webpack } from "./webpack";
@@ -24,6 +25,10 @@ export class Extension extends Webpack {
      */
     private writer: PackageJsonWriter;
 
+    /**
+     * Creates an instance of Extension.
+     * @memberof Extension
+     */
     public constructor() {
         super();
 
@@ -40,7 +45,7 @@ export class Extension extends Webpack {
         /** call parent */
         await super.run();
 
-        this.writer.write("qext", this.qextModel.raw);
+        this.writeQextData();
     }
 
     /**
@@ -71,6 +76,23 @@ export class Extension extends Webpack {
     }
 
     /**
+     * write build scripts into package.json
+     *
+     * @protected
+     * @param {string} configFileName
+     * @memberof Webpack
+     */
+    protected writeBuildScripts(configFileName: string) {
+        const scripts = {
+            "q2g-build:dev": `node node_modules/q2g-build --builder extension --config ${configFileName}`,
+            // tslint:disable-next-line:max-line-length
+            "q2g-build:prod": `node node_modules/q2g-build --builder extension --env production --config ${configFileName}`,
+        };
+
+        this.writer.write("scripts", scripts);
+    }
+
+    /**
      * write property to existing model
      *
      * @private
@@ -80,5 +102,15 @@ export class Extension extends Webpack {
      */
     private writeProperty(model, property: IBuilderProperty) {
         model[property.name] = property.value;
+    }
+
+    /**
+     * write qext data to package.json
+     *
+     * @private
+     * @memberof Extension
+     */
+    private writeQextData() {
+        this.writer.write("qext", this.qextModel.raw);
     }
 }
