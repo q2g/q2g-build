@@ -1,6 +1,5 @@
 src/dist/*
-src/node_modules/*
-test/node_modules/*
+**/node_modules/*
 log/debug.log
 log/error.log
 bin/*
