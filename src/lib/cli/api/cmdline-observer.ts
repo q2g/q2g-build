@@ -1,5 +1,3 @@
-import { IBuilder } from "../../../api";
-
 export interface ICommandLineResult {
     namespace: string;
 

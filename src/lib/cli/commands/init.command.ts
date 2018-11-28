@@ -1,4 +1,5 @@
 import { Extension } from "../service/extension";
+import { Webpack } from "../service/webpack";
 
 const enum InitType {
     EXTENSION = "extension",
@@ -15,7 +16,7 @@ export function initCommand(type: string) {
             initService = new Extension();
             break;
         case InitType.WEBPACK:
-            // initialize InitWebpackService
+            initService = new Webpack();
             break;
         default:
             process.stderr.write("invalid argument for init, call with --init <extension|webpack>");
