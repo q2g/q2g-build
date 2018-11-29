@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { initCommand } from "./commands";
+import { cowSay, CowType, initCommand} from "./commands";
 
 const [, , ...args] = process.argv;
 
@@ -18,6 +18,6 @@ switch (args[0]) {
         initCommand(args[1]);
         break;
     default:
-        process.stderr.write(`Unknown command: ${args[0].replace(/^-*/, "")}`);
+        cowSay(`Unknown command: ${args[0].replace(/^-*/, "")}`, CowType.ERROR);
         process.exit(1);
 }

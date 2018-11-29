@@ -1,6 +1,6 @@
 import { Extension } from "../service/extension";
 import { Webpack } from "../service/webpack";
-import { cowSay } from "./cow-say.command";
+import { cowSay, CowType } from "./cow-say.command";
 
 const enum InitType {
     EXTENSION = "extension",
@@ -20,14 +20,14 @@ export function initCommand(type: string) {
             initService = new Webpack();
             break;
         default:
-            process.stderr.write("invalid argument for init, call with --init <extension|webpack>");
+            cowSay("invalid argument for init\ncall with --init <extension|webpack>", CowType.ERROR);
             process.exit(1);
     }
 
     cowSay([
         `Qlik2Go - Build Cli`,
         ` `,
-        `Initialize extension for: ${type}`,
+        `Initialize configurations for: ${type}`,
     ]);
     return initService.run();
 }

@@ -1,24 +1,38 @@
 import { isArray } from "util";
 
+export enum CowType {
+    ERROR   = 0,
+    DEFAULT = 1,
+}
+
+const cow = `
+        \\  ^__^
+         \\ (oo)\\_______
+           (__)\\       )\\/\\
+               ||----w |
+           ____||_____||__
+
+`;
+
+const errorCow = `
+        \\  ^__^
+         \\ (xx)\\_______
+           (__)\\       )\\/\\
+               ||----w |
+           ____||_____||__
+
+`;
+
 /**
  * what does the cow say ?
  *
  * @export
  * @param {(string | string[])} message
  */
-export function cowSay(message: string | string[]) {
-
-    const cow = `
-           \\  ^__^
-            \\ (oo)\\_______
-              (__)\\       )\\/\\
-                  ||----w |
-              ____||_____||__
-
-    `;
+export function cowSay(message: string | string[], type: CowType = CowType.DEFAULT) {
 
     if (!isArray(message)) {
-        message = [...message.split(/(\r|\n)/)];
+        message = [...message.split(/\n/)];
     }
 
     const maxLength = message.reduce((prev: number, current: string): number => {
@@ -37,5 +51,12 @@ ${messageLines.join("\n")}
 +-${"-".repeat(maxLength)}-+`;
 
     process.stdout.write(messageBox);
-    process.stdout.write(cow);
+
+    switch (type) {
+        case CowType.ERROR:
+            process.stdout.write(errorCow);
+            break;
+        default:
+            process.stdout.write(cow);
+    }
 }
