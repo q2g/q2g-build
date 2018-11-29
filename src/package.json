@@ -7,6 +7,9 @@
   "files": [
     "dist"
   ],
+  "bin": {
+    "q2gb": "./dist/lib/cli/main.js"
+  },
   "scripts": {
     "build": "tsc",
     "pkg:publish": "npm run build && node npm/publish"

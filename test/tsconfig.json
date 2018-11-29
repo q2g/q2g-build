@@ -1,6 +1,7 @@
 {
   "extends": "../src/tsconfig.json",
   "compilerOptions": {
+    "baseUrl": "./",
     "typeRoots": [
       "./node_modules/@types"
     ],
@@ -8,7 +9,11 @@
         "es6"
     ],
     "esModuleInterop": true,
-    "types": [ "chai", "mocha", "node" ]
+    "rootDir": ".",
+    "types": [ "chai", "mocha", "node" ],
+    "paths": {
+      "@src/*": ["../src/*"]
+    },
   },
   "include": [
     "**/*.spec.ts"
