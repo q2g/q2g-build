@@ -1,3 +1,5 @@
+import { existsSync, writeFileSync } from "fs";
+import { resolve } from "path";
 import { IBuilderProperty, ICommandLineBuilderData, ICommandLineResult } from "../api/cmdline-observer";
 import { Namespaces } from "../api/namespaces";
 import { QextProperties } from "../model/extension/qext-properties";
@@ -38,14 +40,22 @@ export class Extension extends Webpack {
 
     /**
      * @inheritdoc
-     * @returns {Promise<void>}
+     * @returns {Promise<string[]>}
      * @memberof Extension
      */
-    public async run(): Promise<void> {
+    public async run(): Promise<string[]> {
+
         /** call parent */
-        await super.run();
+        const parentResult: string[] = await super.run();
 
         this.writeQextData();
+        this.createWbFolderFile();
+
+        return [
+            ...parentResult,
+            "added qext properties to package.json",
+            "created file: wbfolder.wbl",
+        ];
     }
 
     /**
@@ -88,7 +98,6 @@ export class Extension extends Webpack {
             // tslint:disable-next-line:max-line-length
             "q2g-build:prod": `node node_modules/q2g-build --builder extension --env production --config ${configFileName}`,
         };
-
         this.writer.write("scripts", scripts);
     }
 
@@ -112,5 +121,18 @@ export class Extension extends Webpack {
      */
     private writeQextData() {
         this.writer.write("qext", this.qextModel.raw);
+    }
+
+    /**
+     * create wbfolder file for extension
+     *
+     * @private
+     * @memberof Extension
+     */
+    private createWbFolderFile() {
+        const filePath = resolve(process.cwd(), "wbfolder.wbl");
+        if (!existsSync(filePath)) {
+            writeFileSync("wbfolder.wbl", "");
+        }
     }
 }

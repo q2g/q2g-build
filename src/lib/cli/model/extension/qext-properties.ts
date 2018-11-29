@@ -18,9 +18,7 @@ export const QextProperties: ICommandLineBuilderData = {
         {
             name: "type",
             text: "Qext$ type",
-            validator: (value) => {
-                return value === "visualization";
-            }
+            value: "visualization",
         },
         {
             name: "id",

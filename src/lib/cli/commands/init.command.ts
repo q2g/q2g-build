@@ -7,9 +7,9 @@ const enum InitType {
     WEBPACK   = "webpack",
 }
 
-export function initCommand(type: string) {
+export async function initCommand(type: string): Promise<void> {
 
-    let initService;
+    let initService: Extension | Webpack;
 
     switch (type) {
         case InitType.EXTENSION:
@@ -29,5 +29,7 @@ export function initCommand(type: string) {
         ` `,
         `Initialize configurations for: ${type}`,
     ]);
-    return initService.run();
+
+    const result = await initService.run();
+    cowSay(["Success", " ", ...result]);
 }

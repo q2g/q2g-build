@@ -36,11 +36,16 @@ export class Webpack implements ICommandLineReaderObserver {
      * @returns {Promise<void>}
      * @memberof Webpack
      */
-    public async run(): Promise<void> {
+    public async run(): Promise<string[]> {
         await this.reader.read(this.commandLineData);
 
         this.writeJsonConfigFile();
         this.writeBuildScripts("q2g-build.webpack.json");
+
+        return [
+            "created file: q2g-build.webpack.json",
+            "add build scripts to package.json",
+        ];
     }
 
     /**
