@@ -109,10 +109,7 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
             let property       = sectionData.shift();
 
             /** write first question */
-            this.lineReader.question(`${property.text}: `, (answer: string) => {
-                property.value = answer.trim();
-                this.lineReader.emit("line");
-            });
+            this.printQuestion(property);
 
             this.lineReader.on("line", (line: string) => {
                 /** if answer validate pull next property from section.property queue */
@@ -136,12 +133,28 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
                     property = sectionData.shift();
                 }
 
-                this.lineReader.question(`\n${property.text}: `, (answer: string) => {
-                    property.value = answer.trim();
-                    this.lineReader.emit("line");
-                });
+                this.printQuestion(property);
             });
         });
+    }
+
+    /**
+     * print question on screen
+     *
+     * @private
+     * @param {ICommandLineProperty} property
+     * @memberof CommandlineReader
+     */
+    private printQuestion(property: ICommandLineProperty) {
+
+        this.lineReader.question(`\n${property.text}: `, (answer: string) => {
+            property.value = answer.trim();
+            this.lineReader.emit("line");
+        });
+
+        if (property.value !== undefined) {
+            this.lineReader.write(String(property.value));
+        }
     }
 
     /**

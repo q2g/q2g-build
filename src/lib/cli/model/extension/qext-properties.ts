@@ -11,21 +11,22 @@ export const QextProperties: ICommandLineBuilderData = {
             name: "icon",
             text: "Qext$ icon",
             validator: (value) => {
-                return true;
+                return value.length > 0;
             },
+            value: "extension",
         },
         {
             name: "type",
             text: "Qext$ type",
             validator: (value) => {
-                return true;
-            },
+                return value === "visualization";
+            }
         },
         {
             name: "id",
             text: "Qext$ id",
             validator: (value) => {
-                return true;
+                return value.length > 0;
             },
         },
     ],

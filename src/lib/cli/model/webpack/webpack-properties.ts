@@ -1,3 +1,5 @@
+import { isAbsolute } from "path";
+import { isArray } from "util";
 import { ICommandLineBuilderData } from "../../api/cmdline-observer";
 import { Namespaces } from "../../api/namespaces";
 
@@ -6,22 +8,22 @@ export const WebpackProperties: ICommandLineBuilderData = {
         {
             name: "entryFile",
             text: "Webpack$ entry file (relative path)",
-            validator: (value) => {
-                return true;
+            validator: (value): boolean => {
+                return !isAbsolute(value) && isArray(value.match(/^\.(?=\/)/));
             },
         },
         {
             name: "outFileName",
             text: "Webpack$ out filename",
             validator: (value) => {
-                return true;
+                return value.length > 0;
             },
         },
         {
             name: "outputDirectory",
             text: "Webpack$ out directory (relative path)",
             validator: (value) => {
-                return true;
+                return !isAbsolute(value) && isArray(value.match(/^\.(?=\/)/));
             },
         },
     ],
