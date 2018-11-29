@@ -9,21 +9,21 @@ export const QextProperties: ICommandLineBuilderData = {
     data: [
         {
             name: "icon",
-            text: "filename for extension icon",
+            text: "Qext$ icon",
             validator: (value) => {
                 return true;
             },
         },
         {
             name: "type",
-            text: "extension type",
+            text: "Qext$ type",
             validator: (value) => {
                 return true;
             },
         },
         {
             name: "id",
-            text: "extension id",
+            text: "Qext$ id",
             validator: (value) => {
                 return true;
             },

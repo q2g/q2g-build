@@ -1,9 +1,7 @@
 export class WebpackModel {
 
     private webpackEntryFile: string;
-
     private webpackOutFileName: string;
-
     private webpackOutputDirectory: string;
 
     public set entryFile(file: string) {

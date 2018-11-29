@@ -108,8 +108,6 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
             let sectionData    = [...currentSection.data];
             let property       = sectionData.shift();
 
-            this.lineReader.setPrompt("q2g-build$ ");
-
             /** write first question */
             this.lineReader.question(`${property.text}: `, (answer: string) => {
                 property.value = answer.trim();

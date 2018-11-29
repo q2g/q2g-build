@@ -1,22 +1,8 @@
 export class QextPropertiesModel {
 
-    public extensionIcon: string;
-
-    public extensionType: string;
-
-    public extensionId: string;
-
-    public get icon(): string {
-        return this.extensionIcon;
-    }
-
-    public get id(): string {
-        return this.extensionId;
-    }
-
-    public get type(): string {
-        return this.extensionType;
-    }
+    private extensionIcon: string;
+    private extensionType: string;
+    private extensionId: string;
 
     public set icon(icon: string) {
         this.extensionIcon = icon;
@@ -39,9 +25,9 @@ export class QextPropertiesModel {
      */
     public get raw(): any {
         return {
-            icon: this.icon,
-            id  : this.id,
-            type: this.type,
+            icon: this.extensionIcon,
+            id  : this.extensionId,
+            type: this.extensionType,
         };
     }
 }
