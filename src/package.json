@@ -19,13 +19,13 @@
   "devDependencies": {
     "@types/webpack": "4.4.19",
     "@types/node": "10.12.10",
-    "ajv": "6.5.5"
+    "ajv": "6.6.1"
   },
   "dependencies": {
     "clean-webpack-plugin": "1.0.0",
     "copy-webpack-plugin": "4.6.0",
     "css-loader": "1.0.1",
-    "less": "3.8.1",
+    "less": "3.9.0",
     "less-loader": "4.1.0",
     "ncp": "2.0.0",
     "path-override-webpack-plugin": "0.1.2",

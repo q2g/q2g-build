@@ -31,7 +31,9 @@ export class LogPlugin implements Plugin {
             const stats = statsJson.valueOf() as IDataNode;
             const errors: string[] = stats.errors;
 
-            throw new Error(errors.join(`\r\n`));
+            console.log(stats);
+
+            throw new Error("fail");
         });
     }
 }

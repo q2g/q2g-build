@@ -25,7 +25,13 @@ function loadFromFile(configFile: string): IDataNode {
     const configData = readFileSync(configFile, {
         encoding: "utf8" });
 
-    return JSON.parse(configData);
+    try {
+        return JSON.parse(configData);
+    } catch (error) {
+        // tslint:disable-next-line:no-console
+        process.stderr.write(`Could not parse json in ${configFile}.`);
+        throw error;
+    }
 }
 
 /**
@@ -56,7 +62,7 @@ function getBuilderConfiguration(path): IDataNode {
     const builderConfig   = loadFromFile(resolve(projectRoot, path));
     const tsConfigOptions = loadFromFile(resolve(projectRoot, builderConfig.tsConfigFile || "tsconfig.json"));
 
-    if ( ! tsConfigOptions.hasOwnProperty("compilerOptions") ) {
+    if (!tsConfigOptions.hasOwnProperty("compilerOptions") ) {
         tsConfigOptions.compilerOptions = {};
     }
 
@@ -91,15 +97,13 @@ async function main(root: string, ...args: string[]) {
     }
 
     const baseConfig: IBuilderEnvironment = {
-        builderRoot: `${root}/dist`,
         environment: commandLineOptions.env || "development",
         projectName: getProjectName(),
         projectRoot: process.cwd(),
     };
 
     try {
-        const builder: IBuilder = builderService.createBuilder(builderType);
-        builder.initialize( baseConfig );
+        const builder: IBuilder = builderService.createBuilder(builderType, baseConfig);
         builder.configure( getBuilderConfiguration(configFile) );
         await builder.run();
         process.exit(0);
@@ -108,6 +112,8 @@ async function main(root: string, ...args: string[]) {
         process.exit(1);
     }
 }
+
+// export const doBuild = main;
 
 /**
  * call main method and pass process arguments, remove first argument
