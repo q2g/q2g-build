@@ -138,7 +138,7 @@ export  class CommandlineReader implements ICommandLineReaderObservable {
                     property = sectionData.shift();
                 }
 
-                this.lineReader.question(`${property.text}: `, (answer: string) => {
+                this.lineReader.question(`\n${property.text}: `, (answer: string) => {
                     property.value = answer.trim();
                     this.lineReader.emit("line");
                 });

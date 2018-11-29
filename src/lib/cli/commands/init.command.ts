@@ -1,5 +1,6 @@
 import { Extension } from "../service/extension";
 import { Webpack } from "../service/webpack";
+import { cowSay } from "./cow-say.command";
 
 const enum InitType {
     EXTENSION = "extension",
@@ -23,5 +24,10 @@ export function initCommand(type: string) {
             process.exit(1);
     }
 
+    cowSay([
+        `Qlik2Go - Build Cli`,
+        ` `,
+        `Initialize extension for: ${type}`,
+    ]);
     return initService.run();
 }
