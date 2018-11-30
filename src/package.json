@@ -18,9 +18,9 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "10.12.10",
-    "@types/webpack": "4.4.19",
+    "@types/webpack": "4.4.20",
     "ajv": "6.6.1",
-    "uglifyjs-3-webpack-plugin": "^1.2.4"
+    "uglifyjs-3-webpack-plugin": "1.2.4"
   },
   "dependencies": {
     "clean-webpack-plugin": "1.0.0",
@@ -35,7 +35,7 @@
     "style-loader": "0.23.1",
     "ts-loader": "5.3.1",
     "tslint": "5.11.0",
-    "typescript": "3.1.6",
+    "typescript": "3.2.1",
     "url-loader": "1.1.2",
     "webpack": "4.26.1",
     "webpack-cli": "3.1.2",
