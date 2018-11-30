@@ -6,7 +6,7 @@ export interface IBuilderEnvironment {
      * @type {string}
      * @memberof IBuilderEnvironment
      */
-    builderRoot: string;
+    builderRoot?: string;
 
     /**
      * envrionment mode

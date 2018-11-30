@@ -8,13 +8,14 @@
 export default function cleanRequireJsCssLoader(source) {
 
     // pattern to replace css!content.css | css!./content.css with ./content.css
-    const pattern = /("|')css\!(?:\.\/)?(.*?)\.css(\1)/;
+    const patternCss = /("|')css\!(?:\.\/)?(.*?)\.css(\1)/;
 
     /**
      * loop through all matches and replace them
      */
-    const ret = source.replace(pattern, (fullMatch, quoteChar, file) => {
+    const ret = source.replace(patternCss, (fullMatch, quoteChar, file) => {
         return `${quoteChar}./${file}.less${quoteChar}`;
     });
+
     return ret;
 }

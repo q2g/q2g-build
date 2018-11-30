@@ -20,6 +20,7 @@ describe("Configuration Service", () => {
                 name: "mocha",
             });
 
+            // tslint:disable-next-line:no-unused-expression
             expect( Array.isArray(result) ).to.be.true;
         });
 
@@ -137,6 +138,7 @@ describe("Configuration Service", () => {
         });
 
         it("description should not validated", () => {
+            // tslint:disable-next-line:no-unused-expression
             expect(testService.getConfig().getDescription()).to.be.undefined;
         });
     });
