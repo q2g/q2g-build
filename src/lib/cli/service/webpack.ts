@@ -5,6 +5,7 @@ import {
     ICommandLineResult,
 } from "../api/cmdline-observer";
 import { Namespaces } from "../api/namespaces";
+import { TS_CONFIG, TS_CONFIG_FILE_NAME } from "../model/tsconfig";
 import WebpackProperties from "../model/webpack/webpack-properties";
 import { WebpackModel } from "../model/webpack/webpack-properties.model";
 import { CommandlineReader } from "./cmdline-reader";
@@ -39,6 +40,10 @@ export class Webpack implements ICommandLineReaderObserver {
     public async run(): Promise<string[]> {
         await this.reader.read(this.commandLineData);
 
+        // set ts config file
+        this.model.tsConfigFile = TS_CONFIG_FILE_NAME;
+
+        this.writeTsConfigFile();
         this.writeJsonConfigFile();
         this.writeBuildScripts("q2g-build.webpack.json");
 
@@ -100,7 +105,11 @@ export class Webpack implements ICommandLineReaderObserver {
     private writeJsonConfigFile() {
         this.fileWriter.write(
             "q2g-build.webpack.json",
-            JSON.stringify(this.model.raw, null, 4),
+            `${JSON.stringify(this.model.raw, null, 4)}\n`,
         );
+    }
+
+    private writeTsConfigFile() {
+        this.fileWriter.write(TS_CONFIG_FILE_NAME, `${JSON.stringify(TS_CONFIG, null, 4)}\n`);
     }
 }
