@@ -17,14 +17,16 @@
   "author": "Ralf Hannuschka",
   "license": "ISC",
   "devDependencies": {
-    "@types/webpack": "4.4.19",
     "@types/node": "10.12.10",
-    "ajv": "6.6.1"
+    "@types/webpack": "4.4.19",
+    "ajv": "6.6.1",
+    "uglifyjs-3-webpack-plugin": "^1.2.4"
   },
   "dependencies": {
     "clean-webpack-plugin": "1.0.0",
     "copy-webpack-plugin": "4.6.0",
     "css-loader": "1.0.1",
+    "html-loader": "^0.5.5",
     "less": "3.9.0",
     "less-loader": "4.1.0",
     "ncp": "2.0.0",

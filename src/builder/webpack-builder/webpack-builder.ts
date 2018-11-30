@@ -1,4 +1,5 @@
 import { resolve } from "path";
+import * as UglifyJSPlugin from "uglifyjs-3-webpack-plugin";
 import { Compiler, Module, Plugin } from "webpack";
 import { IBuilder, IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
@@ -108,6 +109,13 @@ export class WebpackBuilder implements IBuilder {
         const envConfig = {
             optimization: {
                 minimize: env === "production" ? true : false,
+                minimizer: [
+                    new UglifyJSPlugin({
+                        uglifyOptions: {
+                            mangle: false,
+                        },
+                    }),
+                ],
             },
             webpackEnvrionment: env === "debug" ? "none" : env,
         };

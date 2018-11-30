@@ -5,19 +5,6 @@ const config = WebpackService.getInstance().getConfig();
 
 const moduleRules: Module = {
     rules: [{
-        test: /text!.*\.html$/,
-        use: [{
-            loader: "raw-loader",
-        }],
-    }, {
-        // recommend way to load html files not use raw-loader for that anymore
-        loader: "html-loader",
-        test: /(?!text!).*\.html$/,
-    }, {
-        loader: "json-loader",
-        test: /\.json/,
-        type: "javascript/auto",
-    }, {
         sideEffects: false,
         test: /\.(tsx?|js)$/,
         use: [{
@@ -27,6 +14,15 @@ const moduleRules: Module = {
              */
             loader: "clean-requirejs-imports.loader",
         }],
+    }, {
+        test: /text!.*\.html$/,
+        use: [{
+            loader: "raw-loader",
+        }],
+    }, {
+        loader: "json-loader",
+        test: /\.json/,
+        type: "javascript/auto",
     }, {
         sideEffects: true,
         test: /.*\.tsx?$/,
