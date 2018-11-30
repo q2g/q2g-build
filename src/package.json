@@ -18,7 +18,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/webpack": "4.4.19",
-    "@types/node": "10.12.10",
+    "@types/node": "10.12.11",
     "ajv": "6.6.1"
   },
   "dependencies": {
