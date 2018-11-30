@@ -20,7 +20,7 @@
     "@types/node": "10.12.10",
     "@types/webpack": "4.4.20",
     "ajv": "6.6.1",
-    "uglifyjs-3-webpack-plugin": "^1.2.4"
+    "uglifyjs-3-webpack-plugin": "1.2.4"
   },
   "dependencies": {
     "clean-webpack-plugin": "1.0.0",
