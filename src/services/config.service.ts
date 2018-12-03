@@ -55,7 +55,7 @@ export abstract class ConfigService<T> {
         const validOptions = this.configOptions;
 
         Object.keys(source).forEach( (option) => {
-            if ( ! validOptions[option] ) {
+            if (!validOptions[option] ) {
                 delete filtered[option];
             }
         });
@@ -76,7 +76,7 @@ export abstract class ConfigService<T> {
         const methodExists = Object.prototype.toString.call(
             this.configModel[setterMethod]).slice(8, -1) === "Function";
 
-        if ( methodExists ) {
+        if (methodExists) {
             this.configModel[setterMethod](value);
         }
     }
