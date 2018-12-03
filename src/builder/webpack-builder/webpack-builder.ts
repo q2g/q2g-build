@@ -43,6 +43,7 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     public configure(config: IWebpackConfig): void {
+
         this.webpackService.setOptions({
             ...this.initialConfig,
             ...config,
@@ -78,22 +79,38 @@ export class WebpackBuilder implements IBuilder {
      * @returns {Promise<string>}
      * @memberof WebpackBuilder
      */
-    public async run(): Promise<string> {
-
+    public async run(): Promise<any> {
         await this.beforeRun();
 
-        return new Promise<string>( async (success, error) => {
-            /** create compiler */
-            const compiler: Compiler = await this.webpackService.getWebpack();
+        const compiler: Compiler = await this.webpackService.getWebpack();
+        const webPackConfig      = this.webpackService.getConfig();
+        const watch              = webPackConfig.getWatch() && webPackConfig.getEnvironment() === "development";
 
-            compiler.run((err) => {
-                if ( err ) {
+        return new Promise(async (finalize, reject) => {
+            /** handler if build has finished */
+            const handler: Compiler.Handler = (err) => {
+                if (err) {
                     process.stderr.write(err.toString());
-                    error(err);
+                    if (!watch) {
+                        reject();
+                    }
                 }
-                this.completed();
-                success("completed");
-            });
+
+                process.stdout.write(`Build finished: ${webPackConfig.getPackageName()}\n\n`);
+                if (!watch) {
+                    finalize();
+                }
+            };
+
+            if (watch) {
+                const watchOptions: Compiler.WatchOptions = {
+                    ignored: ["**/*.js", "**/node_modules"],
+                };
+                /** start watch mode */
+                compiler.watch(watchOptions, handler);
+            } else {
+                compiler.run(handler);
+            }
         });
     }
 
@@ -105,7 +122,8 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     protected async beforeRun() {
-        const env = this.webpackService.getConfig().getEnvrionment();
+
+        const env = this.webpackService.getConfig().getEnvironment();
         const envConfig = {
             optimization: {
                 minimize: env === "production" ? true : false,
@@ -117,7 +135,6 @@ export class WebpackBuilder implements IBuilder {
                     }),
                 ],
             },
-            webpackEnvrionment: env === "debug" ? "none" : env,
         };
 
         this.webpackService.getConfig().moduleRules = await this.loadModuleRules();
@@ -144,6 +161,7 @@ export class WebpackBuilder implements IBuilder {
         const initialConfig: IDataNode = environment;
         initialConfig.entryFile   = "./index.ts";
         initialConfig.outFileName = `${environment.projectName}.js`;
+        initialConfig.environment = environment.environment || "development";
         return initialConfig;
     }
 

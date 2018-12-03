@@ -15,10 +15,10 @@ export class QextFileService {
         const outDirectory = this.configService.getConfig().getOutDirectory();
         const filePath     = resolve(outDirectory, `${this.configService.getConfig().getId()}.qext` );
 
-        if ( ! existsSync (outDirectory) ) {
+        if (!existsSync(outDirectory)) {
             this.createDirectory(outDirectory);
         }
-        writeFileSync( filePath, JSON.stringify(data, null, 4), { encoding: "utf8" });
+        writeFileSync(filePath, JSON.stringify(data, null, 4), { encoding: "utf8" });
         return filePath;
     }
 
@@ -32,8 +32,13 @@ export class QextFileService {
                 fullPath = [fullPath, partial].join(sep);
             }
 
-            if (!existsSync(fullPath)) {
-                mkdirSync(fullPath);
+            try {
+                if (!existsSync(fullPath)) {
+                    mkdirSync(fullPath);
+                }
+            } catch (error) {
+                process.stderr.write(`Could not create Directory: ${fullPath}`);
+                process.exit(1);
             }
         });
     }
