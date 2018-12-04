@@ -9,6 +9,7 @@ Create UMD Module Bundle.
 |outFileName|false| out file name default _bundle.js_ |
 |outputDirectory| false | output directory where to save bundle, relative path from projectRoot |
 |tsConfigFile| false | tyscript configuration file to use for webpackplugin ts-loader. default _tsconfig.json_ |
+|watch| boolean | true to enable watch for development mode |
 
 ```
 // q2g-web.json
@@ -18,6 +19,7 @@ Create UMD Module Bundle.
     "outFileName": "myBundle.js",
     "outputDirectory": "./dist/webpack",
     "tsConfigFile": "./tsconfig.webpack.json"
+    "watch": true
 }
 ```
 
