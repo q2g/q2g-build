@@ -73,8 +73,8 @@ export class ExtensionService {
         return this.qrsService.importExtension(name, file);
     }
 
-    public updateExtension(extensionName: string, file: string) {
-        /** @todo implement */
+    public updateExtension(name: string, file: string) {
+        return this.qrsService.updateExtension(name, file);
     }
 
     private readPackageJSON(): IDataNode {

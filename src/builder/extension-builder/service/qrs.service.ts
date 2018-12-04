@@ -118,6 +118,47 @@ export class QrsService {
         });
     }
 
+    public updateExtension(name: string, file: string): Promise<void> {
+
+        return new Promise((finalize, reject) => {
+
+            const params = {
+                externalPath: `${name}.js`,
+                overwrite: true,
+                xrfkey: "abcdefghijklmnop",
+            };
+
+            const options = {
+                ...this.requestOptions,
+                ...{
+                    headers: {
+                        ...this.requestOptions.headers,
+                        "Content-Length": file.length,
+                        "Content-Type": "application/json;charset=UTF-8",
+                    },
+                    method: "POST",
+                    path: `/qrs/extension/${name}/uploadfile?${stringify(params)}`,
+                },
+            };
+
+            const req = request(options, (res) => {
+                res.on("data", (chunk: string) => {
+                    if (res.statusCode !== 201) {
+                        reject("status code not 201");
+                    }
+                    finalize();
+                });
+
+                res.on("error", (err) => {
+                    reject(err.message);
+                });
+            });
+
+            req.write(file);
+            req.end();
+        });
+    }
+
     /**
      * if request options not exists, create them
      *
