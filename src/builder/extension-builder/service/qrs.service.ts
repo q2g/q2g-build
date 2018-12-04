@@ -118,7 +118,7 @@ export class QrsService {
         });
     }
 
-    public updateExtension(name: string, file: string): Promise<void> {
+    public updateExtension(name: string, file: Buffer): Promise<void> {
 
         return new Promise((finalize, reject) => {
 

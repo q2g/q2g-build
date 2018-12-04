@@ -73,7 +73,7 @@ export class ExtensionService {
         return this.qrsService.importExtension(name, file);
     }
 
-    public updateExtension(name: string, file: string) {
+    public updateExtension(name: string, file: Buffer) {
         return this.qrsService.updateExtension(name, file);
     }
 

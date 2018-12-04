@@ -28,9 +28,7 @@ export class DeployExtensionPlugin {
                 let file: string | Buffer;
 
                 if (exists) {
-                    file = readFileSync(resolve(this.outDir, `${this.name}.js`), {encoding: "utf-8"});
-                    /** hotfix after upload last line is removed add a additonal line */
-                    file = file.concat("\n});");
+                    file = readFileSync(resolve(this.outDir, `${this.name}.js`));
                     await this.extensionService.updateExtension(this.name, file);
                 } else {
                     file = readFileSync(resolve(this.outDir, `${this.name}.zip`));
