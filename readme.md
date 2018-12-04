@@ -32,6 +32,6 @@ package.json
 
 ## Builders
 
-[q2g extension builder](docs/extension.builder.md)
-[q2g typescript builder](docs/typescript.builder.md)
+[q2g extension builder](docs/extension.builder.md)\
+[q2g typescript builder](docs/typescript.builder.md)\
 [q2g webpack builder](docs/webpack.builder.md)
