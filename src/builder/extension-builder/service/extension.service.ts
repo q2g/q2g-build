@@ -1,15 +1,33 @@
 import { readFileSync } from "fs";
 import { resolve } from "path";
+import { isArray } from "util";
 import { IDataNode } from "../../../api/data-node";
 import { IQextData } from "../../qext-file-builder/api";
 import { WebpackService } from "../../webpack-builder/service/webpack.service";
+import { QrsService } from "./qrs.service";
 
 export class ExtensionService {
 
+    public static get instance(): ExtensionService {
+        return ExtensionService.oInstance;
+    }
+
+    private static oInstance: ExtensionService = new ExtensionService();
+
     private webpackService: WebpackService;
 
+    private qrsService: QrsService;
+
     public constructor() {
-        this.webpackService  = WebpackService.getInstance();
+
+        if (ExtensionService.oInstance) {
+            throw new Error("Could not create instance from Extension Service, use get Instance instead");
+        }
+
+        this.webpackService = WebpackService.getInstance();
+        this.qrsService     = QrsService.instance;
+
+        ExtensionService.oInstance = this;
     }
 
     public getQextConfiguration(): IQextData {
@@ -37,6 +55,26 @@ export class ExtensionService {
         }, true);
 
         return qextData as IQextData;
+    }
+
+    /**
+     * tests an extension exists
+     *
+     * @param {string} name
+     * @returns {Promise<boolean>}
+     * @memberof ExtensionService
+     */
+    public async extensionExists(name: string): Promise<boolean> {
+        const extensions = await this.qrsService.fetchExtension(name);
+        return isArray(extensions) && extensions.length > 0;
+    }
+
+    public importExtension(name: string, file: Buffer) {
+        return this.qrsService.importExtension(name, file);
+    }
+
+    public updateExtension(extensionName: string, file: string) {
+        /** @todo implement */
     }
 
     private readPackageJSON(): IDataNode {
