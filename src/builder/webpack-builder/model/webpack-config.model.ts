@@ -218,9 +218,8 @@ export class WebpackConfigModel extends ConfigModel {
      * @param {string} filename
      * @memberof WebpackConfigModel
      */
-    public setEntryFile(filename: string) {
-        const fileName = basename(filename, ".ts");
-        this.entryFile[fileName] = filename;
+    public setEntryFile(entryFile: IDataNode) {
+        this.entryFile = entryFile;
     }
 
     /**

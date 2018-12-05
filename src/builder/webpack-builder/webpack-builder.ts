@@ -1,9 +1,8 @@
-import { resolve } from "path";
+import { basename, resolve } from "path";
 import * as UglifyJSPlugin from "uglifyjs-3-webpack-plugin";
 import { Compiler, Module, Plugin } from "webpack";
 import { IBuilder, IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
-import { IWebpackConfig } from "./api/config.interface";
 import { CleanWebpackPlugin, LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
 
@@ -42,7 +41,12 @@ export class WebpackBuilder implements IBuilder {
      * @param {IDataNode} config
      * @memberof WebpackBuilder
      */
-    public configure(config: IWebpackConfig): void {
+    public configure(config: any): void {
+
+        /** hotfix rewrite entry file to be an object, se we can apply multiple entry files */
+        const entryFile = {};
+        entryFile[config.outFileName || basename(config.entryFile, "ts")] = config.entryFile;
+        config.entryFile = entryFile;
 
         this.webpackService.setOptions({
             ...this.initialConfig,
@@ -58,9 +62,7 @@ export class WebpackBuilder implements IBuilder {
      */
     public initialize(environment: IBuilderEnvironment) {
 
-        const env = environment.environment;
         const settings = this.webpackService.getConfig();
-
         this.initialConfig = this.getInitialConfig(environment);
 
         // set context paths were to watch for webpack plugins / loader
@@ -159,7 +161,6 @@ export class WebpackBuilder implements IBuilder {
      */
     protected getInitialConfig(environment: IBuilderEnvironment): IDataNode {
         const initialConfig: IDataNode = environment;
-        initialConfig.entryFile   = "./index.ts";
         initialConfig.outFileName = `${environment.projectName}.js`;
         initialConfig.environment = environment.environment || "development";
         return initialConfig;
