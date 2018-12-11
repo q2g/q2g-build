@@ -76,11 +76,12 @@ export class ExtensionBuilder extends WebpackBuilder {
      */
     protected loadWebpackPlugins(): Plugin[] {
 
-        const plugins  = super.loadWebpackPlugins();
-        const fileName = this.webpackService.getConfig().getOutFileName();
-        const outDir   = this.webpackService.getConfig().getOutDirectory();
+        let plugins     = super.loadWebpackPlugins();
+        const config    = this.webpackService.getConfig();
+        const fileName  = config.getOutFileName();
+        const outDir    = config.getOutDirectory();
 
-        return plugins.concat([
+        plugins = plugins.concat([
             new PathOverridePlugin(/\/umd\//, "/esm/"),
             new CopyWebpackPlugin(this.getBinaryFiles()),
             new QextFilePlugin(
@@ -89,8 +90,13 @@ export class ExtensionBuilder extends WebpackBuilder {
                 filename: `${fileName}.zip`,
                 path: outDir,
             }),
-            this.createDeployPlugin(fileName),
         ]);
+
+        if ( config.getCi() ) {
+            plugins.push(this.createDeployPlugin(fileName));
+        }
+
+        return plugins;
     }
 
     /**
@@ -113,6 +119,11 @@ export class ExtensionBuilder extends WebpackBuilder {
         return binFiles;
     }
 
+    /**
+     * @todo fix if config ci not exists dont return null value
+     *
+     * @param name
+     */
     private createDeployPlugin(name: string): DeployExtensionPlugin {
 
         const config: WebpackConfigModel = this.webpackService.getConfig();
