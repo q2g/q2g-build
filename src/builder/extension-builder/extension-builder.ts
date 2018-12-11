@@ -127,7 +127,7 @@ export class ExtensionBuilder extends WebpackBuilder {
     private createDeployPlugin(name: string): DeployExtensionPlugin {
 
         const config: WebpackConfigModel = this.webpackService.getConfig();
-        const configDirectory = resolve(config.getProjectSource(), "config");
+        const configDirectory = resolve(config.getProjectSource());
 
         if (!existsSync(configDirectory)) {
             return null;
