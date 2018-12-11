@@ -11,10 +11,10 @@ export class DeployExtensionPlugin {
 
     private outDir: string;
 
-    public constructor(name: string, outdir: string) {
-        this.extensionService = ExtensionService.instance;
-        this.name   = name.replace(/(.*?)\.[^\.]+$/, "\$1");
-        this.outDir = outdir;
+    public constructor(name: string, outdir: string, a: any) {
+        this.extensionService   = ExtensionService.instance;
+        this.name               = name.replace(/(.*?)\.[^\.]+$/, "\$1");
+        this.outDir             = outdir;
     }
 
     public apply(compiler: Compiler) {
@@ -22,6 +22,14 @@ export class DeployExtensionPlugin {
         compiler.hooks.afterEmit.tapAsync(
             "ExtensionDone",
             async (comp: compilation.Compilation, callback) => {
+
+                // switch () {
+                //     case 1:
+                //         // a
+                //         break;
+                //     default:
+                //         break;
+                // }
 
                 const exists = await this.extensionService.extensionExists(this.name);
                 const msg = exists ? `QRS$: update extension ${this.name}` : `QRS$: import extension ${this.name}`;

@@ -26,7 +26,7 @@ export class ExtensionBuilder extends WebpackBuilder {
     public constructor() {
         super();
         this.extensionService = ExtensionService.instance;
-        this.qrsService       = QrsService.instance;
+        this.qrsService = QrsService.instance;
     }
 
     /**
@@ -40,9 +40,9 @@ export class ExtensionBuilder extends WebpackBuilder {
         super.initialize(env);
 
         this.webpackService.getConfig().setExternalModules([
-            { angular  : "angular"},
-            { qlik     : "qlik" },
-            { qvangular: "qvangular"},
+            { angular: "angular" },
+            { qlik: "qlik" },
+            { qvangular: "qvangular" },
         ]);
     }
 
@@ -76,10 +76,10 @@ export class ExtensionBuilder extends WebpackBuilder {
      */
     protected loadWebpackPlugins(): Plugin[] {
 
-        let plugins     = super.loadWebpackPlugins();
-        const config    = this.webpackService.getConfig();
-        const fileName  = config.getOutFileName();
-        const outDir    = config.getOutDirectory();
+        let plugins = super.loadWebpackPlugins();
+        const config = this.webpackService.getConfig();
+        const fileName = config.getOutFileName();
+        const outDir = config.getOutDirectory();
 
         plugins = plugins.concat([
             new PathOverridePlugin(/\/umd\//, "/esm/"),
@@ -92,7 +92,7 @@ export class ExtensionBuilder extends WebpackBuilder {
             }),
         ]);
 
-        if ( config.getCi() ) {
+        if (config.getCi()) {
             plugins.push(this.createDeployPlugin(fileName));
         }
 
@@ -109,11 +109,11 @@ export class ExtensionBuilder extends WebpackBuilder {
     private getBinaryFiles(): IDataNode[] {
 
         const binFiles = [
-            { from: "wbfolder.wbl" , to: "wbfolder.wbl" },
+            { from: "wbfolder.wbl", to: "wbfolder.wbl" },
         ];
 
         if (existsSync(resolve(this.webpackService.getConfig().getProjectRoot(), "preview.png"))) {
-            binFiles.push({from: "preview.png", to: "preview.png" });
+            binFiles.push({ from: "preview.png", to: "preview.png" });
         }
 
         return binFiles;
@@ -129,10 +129,18 @@ export class ExtensionBuilder extends WebpackBuilder {
         const config: WebpackConfigModel = this.webpackService.getConfig();
         const configDirectory = resolve(config.getProjectSource());
 
-        if (!existsSync(configDirectory)) {
-            return null;
-        }
+        return new DeployExtensionPlugin(config.getOutFileName(), config.getOutDirectory(), this.getCIConfiguration());
+    }
 
-        return new DeployExtensionPlugin(config.getOutFileName(), config.getOutDirectory());
+    private getCIConfiguration() {
+
+        const projectSource = this.webpackService.getConfig().getProjectRoot();
+        const configPath = resolve(projectSource, "./q2g-ci.config.json");
+        const config = readFileSync(configPath, {
+            encoding: "utf8",
+        });
+
+        return JSON.parse(config);
+
     }
 }
