@@ -24,4 +24,8 @@ export const WebpackOptionRules: IOptionRuleSet  = {
     watch: {
         required: false,
     },
+
+    ci: {
+        required: false,
+    },
 };

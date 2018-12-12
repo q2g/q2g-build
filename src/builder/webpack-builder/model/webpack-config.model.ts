@@ -112,6 +112,8 @@ export class WebpackConfigModel extends ConfigModel {
      */
     private webpackWatch: boolean;
 
+    private extensionCi: boolean;
+
     /**
      * get source directory which where the project is located
      *
@@ -212,6 +214,10 @@ export class WebpackConfigModel extends ConfigModel {
         this.optimization = optimization;
     }
 
+    public setCi(enabled: boolean) {
+        this.extensionCi = enabled;
+    }
+
     /**
      * set entry file
      *
@@ -305,6 +311,11 @@ export class WebpackConfigModel extends ConfigModel {
     }
 
     public getWatch(): boolean {
+        // convert to bool
         return !!this.webpackWatch;
+    }
+
+    public getCi(): boolean {
+        return this.extensionCi;
     }
 }
