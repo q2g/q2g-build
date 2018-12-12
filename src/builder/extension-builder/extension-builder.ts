@@ -54,7 +54,8 @@ export class ExtensionBuilder extends WebpackBuilder {
 
     protected async beforeRun() {
         await super.beforeRun();
-        this.qrsService.certificateRoot = resolve(this.webpackService.getConfig().getProjectRoot(), "./config/cert");
+        this.qrsService.certificateRoot
+            = "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\.Local Certificates";
     }
 
     /**
