@@ -15,6 +15,8 @@ export class QrsService {
 
     private reqOptions: RequestOptions;
 
+    private host = "localhost";
+
     public constructor() {
         if (QrsService.qrsInstance) {
             throw new Error("could not create instance of QrsService, use QrsServcice.instance instead");
@@ -196,7 +198,7 @@ export class QrsService {
                 "X-Qlik-User"  : "UserDirectory= Internal; UserId= sa_repository",
                 "x-qlik-xrfkey": "abcdefghijklmnop",
             },
-            hostname: "nb-fc-207996",
+            hostname: this.host,
             key,
             method: "GET",
             port: "4242",

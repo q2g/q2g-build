@@ -1,4 +1,19 @@
 export interface ICiConfig {
-    qrs: object;
-    desktop: object | boolean;
+    qrs?: IConfigQrs | boolean;
+    desktop?: IConfigDesktop | boolean;
+}
+
+interface IConfigDesktop {
+    path: string;
+}
+
+interface IConfigQrs {
+    serverName: string;
+    authentification?: IQrsAuthentification;
+}
+
+interface IQrsAuthentification {
+    certPath: string;
+    username: string;
+    userdirectory: string;
 }
