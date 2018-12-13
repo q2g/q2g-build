@@ -29,6 +29,7 @@ export class LogPlugin implements Plugin {
 
             const statsJson: Stats.ToJsonOptions = result.toJson();
             const stats = statsJson.valueOf() as IDataNode;
+            process.stderr.write(JSON.stringify(stats.errors));
             const errors: string[] = stats.errors;
 
             throw new Error(errors.join("\n"));
