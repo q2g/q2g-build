@@ -54,8 +54,9 @@ export class ExtensionBuilder extends WebpackBuilder {
 
     protected async beforeRun() {
         await super.beforeRun();
-        this.qrsService.certificateRoot
-            = "C:\\ProgramData\\Qlik\\Sense\\Repository\\Exported Certificates\\.Local Certificates";
+        const dir = process.env.ALLUSERSPROFILE;
+        this.qrsService.certificateRoot =
+            `${dir}\\Qlik\\Sense\\Repository\\Exported Certificates\\.Local Certificates`;
     }
 
     /**
