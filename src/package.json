@@ -17,7 +17,7 @@
   "author": "Ralf Hannuschka",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "10.12.14",
+    "@types/node": "10.12.15",
     "@types/webpack": "4.4.21",
     "ajv": "6.6.1",
     "uglifyjs-3-webpack-plugin": "1.2.4"
