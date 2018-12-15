@@ -66,9 +66,9 @@ function getBuilderConfiguration(path): IDataNode {
         tsConfigOptions.compilerOptions = {};
     }
 
-    const outDir        = builderConfig.outDirectory || tsConfigOptions.compilerOptions.outDir || "./dist";
+    const outDir        = builderConfig.outDirectory              || tsConfigOptions.compilerOptions.outDir || "./dist";
     const projectSource = tsConfigOptions.compilerOptions.rootDir || ".";
-    const tsConfigFile  = builderConfig.tsConfigFile || "tsconfig.json";
+    const tsConfigFile  = builderConfig.tsConfigFile              || "tsconfig.json";
 
     const tsConfigValues = {
         outDirectory  : resolve( projectRoot, outDir),

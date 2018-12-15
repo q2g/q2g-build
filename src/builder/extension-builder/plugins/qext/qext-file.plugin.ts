@@ -13,13 +13,11 @@ export class QextFilePlugin {
     public constructor(qextConfig: IQextData) {
         this.qextConfig  = qextConfig;
         this.qextBuilder = new QextFileBuilder();
+        this.qextBuilder.configure(this.qextConfig);
     }
 
     public apply(compiler: Compiler) {
-        compiler.hooks.beforeRun.tap("QextBeforeRun", () => {
-            this.qextBuilder.configure(this.qextConfig);
-        });
-        this.registerAfterCompilationHook( compiler );
+        this.registerAfterCompilationHook(compiler);
     }
 
     /**

@@ -26,6 +26,14 @@ export const WebpackProperties: ICommandLineBuilderData = {
                 return !isAbsolute(value) && isArray(value.match(/^\.(?=\/)/));
             },
         },
+        {
+            name: "watch",
+            text: "Webpack$ enable watchmode (true|false) only development mode",
+            validator: (value) => {
+                return value === "true" || value === "false";
+            },
+            value: "false",
+        },
     ],
     namespace: Namespaces.WEBPACK,
 };

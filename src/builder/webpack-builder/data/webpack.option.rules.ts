@@ -21,9 +21,11 @@ export const WebpackOptionRules: IOptionRuleSet  = {
         validatorFn: ValidationHelper.notEmptyAndNoWhitespace,
     },
 
-    webpackEnvironment: {
+    watch: {
         required: false,
-        validatorFn: ValidationHelper.containsValue([
-            "development", "none", "production"]),
+    },
+
+    ci: {
+        required: false,
     },
 };

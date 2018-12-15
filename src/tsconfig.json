@@ -2,6 +2,7 @@
     "compilerOptions": {
         "rootDir": ".",
         "outDir": "./dist",
+        "baseUrl": ".",
         "module": "commonjs",
         "target": "es6",
         "moduleResolution": "node",
@@ -12,11 +13,14 @@
         "lib": [
             "es6"
         ],
+        "paths": {
+            "@builder/*": ["./builder/*"],
+        },
         "typeRoots": [
             "node_modules/@types",
             "typings"
         ],
-        "types": [ "node", "webpack" ]
+        "types": ["node", "webpack"]
     },
     "exclude": [
         "node_modules",

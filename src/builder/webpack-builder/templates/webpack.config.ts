@@ -11,7 +11,7 @@ const webpackConfig: Configuration = {
 
     externals: config.getExternalModules() || [],
 
-    mode: config.getWebpackEnvironment(),
+    mode: config.getEnvironment(),
 
     optimization:  config.getOptimization(),
 

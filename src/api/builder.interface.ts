@@ -12,5 +12,5 @@ export interface IBuilder {
 
     initialize(baseConfig: IBuilderEnvironment): void;
 
-    run(): Promise<string>;
+    run(): Promise<any>;
 }

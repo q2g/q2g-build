@@ -18,7 +18,7 @@ export class WebpackConfigModel extends ConfigModel {
      * @type {("debug" | "development" | "production")}
      * @memberof BuilderConfigModel
      */
-    private environment: "debug" | "development" | "production";
+    private environment: "none" | "development" | "production";
 
     /**
      * set context path for webpack to set directory
@@ -56,15 +56,6 @@ export class WebpackConfigModel extends ConfigModel {
      * @memberof WebpackConfigModel
      */
     private webpackModuleRules: Module;
-
-    /**
-     * environment development or production
-     *
-     * @private
-     * @type {string}
-     * @memberof WebpackConfigModel
-     */
-    private webpackEnvrionment: "development" | "production" | "none";
 
     /**
      * context paths to tell webpack where to find specific loaders
@@ -113,6 +104,17 @@ export class WebpackConfigModel extends ConfigModel {
     private plugins: Plugin[];
 
     /**
+     *  watchmode enabled or disabled
+     *
+     * @private
+     * @type {boolean}
+     * @memberof WebpackConfigModel
+     */
+    private webpackWatch: boolean;
+
+    private extensionCi: boolean;
+
+    /**
      * get source directory which where the project is located
      *
      * @returns {string}
@@ -140,16 +142,6 @@ export class WebpackConfigModel extends ConfigModel {
      */
     public getExternalModules(): IDataNode[] {
         return this.externalModules;
-    }
-
-    /**
-     * get environment value
-     *
-     * @returns {string}
-     * @memberof WebpackConfigModel
-     */
-    public getWebpackEnvironment(): "development" | "production" | "none" {
-        return this.webpackEnvrionment;
     }
 
     /**
@@ -222,25 +214,18 @@ export class WebpackConfigModel extends ConfigModel {
         this.optimization = optimization;
     }
 
+    public setCi(enabled: boolean) {
+        this.extensionCi = enabled;
+    }
+
     /**
      * set entry file
      *
      * @param {string} filename
      * @memberof WebpackConfigModel
      */
-    public setEntryFile(filename: string) {
-        const fileName = basename(filename, ".ts");
-        this.entryFile[fileName] = filename;
-    }
-
-    /**
-     * set environment
-     *
-     * @param {string} env
-     * @memberof WebpackConfigModel
-     */
-    public setWebpackEnvironment(env: "development" | "production" | "none") {
-        this.webpackEnvrionment = env;
+    public setEntryFile(entryFile: IDataNode) {
+        this.entryFile = entryFile;
     }
 
     /**
@@ -307,7 +292,7 @@ export class WebpackConfigModel extends ConfigModel {
         this.plugins = plugins;
     }
 
-    public getEnvrionment(): "debug" | "development" | "production" {
+    public getEnvironment(): "none" | "development" | "production" {
         return this.environment;
     }
 
@@ -317,7 +302,20 @@ export class WebpackConfigModel extends ConfigModel {
      * @param {("debug" | "development" | "production")} env
      * @memberof BuilderConfigModel
      */
-    public setEnvironment(env: "debug" | "development" | "production") {
+    public setEnvironment(env: "none" | "development" | "production") {
         this.environment = env;
+    }
+
+    public setWatch(watch: boolean) {
+        this.webpackWatch = watch;
+    }
+
+    public getWatch(): boolean {
+        // convert to bool
+        return !!this.webpackWatch;
+    }
+
+    public getCi(): boolean {
+        return this.extensionCi;
     }
 }

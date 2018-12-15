@@ -28,10 +28,10 @@ package.json
 
 ## CLI
 
-[q2g-build:cli](docs/cli.md) \
+[q2g-build:cli](docs/cli.md)
 
 ## Builders
 
-[q2g extension builder](docs/extension.builder.md) \
-[q2g typescript builder](docs/typescript.builder.md)
-[q2g webpack builder](docs/webpack.builder.md) \
+[q2g extension builder](docs/extension.builder.md)\
+[q2g typescript builder](docs/typescript.builder.md)\
+[q2g webpack builder](docs/webpack.builder.md)
