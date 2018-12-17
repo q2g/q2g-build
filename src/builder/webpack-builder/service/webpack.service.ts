@@ -1,4 +1,4 @@
-import * as Webpack from "webpack";
+import * as webpack from "webpack";
 import { IOptionRuleSet } from "../../../api";
 import { BuilderConfigRules } from "../../../data";
 import { ConfigService } from "../../../services/config.service";
@@ -40,8 +40,9 @@ export class WebpackService extends ConfigService<WebpackConfigModel> {
      * @returns {Promise<Webpack.Compiler>}
      * @memberof WebpackService
      */
-    public async getWebpack(): Promise<Webpack.Compiler> {
-        return Webpack(await this.loadConfigurationFile());
+    public async getWebpack(): Promise<webpack.Compiler> {
+        const configuration = await this.loadConfigurationFile();
+        return webpack(configuration);
     }
 
     /**
@@ -77,7 +78,7 @@ export class WebpackService extends ConfigService<WebpackConfigModel> {
      * @returns {Promise<Webpack.Configuration>}
      * @memberof WebpackService
      */
-    private async loadConfigurationFile(): Promise<Webpack.Configuration> {
+    private async loadConfigurationFile(): Promise<webpack.Configuration> {
         const webpackConfig = await import("../templates/webpack.config");
         return webpackConfig.default;
     }

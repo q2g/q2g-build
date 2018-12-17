@@ -1,4 +1,3 @@
-import { existsSync } from "fs";
 import { basename, resolve } from "path";
 import { Builders, IBuilder, IBuilderEnvironment } from "../api";
 import { IDataNode } from "../api/data-node";
@@ -112,8 +111,8 @@ export class BuilderService {
     }
 
     /**
-     * get builder root directory, this is the path where we can find
-     * the node_modules folder for q2g_build
+     * get directory from this script and go up and search for a directory
+     * which is called q2g-build. By general this should be in node_modules
      *
      * @private
      * @returns {string}
@@ -121,7 +120,7 @@ export class BuilderService {
      */
     private resolveBuilderRootDir(): string {
         let currentPath = __dirname;
-        while (!existsSync(resolve(currentPath, "node_modules")) || basename(currentPath) === "q2g-build") {
+        while (basename(currentPath) !== "q2g-build") {
             currentPath = resolve(currentPath, "..");
         }
         return currentPath;
