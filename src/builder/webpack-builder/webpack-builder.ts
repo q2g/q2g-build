@@ -3,6 +3,7 @@ import * as UglifyJSPlugin from "uglifyjs-3-webpack-plugin";
 import { Compiler, Module, Plugin } from "webpack";
 import { IBuilder, IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
+import { WebpackConfigModel } from "./model/webpack-config.model";
 import { CleanWebpackPlugin, LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
 
@@ -67,12 +68,15 @@ export class WebpackBuilder implements IBuilder {
 
         // set context paths were to watch for webpack plugins / loader
         settings.setLoaderContextPaths([
-            resolve(environment.builderRoot, "./dist/builder/webpack-builder/loader"),
-            resolve(environment.builderRoot, "./builder/webpack-builder/loader"),
-            resolve(environment.builderRoot, "./node_modules"),
-            resolve(environment.projectRoot, "./node_modules"),
+            resolve(__dirname, "./loader"),                     // own loaders
+            resolve(environment.builderRoot, "./node_modules"), // loaders in node_modules folder from q2g-build
+            resolve(environment.projectRoot, "./node_modules"), // loaders in project root node_modules folder
         ]);
         settings.setPackageName(environment.projectName);
+    }
+
+    public get settings(): WebpackConfigModel {
+        return this.webpackService.getConfig();
     }
 
     /**
