@@ -1,5 +1,5 @@
 import { basename, resolve } from "path";
-import * as UglifyJSPlugin from "uglifyjs-3-webpack-plugin";
+import * as TerserWebpackPlugin from "terser-webpack-plugin";
 import { Compiler, Module, Plugin } from "webpack";
 import { IBuilder, IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
@@ -134,8 +134,8 @@ export class WebpackBuilder implements IBuilder {
             optimization: {
                 minimize: env === "production" ? true : false,
                 minimizer: [
-                    new UglifyJSPlugin({
-                        uglifyOptions: {
+                    new TerserWebpackPlugin({
+                        terserOptions: {
                             mangle: false,
                         },
                     }),
