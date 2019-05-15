@@ -36,6 +36,7 @@ const moduleRules: Module = {
             },
         }],
     }, {
+        sideEffects: true,
         test: /\.scss$/,
         use: [{
             loader: "style-loader",
