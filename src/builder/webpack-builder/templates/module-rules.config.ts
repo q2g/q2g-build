@@ -72,21 +72,43 @@ const moduleRules: Module = {
         }],
     }, {
         loader: "url-loader?limit=100000&mimetype=application/vnd.ms-fontobject",
+        options: {
+            name: "[name].[ext]",
+            outputPath: "fonts/",
+            publicPath: `${config.getOutDirectory()}/fonts`,
+        },
         test: /\.eot$/,
     }, {
         loader: "url-loader?limit=100000&mimetype=application/font-woff2",
+        options: {
+            name: "[name].[ext]",
+            outputPath: "fonts/",
+            publicPath: `${config.getOutDirectory()}/fonts`,
+        },
         test: /\.woff2$/,
     }, {
         loader: "url-loader?limit=100000&mimetype=application/font-woff",
-        test: /\.woff$/,
-    }, {
-        loader: "url-loader?limit=100000&mimetype=application/font-woff",
+        options: {
+            name: "[name].[ext]",
+            outputPath: "fonts",
+            publicPath: `${config.getOutDirectory()}/fonts`,
+        },
         test: /\.woff$/,
     }, {
         loader: "url-loader?limit=100000&mimetype=application/font-ttf",
+        options: {
+            name: "[name].[ext]",
+            outputPath: "fonts",
+            publicPath: `${config.getOutDirectory()}/fonts`,
+        },
         test: /\.ttf$/,
     }, {
         loader: "url-loader?limit=100000&mimetype=image/svg+xml",
+        options: {
+            name: "[name].[ext]",
+            outputPath: "fonts",
+            publicPath: `${config.getOutDirectory()}/fonts`,
+        },
         test: /\.svg$/,
     }, {
         loader: "url-loader",

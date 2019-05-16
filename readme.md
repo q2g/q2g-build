@@ -5,6 +5,8 @@
 - projectRoot: absolute path to the project, this is the path where we start the build process ( package.json ).
 - sourceRoot: relative path from project root where to find all source files default _projectRoot_
 
+Special Thanks to **Lucas Schroth** from Akquinet for feedback and improving q2g-build process.
+
 ## Command line options
 
 | Option | Required | Values | Description |
