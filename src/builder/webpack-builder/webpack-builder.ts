@@ -183,7 +183,6 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     protected loadWebpackPlugins(): Plugin[] {
-        const outDir = this.webpackService.getConfig().getOutDirectory();
         const plugins: Plugin[] = [
             new LogPlugin(),
             new CleanWebpackPlugin(),
