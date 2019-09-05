@@ -14,7 +14,7 @@
             "es6"
         ],
         "paths": {
-            "@builder/*": ["./builder/*"],
+            "@builder/*": ["./builder/*"]
         },
         "typeRoots": [
             "node_modules/@types",
@@ -28,6 +28,6 @@
         "**/*.js"
     ],
     "include": [
-       "**/*.ts",
+       "**/*.ts"
     ]
 }

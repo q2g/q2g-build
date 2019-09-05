@@ -7,6 +7,7 @@ import { IDataNode } from "../../api/data-node";
 import { WebpackConfigModel } from "./model/webpack-config.model";
 import { LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
+import webpackConfig from "./templates/webpack.config";
 
 /**
  * builder for webpack to bundle all files
@@ -113,7 +114,7 @@ export class WebpackBuilder implements IBuilder {
 
             if (watch) {
                 const watchOptions: Compiler.WatchOptions = {
-                    ignored: ["**/*.js", "**/node_modules"],
+                    ignored: [webPackConfig.getOutDirectory(), "**/node_modules"],
                 };
                 /** start watch mode */
                 compiler.watch(watchOptions, handler);

@@ -43,6 +43,7 @@ export class ExtensionBuilder extends WebpackBuilder {
 
         this.webpackService.getConfig().setExternalModules([
             { angular: "angular" },
+            { jquery: "jquery" },
             { qlik: "qlik" },
             { qvangular: "qvangular" },
         ]);

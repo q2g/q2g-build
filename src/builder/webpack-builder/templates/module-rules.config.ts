@@ -20,6 +20,11 @@ const moduleRules: Module = {
             loader: "raw-loader",
         }],
     }, {
+        test: /.*\.html$/,
+        use: [{
+            loader: "html-loader",
+        }],
+    }, {
         loader: "json-loader",
         test: /\.json/,
         type: "javascript/auto",
