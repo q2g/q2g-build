@@ -19,7 +19,7 @@
   "devDependencies": {
     "@types/node": "^10.14.4",
     "@types/webpack": "4.4.27",
-    "ajv": "6.10.0"
+    "ajv": "6.11.0"
   },
   "dependencies": {
     "clean-webpack-plugin": "2.0.1",
