@@ -18,7 +18,7 @@
   "license": "ISC",
   "devDependencies": {
     "@types/node": "10.17.13",
-    "@types/webpack": "4.4.27",
+    "@types/webpack": "4.41.2",
     "ajv": "6.11.0"
   },
   "dependencies": {
@@ -40,7 +40,7 @@
     "tslint": "5.15.0",
     "typescript": "3.7.5",
     "url-loader": "1.1.2",
-    "webpack": "4.29.6",
+    "webpack": "4.41.5",
     "webpack-cli": "3.3.10",
     "zip-webpack-plugin": "3.0.0"
   }
