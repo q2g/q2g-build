@@ -36,7 +36,7 @@
     "sass-loader": "7.1.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "^2.0.0",
-    "ts-loader": "5.3.3",
+    "ts-loader": "5.4.5",
     "tslint": "5.15.0",
     "typescript": "3.4.5",
     "url-loader": "1.1.2",
