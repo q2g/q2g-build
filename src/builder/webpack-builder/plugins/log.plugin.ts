@@ -27,12 +27,8 @@ export class LogPlugin implements Plugin {
                 return;
             }
 
-            const statsJson: Stats.ToJsonOptions = result.toJson();
-            const stats = statsJson.valueOf() as IDataNode;
-            process.stderr.write(JSON.stringify(stats.errors));
-            const errors: string[] = stats.errors;
-
-            throw new Error(errors.join("\n"));
+            const statsJson: Stats.ToJsonOutput = result.toJson();
+            process.stderr.write(JSON.stringify(statsJson.errors, null, 4));
         });
     }
 }

@@ -1,4 +1,4 @@
-import { readFileSync, statSync } from "fs";
+import { readFileSync, statSync, existsSync } from "fs";
 import { basename } from "path";
 import { compilation, Compiler } from "webpack";
 import { IQextData } from "../../../qext-file-builder/api";
@@ -33,15 +33,17 @@ export class QextFilePlugin {
             callback,
         ) => {
             const filePath = await this.qextBuilder.run();
-            const fileName = basename(filePath);
+            const fileName  = basename(filePath);
             const fileStats = statSync(filePath);
+            const fileContent = readFileSync(filePath);
 
             comp.assets[fileName] = {
                 size: () => {
                     return fileStats.size;
                 },
                 source: () => {
-                    return readFileSync(filePath);
+                    /** file not exists anymore ...  */
+                    return fileContent;
                 },
             };
             callback();

@@ -1,4 +1,4 @@
-import * as CleanWebpackPlugin from "clean-webpack-plugin";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { Plugin } from "webpack";
@@ -88,7 +88,7 @@ export class ExtensionBuilder extends WebpackBuilder {
 
         const plugins = [
             new LogPlugin(),
-            new CleanWebpackPlugin.default({
+            new CleanWebpackPlugin({
                 cleanAfterEveryBuildPatterns: ["!**/wbfolder.wbl"],
             }),
             new PathOverridePlugin(/\/umd\//, "/esm/"),

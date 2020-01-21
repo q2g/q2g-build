@@ -1,4 +1,4 @@
-import CleanWebpackPlugin from "clean-webpack-plugin";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import { basename, resolve } from "path";
 import * as TerserWebpackPlugin from "terser-webpack-plugin";
 import { Compiler, Module, Plugin } from "webpack";
@@ -7,7 +7,6 @@ import { IDataNode } from "../../api/data-node";
 import { WebpackConfigModel } from "./model/webpack-config.model";
 import { LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
-import webpackConfig from "./templates/webpack.config";
 
 /**
  * builder for webpack to bundle all files
@@ -184,9 +183,13 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     protected loadWebpackPlugins(): Plugin[] {
+
+        /** cast to any to fix typings */
+        const cleanWebpackPlugin: Plugin = new CleanWebpackPlugin() as any;
+
         const plugins: Plugin[] = [
             new LogPlugin(),
-            new CleanWebpackPlugin(),
+            cleanWebpackPlugin,
         ];
         return plugins;
     }
