@@ -8,6 +8,8 @@ export interface IBuilderEnvironment {
      */
     builderRoot?: string;
 
+    typingsRoot?: string;
+
     /**
      * envrionment mode
      *

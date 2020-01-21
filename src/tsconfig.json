@@ -15,12 +15,7 @@
         ],
         "paths": {
             "@builder/*": ["./builder/*"]
-        },
-        "typeRoots": [
-            "node_modules/@types",
-            "typings"
-        ],
-        "types": ["node", "webpack"]
+        }
     },
     "exclude": [
         "node_modules",

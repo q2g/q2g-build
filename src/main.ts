@@ -1,3 +1,4 @@
+import * as copyfiles from "copyfiles";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { IBuilder, IBuilderEnvironment } from "./api";
@@ -88,6 +89,11 @@ function getBuilderConfiguration(path): IDataNode {
  */
 async function main(root: string, ...args: string[]) {
 
+    copyfiles([
+        resolve(__dirname, "typings/*.d.ts"),
+        resolve(process.cwd(), "node_modules/@types", "q2gb"),
+    ], true, () => void 0);
+
     const commandLineOptions  = builderService.readCommandLineArguments(args);
     const builderType: string = commandLineOptions.builder;
     const configFile: string  = commandLineOptions.config;
@@ -112,8 +118,6 @@ async function main(root: string, ...args: string[]) {
         process.exit(1);
     }
 }
-
-// export const doBuild = main;
 
 /**
  * call main method and pass process arguments, remove first argument

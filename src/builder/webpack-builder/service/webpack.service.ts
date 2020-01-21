@@ -13,15 +13,6 @@ export class WebpackService extends ConfigService<WebpackConfigModel> {
         return this.instance;
     }
 
-    /**
-     * global config values service
-     *
-     * @private
-     * @type {Config}
-     * @memberof WebpackService
-     */
-    private configService: WebpackService;
-
     public constructor() {
         if (WebpackService.instance) {
             throw new Error("could not create instance of WebpackService, use WebpackService.getInstance() instead");
@@ -53,7 +44,6 @@ export class WebpackService extends ConfigService<WebpackConfigModel> {
      * @memberof WebpackService
      */
     protected getConfigRules(): IOptionRuleSet {
-
         return {
             ...BuilderConfigRules,
             ...WebpackOptionRules,

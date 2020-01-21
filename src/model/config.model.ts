@@ -114,5 +114,4 @@ export class ConfigModel {
     public setTsConfigFile(fileName: string) {
         this.tsConfigFile = fileName;
     }
-
 }

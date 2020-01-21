@@ -133,10 +133,7 @@ export class ExtensionBuilder extends WebpackBuilder {
      * @param name
      */
     private createDeployPlugin(name: string): DeployExtensionPlugin {
-
         const config: WebpackConfigModel = this.webpackService.getConfig();
-        const configDirectory = resolve(config.getProjectSource());
-
         return new DeployExtensionPlugin(config.getOutFileName(), config.getOutDirectory(), this.getCIConfiguration());
     }
 

@@ -73,8 +73,9 @@ export class WebpackBuilder implements IBuilder {
             resolve(environment.builderRoot, "./node_modules"), // loaders in node_modules folder from q2g-build
             resolve(environment.projectRoot, "./node_modules"), // loaders in project root node_modules folder
             /** only for local development */
-            resolve(environment.builderRoot, "./src/node_modules"), // loaders in node_modules folder from q2g-build
+            resolve(environment.builderRoot, "./src/node_modules"), // loaders in node_modules folder from q2g-build,
         ]);
+
         settings.setPackageName(environment.projectName);
     }
 

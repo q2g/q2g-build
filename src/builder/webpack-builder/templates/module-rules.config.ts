@@ -22,7 +22,7 @@ const moduleRules: Module = {
     }, {
         test: /.*\.html$/,
         use: [{
-            loader: "html-loader",
+            loader: "raw-loader",
         }],
     }, {
         loader: "json-loader",
@@ -31,7 +31,8 @@ const moduleRules: Module = {
     }, {
         sideEffects: true,
         test: /.*\.tsx?$/,
-        use: [{
+        use: [
+        {
             loader: "ts-loader",
             options: {
                 compilerOptions: {
@@ -39,7 +40,9 @@ const moduleRules: Module = {
                 },
                 configFile: config.getTsConfigFile(),
             },
-        }],
+        },
+            { loader: "sanitize-html-imports.loader" },
+        ],
     }, {
         sideEffects: true,
         test: /\.scss$/,
