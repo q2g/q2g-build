@@ -1,6 +1,6 @@
 {
   "name": "q2g-build",
-  "version": "1.0.5-beta.1",
+  "version": "2.0.1",
   "description": "general build process",
   "main": "dist/main.js",
   "module": "dist/main.js",
@@ -11,7 +11,7 @@
     "q2gb": "./dist/lib/cli/main.js"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && copyfiles typings/*.d.ts ./dist",
     "pkg:publish": "npm run build && node npm/publish"
   },
   "author": "Ralf Hannuschka",
@@ -19,7 +19,8 @@
   "devDependencies": {
     "@types/node": "10.17.13",
     "@types/webpack": "4.41.2",
-    "ajv": "6.11.0"
+    "ajv": "6.11.0",
+    "copyfiles": "^2.2.0"
   },
   "dependencies": {
     "clean-webpack-plugin": "3.0.0",
@@ -43,5 +44,6 @@
     "webpack": "4.41.5",
     "webpack-cli": "3.3.10",
     "zip-webpack-plugin": "3.0.0"
-  }
+  },
+  "types": "./dist/typings/index.d.ts"
 }
