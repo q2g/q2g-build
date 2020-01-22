@@ -4,6 +4,7 @@ import { IQextData } from "./api";
 import { QextConfigurationException } from "./data/exception/qext-config.exception";
 import { QextConfigService } from "./services/qext-config.service";
 import { QextFileService } from "./services/qext-file.service";
+import { existsSync } from "fs";
 
 export class QextFileBuilder implements IBuilder {
 
@@ -47,7 +48,7 @@ export class QextFileBuilder implements IBuilder {
         });
 
         if ( hasError ) {
-            throw new QextConfigurationException( JSON.stringify(errors) );
+            throw new QextConfigurationException(JSON.stringify(errors));
         }
     }
 

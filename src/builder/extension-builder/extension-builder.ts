@@ -1,3 +1,4 @@
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
 import { Plugin } from "webpack";
@@ -5,6 +6,7 @@ import { IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
 import { WebpackBuilder } from "../webpack-builder";
 import { WebpackConfigModel } from "../webpack-builder/model";
+import { LogPlugin } from "../webpack-builder/plugins/log.plugin";
 import { CopyWebpackPlugin, PathOverridePlugin, QextFilePlugin, ZipWebpackPlugin } from "./plugins";
 import { DeployExtensionPlugin } from "./plugins/ci/ci.plugin";
 import { ExtensionService } from "./service/extension.service";
@@ -41,6 +43,7 @@ export class ExtensionBuilder extends WebpackBuilder {
 
         this.webpackService.getConfig().setExternalModules([
             { angular: "angular" },
+            { jquery: "jquery" },
             { qlik: "qlik" },
             { qvangular: "qvangular" },
         ]);
@@ -78,21 +81,24 @@ export class ExtensionBuilder extends WebpackBuilder {
      */
     protected loadWebpackPlugins(): Plugin[] {
 
-        let plugins = super.loadWebpackPlugins();
+        // let plugins = super.loadWebpackPlugins();
         const config = this.webpackService.getConfig();
         const fileName = config.getOutFileName();
         const outDir = config.getOutDirectory();
 
-        plugins = plugins.concat([
+        const plugins = [
+            new LogPlugin(),
+            new CleanWebpackPlugin({
+                cleanAfterEveryBuildPatterns: ["!**/wbfolder.wbl"],
+            }),
             new PathOverridePlugin(/\/umd\//, "/esm/"),
             new CopyWebpackPlugin(this.getBinaryFiles()),
-            new QextFilePlugin(
-                this.extensionService.getQextConfiguration()),
+            new QextFilePlugin(this.extensionService.getQextConfiguration()),
             new ZipWebpackPlugin({
                 filename: `${fileName}.zip`,
                 path: outDir,
             }),
-        ]);
+        ];
 
         if (config.getCi()) {
             plugins.push(this.createDeployPlugin(fileName));
@@ -127,10 +133,7 @@ export class ExtensionBuilder extends WebpackBuilder {
      * @param name
      */
     private createDeployPlugin(name: string): DeployExtensionPlugin {
-
         const config: WebpackConfigModel = this.webpackService.getConfig();
-        const configDirectory = resolve(config.getProjectSource());
-
         return new DeployExtensionPlugin(config.getOutFileName(), config.getOutDirectory(), this.getCIConfiguration());
     }
 

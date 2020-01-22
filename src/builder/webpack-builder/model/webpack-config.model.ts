@@ -1,4 +1,3 @@
-import { basename } from "path";
 import { Module, Options, Plugin } from "webpack";
 import { IDataNode } from "../../../api/data-node";
 import { ConfigModel } from "../../../model/config.model";

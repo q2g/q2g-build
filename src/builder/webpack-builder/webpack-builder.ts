@@ -1,4 +1,4 @@
-import CleanWebpackPlugin from "clean-webpack-plugin";
+import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import { basename, resolve } from "path";
 import * as TerserWebpackPlugin from "terser-webpack-plugin";
 import { Compiler, Module, Plugin } from "webpack";
@@ -73,8 +73,9 @@ export class WebpackBuilder implements IBuilder {
             resolve(environment.builderRoot, "./node_modules"), // loaders in node_modules folder from q2g-build
             resolve(environment.projectRoot, "./node_modules"), // loaders in project root node_modules folder
             /** only for local development */
-            resolve(environment.builderRoot, "./src/node_modules"), // loaders in node_modules folder from q2g-build
+            resolve(environment.builderRoot, "./src/node_modules"), // loaders in node_modules folder from q2g-build,
         ]);
+
         settings.setPackageName(environment.projectName);
     }
 
@@ -113,7 +114,7 @@ export class WebpackBuilder implements IBuilder {
 
             if (watch) {
                 const watchOptions: Compiler.WatchOptions = {
-                    ignored: ["**/*.js", "**/node_modules"],
+                    ignored: [webPackConfig.getOutDirectory(), "**/node_modules"],
                 };
                 /** start watch mode */
                 compiler.watch(watchOptions, handler);
@@ -183,10 +184,13 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     protected loadWebpackPlugins(): Plugin[] {
-        const outDir = this.webpackService.getConfig().getOutDirectory();
+
+        /** cast to any to fix typings */
+        const cleanWebpackPlugin: Plugin = new CleanWebpackPlugin() as any;
+
         const plugins: Plugin[] = [
             new LogPlugin(),
-            new CleanWebpackPlugin(),
+            cleanWebpackPlugin,
         ];
         return plugins;
     }

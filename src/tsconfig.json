@@ -14,13 +14,8 @@
             "es6"
         ],
         "paths": {
-            "@builder/*": ["./builder/*"],
-        },
-        "typeRoots": [
-            "node_modules/@types",
-            "typings"
-        ],
-        "types": ["node", "webpack"]
+            "@builder/*": ["./builder/*"]
+        }
     },
     "exclude": [
         "node_modules",
@@ -28,6 +23,6 @@
         "**/*.js"
     ],
     "include": [
-       "**/*.ts",
+       "**/*.ts"
     ]
 }

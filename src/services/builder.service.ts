@@ -100,8 +100,10 @@ export class BuilderService {
                 }
         }
 
+        const builderRootDirectory = env.builderRoot || this.resolveBuilderRootDir();
+
         builder.initialize({
-            builderRoot: env.builderRoot || this.resolveBuilderRootDir(),
+            builderRoot: builderRootDirectory ,
             environment: env.environment || "development",
             projectName: env.projectName || "q2g-project",
             projectRoot: env.projectRoot || ".",

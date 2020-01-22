@@ -18,6 +18,7 @@ export class QextFileService {
         if (!existsSync(outDirectory)) {
             this.createDirectory(outDirectory);
         }
+
         writeFileSync(filePath, JSON.stringify(data, null, 4), { encoding: "utf8" });
         return filePath;
     }

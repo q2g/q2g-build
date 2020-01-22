@@ -1,4 +1,4 @@
-import { Configuration, Options } from "webpack";
+import { Configuration } from "webpack";
 import { WebpackService } from "../service/webpack.service";
 
 const config = WebpackService.getInstance().getConfig();
