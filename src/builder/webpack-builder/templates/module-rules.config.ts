@@ -6,7 +6,7 @@ const config = WebpackService.getInstance().getConfig();
 const moduleRules: Module = {
     rules: [{
         sideEffects: false,
-        test: /\.(tsx?|js)$/,
+        test: /\.js$/,
         use: [
             { loader: "clean-requirejs-imports.loader" },
             { loader: "sanitize-html-imports.loader" },
@@ -28,15 +28,19 @@ const moduleRules: Module = {
     }, {
         sideEffects: true,
         test: /.*\.tsx?$/,
-        use: [{
-            loader: "ts-loader",
-            options: {
-                compilerOptions: {
-                    outDir: ".",
+        use: [
+            {
+                loader: "ts-loader",
+                options: {
+                    compilerOptions: {
+                        outDir: ".",
+                    },
+                    configFile: config.getTsConfigFile(),
                 },
-                configFile: config.getTsConfigFile(),
             },
-        }],
+            { loader: "clean-requirejs-imports.loader" },
+            { loader: "sanitize-html-imports.loader" },
+        ],
     }, {
         sideEffects: true,
         test: /\.scss$/,
