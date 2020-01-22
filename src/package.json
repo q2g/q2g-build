@@ -10,10 +10,14 @@
   "bin": {
     "q2gb": "./dist/lib/cli/main.js"
   },
+  "repository": {
+    "url": "git+https://github.com/q2g/q2g-build.git",
+    "type": "git"
+  },
+  "homepage": "https://github.com/q2g/q2g-build#readme",
   "scripts": {
     "build": "tsc && copyfiles typings/*.d.ts ./dist",
-    "prepublish": "npm run build && copyfiles ../readme.md ./dist/readme.md",
-    "publish": "npm publish"
+    "pkg:publish": "npm run build && npm publish"
   },
   "author": "Ralf Hannuschka",
   "license": "ISC",
