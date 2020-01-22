@@ -16,13 +16,13 @@ Special Thanks to **Lucas Schroth** from Akquinet for feedback and improving q2g
 |--env|false| development, production | set environment, default value _development_ |
 | --sourceRoot | false | ./src | relative path where to find source files. Default value _projectRoot_ |
 
-```
+```json
 package.json
 {
     ...
     "scripts": {
         "build:tsc": node node_modules/q2g-build --builder tsc --config ./q2g-tsc.json --sourceRoot ./src
-        "build:web": node node_modules/q2g-build --builder webpack --config ./q2g-webpack.json 
+        "build:web": node node_modules/q2g-build --builder webpack --config ./q2g-webpack.json
     }
     ...
 }

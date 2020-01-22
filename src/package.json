@@ -12,7 +12,8 @@
   },
   "scripts": {
     "build": "tsc && copyfiles typings/*.d.ts ./dist",
-    "pkg:publish": "npm run build && node npm/publish"
+    "prepublish": "npm run build && copyfiles ../readme.md ./dist/readme.md",
+    "publish": "npm publish"
   },
   "author": "Ralf Hannuschka",
   "license": "ISC",
