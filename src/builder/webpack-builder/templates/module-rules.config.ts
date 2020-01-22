@@ -6,14 +6,11 @@ const config = WebpackService.getInstance().getConfig();
 const moduleRules: Module = {
     rules: [{
         sideEffects: false,
-        test: /\.(tsx?|js)$/,
-        use: [{
-            /**
-             * remove all require js import css loader plugins
-             * otherwise bundle will fail
-             */
-            loader: "clean-requirejs-imports.loader",
-        }],
+        test: /\.js$/,
+        use: [
+            { loader: "clean-requirejs-imports.loader" },
+            { loader: "sanitize-html-imports.loader" },
+        ],
     }, {
         test: /text!.*\.html$/,
         use: [{
@@ -32,15 +29,16 @@ const moduleRules: Module = {
         sideEffects: true,
         test: /.*\.tsx?$/,
         use: [
-        {
-            loader: "ts-loader",
-            options: {
-                compilerOptions: {
-                    outDir: ".",
+            {
+                loader: "ts-loader",
+                options: {
+                    compilerOptions: {
+                        outDir: ".",
+                    },
+                    configFile: config.getTsConfigFile(),
                 },
-                configFile: config.getTsConfigFile(),
             },
-        },
+            { loader: "clean-requirejs-imports.loader" },
             { loader: "sanitize-html-imports.loader" },
         ],
     }, {
