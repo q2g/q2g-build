@@ -16,23 +16,19 @@ Create new extensions (or open existing one)
 npm i -g q2g-build
 
 # create extension base directory
-mkdir test-textension
-mkdir test-extension\src
-cd test-extensions
-
-# initialize npm package to create a package.json file
-# and install q2g-build so we can build packages
-npm init
-npm i --save-dev q2g-build
-
-# create empty tsconfig.json file which will used by q2gb
-# you could also use tsc --init requires typescript installed globally
-copy NUL > tsconfig.json
+mkdir q2g-demo-extension
+mkdir q2g-demo-extension\extension
 
 # create extension specific files
-copy NUL > src\index.ts
-copy NUL > src\index.html
-copy NUL > src\index.css
+copy NUL > q2g-demo-extension\tsconfig.json # or tsc --init in q2g-demo-extension directory
+copy NUL > q2g-demo-extension\extension\index.ts
+copy NUL > q2g-demo-extension\extension\index.html
+copy NUL > q2g-demo-extension\index.css # you could also use scss / less
+
+cd q2g-demo-extension
+
+npm init
+npm i --save-dev q2g-build
 ```
 
 ### update tsconfig.json
@@ -70,6 +66,7 @@ export = {
         exportData: false
     },
     controller: ["$scope", "$element", ($scope: any, $element) => {
+        /** angularjs code goes here */
     }]
 };
 ```
@@ -77,17 +74,24 @@ export = {
 extension/index.html
 
 ```html
-<div class="extension-body">
-    Hello Qlik to go build
+<h1>Qlik 2 Go Demo Extension</h1>
+<div class="message-box">
+    welcome to qlik extensions
 </div>
+```
+
+extension/index.css
+
+```css
+.message-box {
+    color: blue;
+}
 ```
 
 ### Use q2gb cli
 
-You can allways create all required configuration files by your own if you want, but we will use q2gb cli which helps us to create required configuration files. It also updates the package json and add:
-
-1. scripts
-2. qext informations
+You can allways create all required configuration files by your own if you want, but we will use q2gb cli which helps us to create required configuration files.
+It also updates the package json and add required npm scripts to start build process (dev and prod), also qext file informations.
 
 ```bash
 C:\Users\rhannuschka\work\q2g-demo-extension>q2gb --init extension
@@ -147,6 +151,12 @@ npm run q2g-build:dev
 # production mode, file will minimized
 npm run q2g-build:prod
 ```
+
+> It is also possible to create only a webpack build.
+>
+> ```bash
+> q2gb --init webpack
+> ```
 
 Special Thanks to **Lucas Schroth** from Akquinet for feedback and improving q2g-build process.
 
