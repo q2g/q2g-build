@@ -66,9 +66,6 @@ const moduleRules: Module = {
         test: /\.css$/,
         use: [{
             loader: "style-loader",
-            options: {
-                convertToAbsoluteUrls: true,
-            },
         }, {
             loader: "css-loader",
             options: {

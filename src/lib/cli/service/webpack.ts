@@ -5,7 +5,7 @@ import {
     ICommandLineResult,
 } from "../api/cmdline-observer";
 import { Namespaces } from "../api/namespaces";
-import { TS_CONFIG, TS_CONFIG_FILE_NAME } from "../model/tsconfig";
+import { CI_CONFIG, CI_CONFIG_FILE_NAME, TS_CONFIG, TS_CONFIG_FILE_NAME } from "../model/tsconfig";
 import WebpackProperties from "../model/webpack/webpack-properties";
 import { WebpackModel } from "../model/webpack/webpack-properties.model";
 import { CommandlineReader } from "./cmdline-reader";
@@ -14,11 +14,11 @@ import { PackageJsonWriter } from "./package-json.writer";
 
 export class Webpack implements ICommandLineReaderObserver {
 
+    protected model: WebpackModel;
+
+    protected fileWriter: FileWriter;
+
     private reader: CommandlineReader;
-
-    private model: WebpackModel;
-
-    private fileWriter: FileWriter;
 
     private pkgJsonWriter: PackageJsonWriter;
 
@@ -102,7 +102,7 @@ export class Webpack implements ICommandLineReaderObserver {
      * @private
      * @memberof Webpack
      */
-    private writeJsonConfigFile() {
+    protected writeJsonConfigFile() {
         this.fileWriter.write(
             "q2g-build.webpack.json",
             `${JSON.stringify(this.model.raw, null, 4)}\n`,

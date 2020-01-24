@@ -27,14 +27,6 @@ export const QextProperties: ICommandLineBuilderData = {
                 return value.length > 0;
             },
         },
-        {
-            name: "continuesIntegration",
-            text: "Qext$ enable continues integration",
-            validator: (value) => {
-                return value.length > 0;
-            },
-            value: "false",
-        },
     ],
     namespace: Namespaces.QEXT,
 };

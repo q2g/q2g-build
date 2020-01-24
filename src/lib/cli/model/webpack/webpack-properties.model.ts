@@ -25,7 +25,7 @@ export class WebpackModel {
     }
 
     public set watch(enabled: boolean | string) {
-        this.webpackWatch = !isBoolean(enabled) ? enabled === "true" : enabled;
+        this.webpackWatch = !!enabled;
     }
 
     public get raw() {

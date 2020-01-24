@@ -146,6 +146,5 @@ export class ExtensionBuilder extends WebpackBuilder {
         });
 
         return JSON.parse(config);
-
     }
 }
