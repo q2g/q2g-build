@@ -14,4 +14,4 @@ export const CI_CONFIG = {
 };
 
 export const TS_CONFIG_FILE_NAME = "q2g-build.tsconfig.json";
-export const CI_CONFIG_FILE_NAME = "q2g-build.ci.json";
+export const CI_CONFIG_FILE_NAME = "q2g-ci.config.json";
