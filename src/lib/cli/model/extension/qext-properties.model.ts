@@ -17,8 +17,8 @@ export class QextPropertiesModel {
         this.extensionType = type;
     }
 
-    public set ci(type: string) {
-        this.extensionCi = type === "true";
+    public set ci(enabled: boolean) {
+        this.extensionCi = !!enabled;
     }
 
     /**
