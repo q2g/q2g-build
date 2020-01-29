@@ -5,7 +5,7 @@ import { Compiler, Module, Plugin } from "webpack";
 import { IBuilder, IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
 import { WebpackConfigModel } from "./model/webpack-config.model";
-import { LogPlugin } from "./plugins";
+import { CopyWebpackPlugin, LogPlugin } from "./plugins";
 import { WebpackService } from "./service/webpack.service";
 
 /**
@@ -44,12 +44,10 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     public configure(config: any): void {
-
         /** hotfix rewrite entry file to be an object, se we can apply multiple entry files */
         const entryFile = {};
-        entryFile[config.outFileName || basename(config.entryFile, "ts")] = config.entryFile;
+        entryFile[config.outFileName || basename(config.entryFile, "ts")] = resolve(config.rootDir, config.entryFile),
         config.entryFile = entryFile;
-
         this.webpackService.setOptions({
             ...this.initialConfig,
             ...config,
@@ -184,13 +182,11 @@ export class WebpackBuilder implements IBuilder {
      * @memberof WebpackBuilder
      */
     protected loadWebpackPlugins(): Plugin[] {
-
         /** cast to any to fix typings */
-        const cleanWebpackPlugin: Plugin = new CleanWebpackPlugin() as any;
-
         const plugins: Plugin[] = [
             new LogPlugin(),
-            cleanWebpackPlugin,
+            new CleanWebpackPlugin(this.getCleanWebpackPluginOptions()),
+            new CopyWebpackPlugin(this.getCopyWebpackPluginAssets()),
         ];
         return plugins;
     }
@@ -205,5 +201,18 @@ export class WebpackBuilder implements IBuilder {
     protected async loadModuleRules(): Promise<Module> {
         const moduleRules: any = await import("./templates/module-rules.config");
         return moduleRules.default;
+    }
+
+    protected getCleanWebpackPluginOptions(): IDataNode {
+        return {};
+    }
+
+    protected getCopyWebpackPluginAssets(): IDataNode[] {
+        const binaries = this.webpackService.getConfig().getBinaries();
+        if (binaries && Array.isArray(binaries)) {
+            const rootDir  = this.webpackService.getConfig().getRootDir();
+            return binaries.map((binary) => ({ from: `${rootDir}/${binary}`, to: binary }));
+        }
+        return [];
     }
 }

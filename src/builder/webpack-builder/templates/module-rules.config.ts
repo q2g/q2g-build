@@ -12,15 +12,17 @@ const moduleRules: Module = {
             { loader: "sanitize-html-imports.loader" },
         ],
     }, {
-        test: /text!.*\.html$/,
-        use: [{
-            loader: "raw-loader",
-        }],
-    }, {
         test: /.*\.html$/,
-        use: [{
-            loader: "raw-loader",
-        }],
+        use: [
+            {
+                loader: "image-to-base64.loader",
+            },
+            {
+                loader: "html-loader",
+                options: {
+                }
+            },
+        ],
     }, {
         loader: "json-loader",
         test: /\.json/,
@@ -113,10 +115,6 @@ const moduleRules: Module = {
             publicPath: `${config.getOutDirectory()}/fonts`,
         },
         test: /\.svg$/,
-    }, {
-        loader: "url-loader",
-        options: { limit: 10000 },
-        test: /\.(png|jpg|gif)$/,
     }],
 };
 
