@@ -22,7 +22,7 @@
   "author": "Ralf Hannuschka",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "10.17.14",
+    "@types/node": "10.17.60",
     "@types/webpack": "4.41.3",
     "ajv": "6.11.0"
   },
