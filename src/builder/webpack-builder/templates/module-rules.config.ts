@@ -1,9 +1,9 @@
-import { Module } from "webpack";
+import { Module, ModuleOptions } from "webpack";
 import { WebpackService } from "../service/webpack.service";
 
 const config = WebpackService.getInstance().getConfig();
 
-const moduleRules: Module = {
+const moduleRules: ModuleOptions = {
     rules: [{
         sideEffects: false,
         test: /\.js$/,

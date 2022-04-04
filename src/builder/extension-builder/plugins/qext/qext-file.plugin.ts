@@ -1,6 +1,6 @@
 import { readFileSync, statSync, existsSync } from "fs";
 import { basename } from "path";
-import { compilation, Compiler } from "webpack";
+import { Compiler, Compilation } from "webpack";
 import { IQextData } from "../../../qext-file-builder/api";
 import { QextFileBuilder } from "../../../qext-file-builder/qext-file.builder";
 
@@ -29,7 +29,7 @@ export class QextFilePlugin {
      */
     private registerAfterCompilationHook(compiler: Compiler) {
         compiler.hooks.afterCompile.tapAsync("QextAfterCompile", async (
-            comp: compilation.Compilation,
+            comp: any, // ToDo rebuild to Compilation Type
             callback,
         ) => {
             const filePath = await this.qextBuilder.run();
@@ -45,6 +45,7 @@ export class QextFilePlugin {
                     /** file not exists anymore ...  */
                     return fileContent;
                 },
+                
             };
             callback();
         });

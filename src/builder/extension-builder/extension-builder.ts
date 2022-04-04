@@ -1,7 +1,8 @@
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
+import { Pattern, PluginOptions } from "copy-webpack-plugin";
 import { existsSync, readFileSync } from "fs";
 import { resolve } from "path";
-import { Plugin } from "webpack";
+import { ExternalsPlugin } from "webpack";
 import { IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
 import { WebpackBuilder } from "../webpack-builder";
@@ -79,7 +80,7 @@ export class ExtensionBuilder extends WebpackBuilder {
      * @returns {Plugin[]}
      * @memberof WebpackBuilder
      */
-    protected loadWebpackPlugins(): Plugin[] {
+    protected loadWebpackPlugins(): ExternalsPlugin[] {
 
         // let plugins = super.loadWebpackPlugins();
         const config = this.webpackService.getConfig();
@@ -92,7 +93,9 @@ export class ExtensionBuilder extends WebpackBuilder {
                 cleanAfterEveryBuildPatterns: ["!**/wbfolder.wbl"],
             }),
             new PathOverridePlugin(/\/umd\//, "/esm/"),
-            new CopyWebpackPlugin(this.getBinaryFiles()),
+            new CopyWebpackPlugin({
+                patterns: this.getBinaryFiles()
+            }),
             new QextFilePlugin(this.extensionService.getQextConfiguration()),
             new ZipWebpackPlugin({
                 filename: `${fileName}.zip`,
@@ -111,10 +114,10 @@ export class ExtensionBuilder extends WebpackBuilder {
      * get binary files which should copy to dist folder
      *
      * @private
-     * @returns {IDataNode[]}
+     * @returns {Pattern[]}
      * @memberof ExtensionBuilder
      */
-    private getBinaryFiles(): IDataNode[] {
+    private getBinaryFiles(): Pattern[] {
 
         const binFiles = [
             { from: "wbfolder.wbl", to: "wbfolder.wbl" },
