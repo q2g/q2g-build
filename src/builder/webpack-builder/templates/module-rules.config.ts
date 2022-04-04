@@ -74,40 +74,50 @@ const moduleRules: ModuleOptions = {
             },
         }],
     }, {
-        loader: "url-loader?limit=100000&mimetype=application/vnd.ms-fontobject",
+        loader: "url-loader",
         options: {
+            limit: 100000,
+            mimetype: "application/vnd.ms-fontobject",
             name: "[name].[ext]",
             outputPath: "fonts/",
             publicPath: `${config.getOutDirectory()}/fonts`,
         },
         test: /\.eot$/,
     }, {
-        loader: "url-loader?limit=100000&mimetype=application/font-woff2",
+        loader: "url-loader",
         options: {
+            limit: 100000,
+            mimetype: "application/font-woff2",
             name: "[name].[ext]",
             outputPath: "fonts/",
             publicPath: `${config.getOutDirectory()}/fonts`,
         },
         test: /\.woff2$/,
     }, {
-        loader: "url-loader?limit=100000&mimetype=application/font-woff",
+        loader: "url-loader",
         options: {
+            limit: 100000,
+            mimetype: "application/font-woff",
             name: "[name].[ext]",
             outputPath: "fonts",
             publicPath: `${config.getOutDirectory()}/fonts`,
         },
         test: /\.woff$/,
     }, {
-        loader: "url-loader?limit=100000&mimetype=application/font-ttf",
+        loader: "url-loader",
         options: {
+            limit: 100000,
+            mimetype: "application/font-ttf",
             name: "[name].[ext]",
             outputPath: "fonts",
             publicPath: `${config.getOutDirectory()}/fonts`,
         },
         test: /\.ttf$/,
     }, {
-        loader: "url-loader?limit=100000&mimetype=image/svg+xml",
+        loader: "url-loader",
         options: {
+            limit: 100000,
+            mimetype: "image/svg+xml",
             name: "[name].[ext]",
             outputPath: "fonts",
             publicPath: `${config.getOutDirectory()}/fonts`,
@@ -115,7 +125,9 @@ const moduleRules: ModuleOptions = {
         test: /\.svg$/,
     }, {
         loader: "url-loader",
-        options: { limit: 10000 },
+        options: {
+            limit: 10000
+        },
         test: /\.(png|jpg|gif)$/,
     }],
 };

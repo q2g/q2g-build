@@ -92,7 +92,7 @@ export class ExtensionBuilder extends WebpackBuilder {
             new CleanWebpackPlugin({
                 cleanAfterEveryBuildPatterns: ["!**/wbfolder.wbl"],
             }),
-            new PathOverridePlugin(/\/umd\//, "/esm/"),
+            // new PathOverridePlugin(/\/umd\//, "/esm/"),
             new CopyWebpackPlugin({
                 patterns: this.getBinaryFiles()
             }),
