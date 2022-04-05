@@ -10,8 +10,6 @@ import { ConfigModel } from "../../../model/config.model";
  */
 export class WebpackConfigModel extends ConfigModel {
 
-    private binaries: string[] = [];
-
     /**
      * envrionment
      *
@@ -115,8 +113,6 @@ export class WebpackConfigModel extends ConfigModel {
 
     private extensionCi: boolean;
 
-    private rootDir: string;
-
     /**
      * get source directory which where the project is located
      *
@@ -205,22 +201,6 @@ export class WebpackConfigModel extends ConfigModel {
      */
     public getPlugins(): ExternalsPlugin[] {
         return this.plugins;
-    }
-
-    public setRootDir(path: string) {
-        this.rootDir = path;
-    }
-
-    public getRootDir(): string {
-        return this.rootDir;
-    }
-
-    public setBinaries(paths: string[]) {
-        this.binaries = paths;
-    }
-
-    public getBinaries(): string[] {
-        return this.binaries;
     }
 
     /**

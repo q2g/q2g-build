@@ -3,10 +3,6 @@ import { ValidationHelper } from "../../../helper";
 
 export const WebpackOptionRules: IOptionRuleSet  = {
 
-    rootDir: {
-        required: true,
-    },
-
     entryFile: {
         required: true,
     },
@@ -23,17 +19,6 @@ export const WebpackOptionRules: IOptionRuleSet  = {
     outFileName: {
         required: false,
         validatorFn: ValidationHelper.notEmptyAndNoWhitespace,
-    },
-
-    binaries: {
-        required: false,
-        validatorFn: (value) => {
-            const isValid = Array.isArray(value);
-            return {
-                error: isValid ? [] : ["requires an array of relative paths, files"],
-                isValid,
-            };
-        },
     },
 
     watch: {

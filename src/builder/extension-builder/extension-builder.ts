@@ -86,8 +86,15 @@ export class ExtensionBuilder extends WebpackBuilder {
         const config = this.webpackService.getConfig();
         const fileName = config.getOutFileName();
         const outDir = config.getOutDirectory();
+
         const plugins = [
-            ...super.loadWebpackPlugins(),
+            new LogPlugin(),
+            new CleanWebpackPlugin({
+                cleanAfterEveryBuildPatterns: ["!**/wbfolder.wbl"],
+            }),
+            new CopyWebpackPlugin({
+                patterns: this.getBinaryFiles()
+            }),
             new QextFilePlugin(this.extensionService.getQextConfiguration()),
             new ZipWebpackPlugin({
                 filename: `${fileName}.zip`,
@@ -98,24 +105,27 @@ export class ExtensionBuilder extends WebpackBuilder {
         if (config.getCi()) {
             plugins.push(this.createDeployPlugin(fileName));
         }
+
         return plugins;
     }
 
-    protected getCleanWebpackPluginOptions(): IDataNode {
-        const options = super.getCleanWebpackPluginOptions();
-        return {...options, cleanAfterEveryBuildPatterns: ["!**/wbfolder.wbl"]};
-    }
+    /**
+     * get binary files which should copy to dist folder
+     *
+     * @private
+     * @returns {Pattern[]}
+     * @memberof ExtensionBuilder
+     */
+    private getBinaryFiles(): Pattern[] {
 
-    protected getCopyWebpackPluginAssets(): Pattern[] {
-        const copyPaths = super.getCopyWebpackPluginAssets();
-        const binFiles  = [
-            ...copyPaths,
+        const binFiles = [
             { from: "wbfolder.wbl", to: "wbfolder.wbl" },
         ];
 
         if (existsSync(resolve(this.webpackService.getConfig().getProjectRoot(), "preview.png"))) {
             binFiles.push({ from: "preview.png", to: "preview.png" });
         }
+
         return binFiles;
     }
 
