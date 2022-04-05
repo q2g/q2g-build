@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import { compilation, Compiler } from "webpack";
+import { Compilation, Compiler } from "webpack";
 import { ICiConfig } from "../../api/ci-config.interface";
 import { IExtensionFile } from "../../api/extensionFile.interface";
 import { DesktopService } from "../../service/desktop.service";
@@ -30,7 +30,7 @@ export class DeployExtensionPlugin {
         // this breaks the watcher
         compiler.hooks.afterEmit.tapAsync(
             "ExtensionDone",
-            async (comp: compilation.Compilation, callback) => {
+            async (comp: Compilation, callback) => {
 
                 if (typeof (this.config.desktop) !== "undefined") {
                     const files: IExtensionFile[] = [];

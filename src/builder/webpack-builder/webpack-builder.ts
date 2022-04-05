@@ -1,7 +1,7 @@
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import { basename, resolve } from "path";
 import * as TerserWebpackPlugin from "terser-webpack-plugin";
-import { Compiler, Module, Plugin } from "webpack";
+import { Compiler, Module, AutomaticPrefetchPlugin, ModuleOptions } from "webpack";
 import { IBuilder, IBuilderEnvironment } from "../../api";
 import { IDataNode } from "../../api/data-node";
 import { WebpackConfigModel } from "./model/webpack-config.model";
@@ -96,9 +96,9 @@ export class WebpackBuilder implements IBuilder {
         const webPackConfig      = this.webpackService.getConfig();
         const watch              = webPackConfig.getWatch() && webPackConfig.getEnvironment() === "development";
 
-        return new Promise(async (finalize, reject) => {
+        return new Promise<void>(async (finalize, reject) => {
             /** handler if build has finished */
-            const handler: Compiler.Handler = (err) => {
+            const handler: any = (err) => {
                 if (err) {
                     process.stderr.write(err.toString());
                     if (!watch) {
@@ -113,7 +113,7 @@ export class WebpackBuilder implements IBuilder {
             };
 
             if (watch) {
-                const watchOptions: Compiler.WatchOptions = {
+                const watchOptions: any = {
                     ignored: [webPackConfig.getOutDirectory(), "**/node_modules"],
                 };
                 /** start watch mode */
@@ -183,12 +183,12 @@ export class WebpackBuilder implements IBuilder {
      * @returns {Plugin[]}
      * @memberof WebpackBuilder
      */
-    protected loadWebpackPlugins(): Plugin[] {
+    protected loadWebpackPlugins(): AutomaticPrefetchPlugin[] {
 
         /** cast to any to fix typings */
-        const cleanWebpackPlugin: Plugin = new CleanWebpackPlugin() as any;
+        const cleanWebpackPlugin: AutomaticPrefetchPlugin = new CleanWebpackPlugin() as any;
 
-        const plugins: Plugin[] = [
+        const plugins: AutomaticPrefetchPlugin[] = [
             new LogPlugin(),
             cleanWebpackPlugin,
         ];
@@ -202,7 +202,7 @@ export class WebpackBuilder implements IBuilder {
      * @returns {Promise<IDataNode>}
      * @memberof WebpackBuilder
      */
-    protected async loadModuleRules(): Promise<Module> {
+    protected async loadModuleRules(): Promise<ModuleOptions> {
         const moduleRules: any = await import("./templates/module-rules.config");
         return moduleRules.default;
     }
