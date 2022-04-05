@@ -1,4 +1,4 @@
-import { Compiler, Plugin, Stats } from "webpack";
+import { Compiler, AutomaticPrefetchPlugin, Stats, StatsCompilation } from "webpack";
 import { IDataNode } from "../../../api/data-node";
 
 /**
@@ -8,7 +8,7 @@ import { IDataNode } from "../../../api/data-node";
  * @class LogPlugin
  * @implements {Plugin}
  */
-export class LogPlugin implements Plugin {
+export class LogPlugin implements AutomaticPrefetchPlugin {
 
     /**
      * entry point for webpack plugins
@@ -27,7 +27,7 @@ export class LogPlugin implements Plugin {
                 return;
             }
 
-            const statsJson: Stats.ToJsonOutput = result.toJson();
+            const statsJson: StatsCompilation = result.toJson();
             process.stderr.write(JSON.stringify(statsJson.errors, null, 4));
         });
     }

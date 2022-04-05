@@ -1,4 +1,4 @@
-import { Module, Options, Plugin } from "webpack";
+import { Module, ExternalsPlugin, ModuleOptions } from "webpack";
 import { IDataNode } from "../../../api/data-node";
 import { ConfigModel } from "../../../model/config.model";
 
@@ -54,7 +54,7 @@ export class WebpackConfigModel extends ConfigModel {
      * @type {IDataNode}
      * @memberof WebpackConfigModel
      */
-    private webpackModuleRules: Module;
+    private webpackModuleRules: ModuleOptions;
 
     /**
      * context paths to tell webpack where to find specific loaders
@@ -73,7 +73,7 @@ export class WebpackConfigModel extends ConfigModel {
      * @type {Options.Optimization}
      * @memberof WebpackConfigModel
      */
-    private optimization: Options.Optimization;
+    private optimization: any;
 
     /**
      * out file name where bundle is saved to
@@ -100,7 +100,7 @@ export class WebpackConfigModel extends ConfigModel {
      * @type {Plugin[]}
      * @memberof WebpackConfigModel
      */
-    private plugins: Plugin[];
+    private plugins: ExternalsPlugin[];
 
     /**
      *  watchmode enabled or disabled
@@ -159,7 +159,7 @@ export class WebpackConfigModel extends ConfigModel {
      * @type {IDataNode}
      * @memberof WebpackConfigModel
      */
-    public get moduleRules(): Module {
+    public get moduleRules(): ModuleOptions {
         return this.webpackModuleRules;
     }
 
@@ -169,7 +169,7 @@ export class WebpackConfigModel extends ConfigModel {
      * @returns {Options.Optimization}
      * @memberof WebpackConfigModel
      */
-    public getOptimization(): Options.Optimization {
+    public getOptimization(): any {
         return this.optimization;
     }
 
@@ -199,7 +199,7 @@ export class WebpackConfigModel extends ConfigModel {
      * @returns {Plugin[]}
      * @memberof WebpackConfigModel
      */
-    public getPlugins(): Plugin[] {
+    public getPlugins(): ExternalsPlugin[] {
         return this.plugins;
     }
 
@@ -209,7 +209,7 @@ export class WebpackConfigModel extends ConfigModel {
      * @param {Options.Optimization} optimization
      * @memberof WebpackConfigModel
      */
-    public setOptimization(optimization: Options.Optimization) {
+    public setOptimization(optimization: any) {
         this.optimization = optimization;
     }
 
@@ -267,7 +267,7 @@ export class WebpackConfigModel extends ConfigModel {
         this.loaderContextPaths = paths;
     }
 
-    public set moduleRules(rules: Module) {
+    public set moduleRules(rules: ModuleOptions) {
         this.webpackModuleRules = rules;
     }
 
@@ -287,7 +287,7 @@ export class WebpackConfigModel extends ConfigModel {
      * @param {Plugin[]} plugins
      * @memberof WebpackConfigModel
      */
-    public setPlugins(plugins: Plugin[]) {
+    public setPlugins(plugins: ExternalsPlugin[]) {
         this.plugins = plugins;
     }
 
