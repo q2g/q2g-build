@@ -12,15 +12,17 @@ const moduleRules: ModuleOptions = {
             { loader: "sanitize-html-imports.loader" },
         ],
     }, {
-        test: /text!.*\.html$/,
-        use: [{
-            loader: "raw-loader",
-        }],
-    }, {
         test: /.*\.html$/,
-        use: [{
-            loader: "raw-loader",
-        }],
+        use: [
+            {
+                loader: "image-to-base64.loader",
+            },
+            {
+                loader: "html-loader",
+                options: {
+                }
+            },
+        ],
     }, {
         loader: "json-loader",
         test: /\.json/,
