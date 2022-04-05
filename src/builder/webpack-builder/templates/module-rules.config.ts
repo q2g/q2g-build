@@ -129,7 +129,16 @@ const moduleRules: ModuleOptions = {
             limit: 10000
         },
         test: /\.(png|jpg|gif)$/,
-    }],
+    }
+    , {
+        test: /\.ts$/,
+        loader: 'string-replace-loader',
+        options: {
+            search: 'umd/daVinci',
+            replace: 'esm/daVinci'
+        }
+    }
+],
 };
 
 export default moduleRules;

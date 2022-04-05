@@ -17,7 +17,7 @@ export class QextFilePlugin {
     }
 
     public apply(compiler: Compiler) {
-        this.registerAfterCompilationHook(compiler);
+        this.registerMakeHook(compiler);
     }
 
     /**
@@ -27,9 +27,9 @@ export class QextFilePlugin {
      * @param {Compiler} compiler
      * @memberof QextFilePlugin
      */
-    private registerAfterCompilationHook(compiler: Compiler) {
-        compiler.hooks.afterCompile.tapAsync("QextAfterCompile", async (
-            comp: any, // ToDo rebuild to Compilation Type
+    private registerMakeHook(compiler: Compiler) {
+        compiler.hooks.make.tapAsync("QextAfterCompile", async (
+            comp, // ToDo rebuild to Compilation Type
             callback,
         ) => {
             const filePath = await this.qextBuilder.run();
@@ -37,7 +37,7 @@ export class QextFilePlugin {
             const fileStats = statSync(filePath);
             const fileContent = readFileSync(filePath);
 
-            comp.assets[fileName] = {
+            (comp as any).assets[fileName] = {
                 size: () => {
                     return fileStats.size;
                 },

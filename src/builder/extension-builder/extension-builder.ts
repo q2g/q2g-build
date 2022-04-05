@@ -8,7 +8,7 @@ import { IDataNode } from "../../api/data-node";
 import { WebpackBuilder } from "../webpack-builder";
 import { WebpackConfigModel } from "../webpack-builder/model";
 import { LogPlugin } from "../webpack-builder/plugins/log.plugin";
-import { CopyWebpackPlugin, PathOverridePlugin, QextFilePlugin, ZipWebpackPlugin } from "./plugins";
+import { CopyWebpackPlugin, QextFilePlugin, ZipWebpackPlugin } from "./plugins";
 import { DeployExtensionPlugin } from "./plugins/ci/ci.plugin";
 import { ExtensionService } from "./service/extension.service";
 import { QrsService } from "./service/qrs.service";
@@ -92,7 +92,6 @@ export class ExtensionBuilder extends WebpackBuilder {
             new CleanWebpackPlugin({
                 cleanAfterEveryBuildPatterns: ["!**/wbfolder.wbl"],
             }),
-            // new PathOverridePlugin(/\/umd\//, "/esm/"),
             new CopyWebpackPlugin({
                 patterns: this.getBinaryFiles()
             }),
