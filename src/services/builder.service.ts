@@ -36,8 +36,7 @@ export class BuilderService {
      */
     private constructor() {
         if ( BuilderService.instance ) {
-            throw new Error(
-                "could not create instance of BuilderService. Use BuilderService.getInstance() instead");
+            throw new Error("could not create instance of BuilderService. Use BuilderService.getInstance() instead");
         }
         this.builders = new Map<string, IBuilder>();
         BuilderService.instance = this;
@@ -56,7 +55,7 @@ export class BuilderService {
             this.builders.set(key, builder);
             return;
         }
-        throw new Error(`builder with ${key} allready registered`);
+        throw new Error(`builder with ${key} already registered`);
     }
 
     /**
@@ -96,7 +95,7 @@ export class BuilderService {
                    builder = this.builders.get(builderType);
                 } else {
                     throw new Error(`Builder for ${builderType}
-                        does not exists please use one of these types [webpack, extension]`);
+                        does not exist; please use one of these types [webpack, extension]`);
                 }
         }
 

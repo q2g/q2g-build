@@ -4,14 +4,13 @@ import { isNullOrUndefined } from "util";
 import { IExtensionFile } from "../api/extensionFile.interface";
 
 export class DesktopService {
-
     public static get instance(): DesktopService {
         return DesktopService.desktopInstance;
     }
 
     private static desktopInstance: DesktopService = new DesktopService();
 
-    private defaultPath = `${homedir}\\Documents\\Qlik\\Sense\\Extensions\\`;
+    private defaultPath: string = `${homedir}\\Documents\\Qlik\\Sense\\Extensions\\`;
 
     public constructor() {
         if (DesktopService.desktopInstance) {
@@ -53,5 +52,4 @@ export class DesktopService {
             });
         });
     }
-
 }
