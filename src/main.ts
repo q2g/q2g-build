@@ -19,7 +19,7 @@ function loadFromFile(configFile: string): IDataNode {
 
     if ( ! existsSync(configFile) ) {
         throw new Error(
-            `configuration file ${configFile} not exists. Please check your
+            `configuration file ${configFile} does not exist. Please check your
             command line arguments for --config.\n\n`);
     }
 
