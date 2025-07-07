@@ -45,7 +45,7 @@ export class DesktopService {
     private writeFilePromise(path: string, file: string | Buffer): Promise<void> {
         return new Promise((resolveProm, reject) => {
             writeFile(path, file, (e) => {
-                if (!isNullOrUndefined(e)) {
+                if (!(e === null || e === undefined)) {
                     reject(e);
                 }
                 resolveProm();
