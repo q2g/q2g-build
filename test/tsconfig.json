@@ -1,21 +1,21 @@
 {
-  "extends": "../src/tsconfig.json",
-  "compilerOptions": {
-    "baseUrl": "./",
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "lib": [
-        "es6"
-    ],
-    "esModuleInterop": true,
-    "rootDir": ".",
-    "types": [ "chai", "mocha", "node" ],
-    "paths": {
-      "@src/*": ["../src/*"]
+    "extends": "../src/tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": "./",
+        "typeRoots": [
+            "./node_modules/@types"
+        ],
+        "lib": [
+            "es6"
+        ],
+        "esModuleInterop": true,
+        "rootDir": ".",
+        "types": [ "chai", "mocha", "node" ],
+        "paths": {
+            "@src/*": [ "../src/*" ]
+        },
     },
-  },
-  "include": [
-    "**/*.spec.ts"
-  ]
+    "include": [
+        "**/*.spec.ts"
+    ]
 }

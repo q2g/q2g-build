@@ -14,7 +14,7 @@
             "es6"
         ],
         "paths": {
-            "@builder/*": ["./builder/*"]
+            "@builder/*": [ "./builder/*" ]
         }
     },
     "exclude": [
@@ -23,6 +23,6 @@
         "**/*.js"
     ],
     "include": [
-       "**/*.ts"
+        "**/*.ts"
     ]
 }

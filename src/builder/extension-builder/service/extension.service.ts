@@ -1,6 +1,5 @@
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import { isArray } from "util";
 import { IDataNode } from "../../../api/data-node";
 import { IQextData } from "../../qext-file-builder/api";
 import { WebpackService } from "../../webpack-builder/service/webpack.service";
@@ -66,7 +65,7 @@ export class ExtensionService {
      */
     public async extensionExists(name: string): Promise<boolean> {
         const extensions = await this.qrsService.fetchExtension(name);
-        return isArray(extensions) && extensions.length > 0;
+        return Array.isArray(extensions) && extensions.length > 0;
     }
 
     public importExtension(name: string, file: Buffer) {
