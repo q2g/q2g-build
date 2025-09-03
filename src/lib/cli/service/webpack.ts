@@ -88,9 +88,9 @@ export class Webpack implements ICommandLineReaderObserver {
      */
     protected writeBuildScripts(configFileName: string) {
         const scripts = {
-            "q2g-build:dev": `node node_modules/q2g-build --builder webpack --config ${configFileName}`,
+            "q2g-build:dev": `node node_modules/q2g-build-bak --builder webpack --config ${configFileName}`,
             // tslint:disable-next-line:max-line-length
-            "q2g-build:prod": `node node_modules/q2g-build --builder webpack --env production --config ${configFileName}`,
+            "q2g-build:prod": `node node_modules/q2g-build-bak --builder webpack --env production --config ${configFileName}`,
         };
 
         this.pkgJsonWriter.write("scripts", scripts);

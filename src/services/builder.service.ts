@@ -83,7 +83,6 @@ export class BuilderService {
      * @memberof BuilderService
      */
     public createBuilder(builderType: string, env: IBuilderEnvironment): IBuilder {
-
         let builder: IBuilder;
 
         switch (builderType) {
@@ -94,8 +93,7 @@ export class BuilderService {
                 if ( this.builders.has(builderType) ) {
                    builder = this.builders.get(builderType);
                 } else {
-                    throw new Error(`Builder for ${builderType}
-                        does not exist; please use one of these types [webpack, extension]`);
+                    throw new Error(`Builder for ${builderType} does not exist; please use one of these types [webpack, extension]`);
                 }
         }
 
@@ -113,7 +111,7 @@ export class BuilderService {
 
     /**
      * get directory from this script and go up and search for a directory
-     * which is called q2g-build. By general this should be in node_modules
+     * which is called q2g-build(-bak). By general this should be in node_modules.
      *
      * @private
      * @returns {string}
@@ -121,7 +119,7 @@ export class BuilderService {
      */
     private resolveBuilderRootDir(): string {
         let currentPath = __dirname;
-        while (basename(currentPath) !== "q2g-build") {
+        while (basename(currentPath).length > 0 && basename(currentPath) !== "q2g-build-bak" && basename(currentPath) !== "q2g-build") {
             currentPath = resolve(currentPath, "..");
         }
         return currentPath;

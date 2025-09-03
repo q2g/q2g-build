@@ -1,6 +1,6 @@
 {
     "name": "q2g-build-bak",
-    "version": "3.0.2-beta.1",
+    "version": "3.0.2-beta.2",
     "description": "general build process",
     "main": "dist/main.js",
     "module": "dist/main.js",

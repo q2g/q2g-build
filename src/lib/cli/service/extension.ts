@@ -105,9 +105,9 @@ export class Extension extends Webpack {
      */
     protected writeBuildScripts(configFileName: string) {
         const scripts = {
-            "q2g-build:dev": `node node_modules/q2g-build --builder extension --config ${configFileName}`,
+            "q2g-build:dev": `node node_modules/q2g-build-bak --builder extension --config ${configFileName}`,
             // tslint:disable-next-line:max-line-length
-            "q2g-build:prod": `node node_modules/q2g-build --builder extension --env production --config ${configFileName}`,
+            "q2g-build:prod": `node node_modules/q2g-build-bak --builder extension --env production --config ${configFileName}`,
         };
         this.writer.write("scripts", scripts);
     }

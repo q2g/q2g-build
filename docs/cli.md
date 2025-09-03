@@ -9,6 +9,6 @@ q2gb --init <extension|webpack> to start helper to create extension or webpack b
 
 to enable that feature it is required to install q2g-build as global package 
 
-npm i -g q2g-build
+npm i -g q2g-build-bak
 
 ![Qlik2Go CLI Demo](./images/q2gb-cli.gif)
