@@ -10,7 +10,6 @@ export const CommandlineOptions: IOptionRuleSet  = {
    },
    env: {
        required: false,
-       validatorFn: ValidationHelper.containsValue(
-            ["development", "production"]),
+       validatorFn: ValidationHelper.containsValue(["development", "production"]),
    },
 };

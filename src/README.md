@@ -2,7 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/48294aa49a3c4f2db610df9e2676ccfd)](https://app.codacy.com/app/konne/q2g-build?utm_source=github.com&utm_medium=referral&utm_content=q2g/q2g-build&utm_campaign=badger)
 
-Qlik2Go Build Process which contains multiple build proceses for Webpack and Typescript, maintainly used to build and deploy qlik extensions on qlik sense.
+Qlik2Go Build Process which contains multiple build processes for Webpack and Typescript, mainly used to build and deploy Qlik extensions on Qlik Sense.
 
 ## Usage
 
@@ -90,8 +90,8 @@ extension/index.css
 
 ### Use q2gb cli
 
-You can allways create all required configuration files by your own if you want, but we will use q2gb cli which helps us to create required configuration files.
-It also updates the package json and add required npm scripts to start build process (dev and prod), also qext file informations.
+You can always create all required configuration files by your own if you want, but we will use q2gb cli which helps us to create required configuration files.
+It also updates the package.json and adds required npm scripts to start the build process (dev and prod), also qext file information.
 
 ```bash
 C:\Users\rhannuschka\work\q2g-demo-extension>q2gb --init extension

@@ -1,5 +1,3 @@
-import { isArray } from "util";
-
 export enum CowType {
     ERROR   = 0,
     DEFAULT = 1,
@@ -31,7 +29,7 @@ const errorCow = `
  */
 export function cowSay(message: string | string[], type: CowType = CowType.DEFAULT) {
 
-    if (!isArray(message)) {
+    if (!Array.isArray(message)) {
         message = [...message.split(/\n/)];
     }
 

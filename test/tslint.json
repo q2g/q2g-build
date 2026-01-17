@@ -3,9 +3,9 @@
     "extends": [
         "tslint:recommended"
     ],
-    "jsRules": {},
+    "jsRules": { },
     "rules": {
         "adjacent-overload-signatures": false
     },
-    "rulesDirectory": []
+    "rulesDirectory": [ ]
 }

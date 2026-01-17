@@ -36,8 +36,7 @@ export class BuilderService {
      */
     private constructor() {
         if ( BuilderService.instance ) {
-            throw new Error(
-                "could not create instance of BuilderService. Use BuilderService.getInstance() instead");
+            throw new Error("could not create instance of BuilderService. Use BuilderService.getInstance() instead");
         }
         this.builders = new Map<string, IBuilder>();
         BuilderService.instance = this;
@@ -56,7 +55,7 @@ export class BuilderService {
             this.builders.set(key, builder);
             return;
         }
-        throw new Error(`builder with ${key} allready registered`);
+        throw new Error(`builder with ${key} already registered`);
     }
 
     /**
@@ -84,7 +83,6 @@ export class BuilderService {
      * @memberof BuilderService
      */
     public createBuilder(builderType: string, env: IBuilderEnvironment): IBuilder {
-
         let builder: IBuilder;
 
         switch (builderType) {
@@ -95,8 +93,7 @@ export class BuilderService {
                 if ( this.builders.has(builderType) ) {
                    builder = this.builders.get(builderType);
                 } else {
-                    throw new Error(`Builder for ${builderType}
-                        does not exists please use one of these types [webpack, extension]`);
+                    throw new Error(`Builder for ${builderType} does not exist; please use one of these types [webpack, extension]`);
                 }
         }
 
@@ -114,7 +111,7 @@ export class BuilderService {
 
     /**
      * get directory from this script and go up and search for a directory
-     * which is called q2g-build. By general this should be in node_modules
+     * which is called q2g-build(-bak). By general this should be in node_modules.
      *
      * @private
      * @returns {string}
@@ -122,7 +119,7 @@ export class BuilderService {
      */
     private resolveBuilderRootDir(): string {
         let currentPath = __dirname;
-        while (basename(currentPath) !== "q2g-build") {
+        while (basename(currentPath).length > 0 && basename(currentPath) !== "q2g-build-bak" && basename(currentPath) !== "q2g-build") {
             currentPath = resolve(currentPath, "..");
         }
         return currentPath;
